@@ -195,12 +195,12 @@ export class DataService {
   }
   public sideBar = [
     {
-      tittle: 'Main',
+      tittle: 'Menú',
       showAsTab: false,
       separateRoute: false,
       menu: [
         {
-          menuValue: 'Dashboard',
+          menuValue: 'Inicio',
           hasSubRoute: true,
           showSubRoute: false,
           base: 'dashboard',
@@ -224,223 +224,223 @@ export class DataService {
             },
           ],
         },
+        // {
+        //   menuValue: 'Doctors',
+        //   hasSubRoute: true,
+        //   showSubRoute: false,
+        //   base: 'doctor',
+        //   img: 'assets/img/icons/menu-icon-02.svg',
+        //   subMenus: [
+        //     {
+        //       menuValue: 'Doctor List',
+        //       route: routes.doctorsList,
+        //       base: routes.doctorsList,
+        //     },
+        //     {
+        //       menuValue: 'Add Doctor',
+        //       route: routes.addDoctor,
+        //       base: routes.addDoctor,
+        //     },
+        //     {
+        //       menuValue: 'Edit Doctor',
+        //       route: routes.editDoctor,
+        //       base: routes.editDoctor,
+        //     },
+        //     {
+        //       menuValue: 'Doctor Profile',
+        //       route: routes.doctorProfile,
+        //       base: routes.doctorProfile,
+        //     },
+        //   ],
+        // },
         {
-          menuValue: 'Doctors',
-          hasSubRoute: true,
-          showSubRoute: false,
-          base: 'doctor',
-          img: 'assets/img/icons/menu-icon-02.svg',
-          subMenus: [
-            {
-              menuValue: 'Doctor List',
-              route: routes.doctorsList,
-              base: routes.doctorsList,
-            },
-            {
-              menuValue: 'Add Doctor',
-              route: routes.addDoctor,
-              base: routes.addDoctor,
-            },
-            {
-              menuValue: 'Edit Doctor',
-              route: routes.editDoctor,
-              base: routes.editDoctor,
-            },
-            {
-              menuValue: 'Doctor Profile',
-              route: routes.doctorProfile,
-              base: routes.doctorProfile,
-            },
-          ],
-        },
-        {
-          menuValue: 'Patients',
+          menuValue: 'Pacientes',
           hasSubRoute: true,
           showSubRoute: false,
           base: 'patient',
           img: 'assets/img/icons/menu-icon-03.svg',
           subMenus: [
             {
-              menuValue: 'Patients List',
+              menuValue: 'Lista de pacientes',
               route: routes.patientsList,
               base: routes.patientsList,
             },
             {
-              menuValue: 'Add Patients',
+              menuValue: 'Añadir paciente',
               route: routes.addPatient,
               base: routes.addPatient,
             },
             {
-              menuValue: 'Edit Patients',
+              menuValue: 'Editar paciente',
               route: routes.editPatient,
               base: routes.editPatient,
             },
             {
-              menuValue: 'Patients Profile',
+              menuValue: 'Perfil del paciente',
               route: routes.patientProfile,
               base: routes.patientProfile,
             },
           ],
         },
         {
-          menuValue: 'Staff',
+          menuValue: 'Empleados',
           hasSubRoute: true,
           showSubRoute: false,
           base: 'staff',
           img: 'assets/img/icons/menu-icon-08.svg',
           subMenus: [
             {
-              menuValue: 'Staff List',
+              menuValue: 'Lista de empleados',
               route: routes.staffList,
               base: routes.staffList,
             },
             {
-              menuValue: 'Add Staff',
+              menuValue: 'Añadir empleado',
               route: routes.addStaff,
               base: routes.addStaff,
             },
-            {
-              menuValue: 'Staff Profile',
-              route: routes.staffProfile,
-              base: routes.staffProfile,
-            },
-            {
-              menuValue: 'Leaves',
-              route: routes.staffLeave,
-              base: routes.staffLeave,
-            },
-            {
-              menuValue: 'Holidays',
-              route: routes.staffHoliday,
-              base: routes.staffHoliday,
-            },
-            {
-              menuValue: 'Attendance',
-              route: routes.staffAttendance,
-              base: routes.staffAttendance,
-            },
+            // {
+            //   menuValue: 'Staff Profile',
+            //   route: routes.staffProfile,
+            //   base: routes.staffProfile,
+            // },
+            // {
+            //   menuValue: 'Leaves',
+            //   route: routes.staffLeave,
+            //   base: routes.staffLeave,
+            // },
+            // {
+            //   menuValue: 'Holidays',
+            //   route: routes.staffHoliday,
+            //   base: routes.staffHoliday,
+            // },
+            // {
+            //   menuValue: 'Attendance',
+            //   route: routes.staffAttendance,
+            //   base: routes.staffAttendance,
+            // },
           ],
         },
         {
-          menuValue: 'Appointments',
+          menuValue: 'Citas',
           hasSubRoute: true,
           showSubRoute: false,
           base: 'appointments',
           img: 'assets/img/icons/menu-icon-04.svg',
           subMenus: [
             {
-              menuValue: 'Appointment List',
+              menuValue: 'Lista de citas',
               route: routes.appointmentList,
               base: routes.appointmentList,
             },
             {
-              menuValue: 'Book Appointment',
+              menuValue: 'Crear cita',
               route: routes.addAppointment,
               base: routes.addAppointment,
             },
             {
-              menuValue: 'Edit Appointment',
+              menuValue: 'Editar cita',
               route: routes.editAppointment,
               base: routes.editAppointment,
             },
           ],
         },
         {
-          menuValue: 'Doctor Schedule',
+          menuValue: 'Horarios empleados',
           hasSubRoute: true,
           showSubRoute: false,
           base: 'doctor-schedule',
           img: 'assets/img/icons/menu-icon-05.svg',
           subMenus: [
             {
-              menuValue: 'Schedule List',
+              menuValue: 'Lista de horarios',
               route: routes.schedule,
               base: routes.schedule,
             },
             {
-              menuValue: 'Book Appointment',
+              menuValue: 'Crear horario empleado',
               route: routes.addSchedule,
               base: routes.addSchedule,
             },
             {
-              menuValue: 'Edit Appointment',
+              menuValue: 'Editar horario empleado',
               route: routes.editSchedule,
               base: routes.editSchedule,
             },
           ],
         },
+        // {
+        //   menuValue: 'Departments',
+        //   hasSubRoute: true,
+        //   showSubRoute: false,
+        //   base: 'departments',
+        //   img: 'assets/img/icons/menu-icon-06.svg',
+        //   subMenus: [
+        //     {
+        //       menuValue: 'Department List',
+        //       route: routes.departmentList,
+        //       base: routes.departmentList,
+        //     },
+        //     {
+        //       menuValue: 'Add Department',
+        //       route: routes.addDepartment,
+        //       base: routes.addDepartment,
+        //     },
+        //     {
+        //       menuValue: 'Edit Department',
+        //       route: routes.editDepartment,
+        //       base: routes.editDepartment,
+        //     },
+        //   ],
+        // },
         {
-          menuValue: 'Departments',
-          hasSubRoute: true,
-          showSubRoute: false,
-          base: 'departments',
-          img: 'assets/img/icons/menu-icon-06.svg',
-          subMenus: [
-            {
-              menuValue: 'Department List',
-              route: routes.departmentList,
-              base: routes.departmentList,
-            },
-            {
-              menuValue: 'Add Department',
-              route: routes.addDepartment,
-              base: routes.addDepartment,
-            },
-            {
-              menuValue: 'Edit Department',
-              route: routes.editDepartment,
-              base: routes.editDepartment,
-            },
-          ],
-        },
-        {
-          menuValue: 'Accounts',
+          menuValue: 'Cuentas',
           hasSubRoute: true,
           showSubRoute: false,
           base: 'accounts',
           img: 'assets/img/icons/menu-icon-07.svg',
           subMenus: [
             {
-              menuValue: 'Invoices',
+              menuValue: 'Facturas',
               route: routes.invoices,
               base: routes.invoices,
             },
             {
-              menuValue: 'Payments',
+              menuValue: 'Pagos',
               route: routes.payments,
               base: routes.payments,
             },
             {
-              menuValue: 'Expenses',
+              menuValue: 'Gastos',
               route: routes.expenses,
               base: routes.expenses,
             },
-            {
-              menuValue: 'Taxes',
-              route: routes.taxes,
-              base: routes.taxes,
-            },
-            {
-              menuValue: 'Provident Fund',
-              route: routes.providentFund,
-              base: routes.providentFund,
-            },
+            // {
+            //   menuValue: 'Taxes',
+            //   route: routes.taxes,
+            //   base: routes.taxes,
+            // },
+            // {
+            //   menuValue: 'Provident Fund',
+            //   route: routes.providentFund,
+            //   base: routes.providentFund,
+            // },
           ],
         },
         {
-          menuValue: 'Payroll',
+          menuValue: 'Nóminas',
           hasSubRoute: true,
           showSubRoute: false,
           base: 'payroll',
           img: 'assets/img/icons/menu-icon-09.svg',
           subMenus: [
             {
-              menuValue: 'Employee Salary',
+              menuValue: 'Sueldos empleados',
               route: routes.salary,
               base: routes.salary,
             },
             {
-              menuValue: 'Payslip',
+              menuValue: 'Crear nómina',
               route: routes.salaryView,
               base: routes.salaryView,
             },
@@ -456,94 +456,94 @@ export class DataService {
           subMenus: [],
         },
         {
-          menuValue: 'Call',
+          menuValue: 'Llamadas',
           hasSubRoute: true,
           showSubRoute: false,
           base: 'calls',
           img: 'assets/img/icons/menu-icon-11.svg',
           subMenus: [
             {
-              menuValue: 'Voice Call',
+              menuValue: 'Llamadas de voz',
               route: routes.voiceCall,
               base: routes.voiceCall,
             },
             {
-              menuValue: 'Video Call',
+              menuValue: 'Videollamadas',
               route: routes.videoCall,
               base: routes.videoCall,
             },
             {
-              menuValue: 'Incoming Call',
+              menuValue: 'Llamadas perdidas',
               route: routes.incomingCall,
               base: routes.incomingCall,
             },
           ],
         },
+        // {
+        //   menuValue: 'Email',
+        //   hasSubRoute: true,
+        //   showSubRoute: false,
+        //   base: 'email',
+        //   img: 'assets/img/icons/menu-icon-12.svg',
+        //   subMenus: [
+        //     {
+        //       menuValue: 'Compose Mail',
+        //       route: routes.compose,
+        //       base: routes.compose,
+        //     },
+        //     {
+        //       menuValue: 'Inbox',
+        //       route: routes.inbox,
+        //       base: routes.inbox,
+        //     },
+        //     {
+        //       menuValue: 'Mail View',
+        //       route: routes.mailView,
+        //       base: routes.mailView,
+        //     },
+        //   ],
+        // },
+        // {
+        //   menuValue: 'Blog',
+        //   hasSubRoute: true,
+        //   showSubRoute: false,
+        //   base: 'blogs',
+        //   img: 'assets/img/icons/menu-icon-13.svg',
+        //   subMenus: [
+        //     {
+        //       menuValue: 'Blog',
+        //       route: routes.blog,
+        //       base: routes.blog,
+        //     },
+        //     {
+        //       menuValue: 'Blog View',
+        //       route: routes.blogDetails,
+        //       base: routes.blogDetails,
+        //     },
+        //     {
+        //       menuValue: 'Add Blog',
+        //       route: routes.addBlog,
+        //       base: routes.addBlog,
+        //     },
+        //     {
+        //       menuValue: 'Edit Blog',
+        //       route: routes.editBlog,
+        //       base: routes.editBlog,
+        //     },
+        //   ],
+        // },
+        // {
+        //   menuValue: 'Assets',
+        //   route: routes.assetsList,
+        //   hasSubRoute: false,
+        //   showSubRoute: false,
+        //   icon: 'fa-cube',
+        //   faIcon: true,
+        //   base: 'assets',
+        //   subMenus: [],
+        // },
         {
-          menuValue: 'Email',
-          hasSubRoute: true,
-          showSubRoute: false,
-          base: 'email',
-          img: 'assets/img/icons/menu-icon-12.svg',
-          subMenus: [
-            {
-              menuValue: 'Compose Mail',
-              route: routes.compose,
-              base: routes.compose,
-            },
-            {
-              menuValue: 'Inbox',
-              route: routes.inbox,
-              base: routes.inbox,
-            },
-            {
-              menuValue: 'Mail View',
-              route: routes.mailView,
-              base: routes.mailView,
-            },
-          ],
-        },
-        {
-          menuValue: 'Blog',
-          hasSubRoute: true,
-          showSubRoute: false,
-          base: 'blogs',
-          img: 'assets/img/icons/menu-icon-13.svg',
-          subMenus: [
-            {
-              menuValue: 'Blog',
-              route: routes.blog,
-              base: routes.blog,
-            },
-            {
-              menuValue: 'Blog View',
-              route: routes.blogDetails,
-              base: routes.blogDetails,
-            },
-            {
-              menuValue: 'Add Blog',
-              route: routes.addBlog,
-              base: routes.addBlog,
-            },
-            {
-              menuValue: 'Edit Blog',
-              route: routes.editBlog,
-              base: routes.editBlog,
-            },
-          ],
-        },
-        {
-          menuValue: 'Assets',
-          route: routes.assetsList,
-          hasSubRoute: false,
-          showSubRoute: false,
-          icon: 'fa-cube',
-          faIcon: true,
-          base: 'assets',
-          subMenus: [],
-        },
-        {
-          menuValue: 'activities',
+          menuValue: 'Historial médico',
           route: routes.activities,
           hasSubRoute: false,
           showSubRoute: false,
@@ -551,27 +551,27 @@ export class DataService {
           base: 'activities',
           subMenus: [],
         },
+        // {
+        //   menuValue: 'Reports',
+        //   hasSubRoute: true,
+        //   showSubRoute: false,
+        //   base: 'reports',
+        //   img: 'assets/img/icons/menu-icon-02.svg',
+        //   subMenus: [
+        //     {
+        //       menuValue: 'Expense Report',
+        //       route: routes.expenseReports,
+        //       base: routes.expenseReports,
+        //     },
+        //     {
+        //       menuValue: 'Invoice Report',
+        //       route: routes.invoiceReports,
+        //       base: routes.invoiceReports,
+        //     },
+        //   ],
+        // },
         {
-          menuValue: 'Reports',
-          hasSubRoute: true,
-          showSubRoute: false,
-          base: 'reports',
-          img: 'assets/img/icons/menu-icon-02.svg',
-          subMenus: [
-            {
-              menuValue: 'Expense Report',
-              route: routes.expenseReports,
-              base: routes.expenseReports,
-            },
-            {
-              menuValue: 'Invoice Report',
-              route: routes.invoiceReports,
-              base: routes.invoiceReports,
-            },
-          ],
-        },
-        {
-          menuValue: 'Invoice',
+          menuValue: 'Facturas',
           hasSubRoute: true,
           showSubRoute: false,
           base: 'invoice',
@@ -610,7 +610,7 @@ export class DataService {
           ],
         },
         {
-          menuValue: 'Settings',
+          menuValue: 'Configuración',
           route: routes.settings,
           hasSubRoute: false,
           showSubRoute: false,
