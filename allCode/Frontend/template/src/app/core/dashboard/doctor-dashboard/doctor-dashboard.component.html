@@ -1,5 +1,6 @@
 <div class="page-wrapper">
     <div class="content">
+
         <!-- Page Header -->
         <div class="page-header">
             <div class="row">
@@ -28,7 +29,11 @@
                 </div>
             </div>
         </div>
+        <div class="doctor-list-blk">
             <div class="row">
+                <div class="col-xl-3 col-md-6">
+                    <div class="doctor-widget border-right-bg">
+                        <div class="doctor-box-icon flex-shrink-0">
                             <img src="assets/img/icons/doctor-dash-01.svg" alt="">
                         </div>
                         <div class="doctor-content dash-count flex-grow-1">
@@ -304,8 +309,8 @@
                             </div>
                         </div>
                     </div>
-                    
-                    
+
+
 
 
 
@@ -338,12 +343,10 @@
                                                 <span>Andrea Lalema</span>
                                             </li>
                                             <li class=" dropdown ongoing-blk ">
-                                                <a href="javascript:void(0);"
-                                                    class="dropdown-toggle  active-doctor"
+                                                <a href="javascript:void(0);" class="dropdown-toggle  active-doctor"
                                                     data-bs-toggle="dropdown">
                                                     <i class="fas fa-circle me-2 active-circles"></i>08:00
-                                                    <span>Andrea Lalema</span><span
-                                                        class="ongoing-drapt">Próximo <i
+                                                    <span>Andrea Lalema</span><span class="ongoing-drapt">Próximo <i
                                                             class="feather icon-chevron-down ms-2"></i></span>
                                                 </a>
                                                 <ul class="doctor-sub-list dropdown-menu">
@@ -357,14 +360,13 @@
                                                     <li class="schedule-blk mb-0 pt-2 dropdown-item">
                                                         <ul class="nav schedule-time">
                                                             <li><a href="javascript:;"><img
-                                                                        src="assets/img/icons/trash.svg"
-                                                                        alt=""></a></li>
+                                                                        src="assets/img/icons/trash.svg" alt=""></a>
+                                                            </li>
                                                             <li><a href="javascript:;"><img
-                                                                        src="assets/img/icons/profile.svg"
-                                                                        alt=""></a></li>
+                                                                        src="assets/img/icons/profile.svg" alt=""></a>
+                                                            </li>
                                                             <li><a href="javascript:;"><img
-                                                                        src="assets/img/icons/edit.svg"
-                                                                        alt=""></a></li>
+                                                                        src="assets/img/icons/edit.svg" alt=""></a></li>
                                                         </ul>
                                                         <a class="btn btn-primary appoint-start">Iniciar
                                                             cita</a>
@@ -413,68 +415,67 @@
             </div>
 
 
-            
-        <div class="row">
-            <div class="col-12 col-md-12 col-lg-12 col-xl-7">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="chart-title patient-visit mb-0">
-                            <h4>Ingresos</h4>
-                            <div class="income-value">
-                                <h3><span>€</span> 20,560</h3>
-                                <p><span class="passive-view"><i class="feather icon-arrow-up-right me-1"></i>40%</span>
-                                    vs last month</p>
-                            </div>
-                            <div class="form-group mb-0">
-                                <mat-select [(ngModel)]="selectedValue" class="form-control select" placeholder="2022">
-                                    <mat-option *ngFor="let data of selecedList" [value]="data.value">
-                                        {{data.value}}
-                                    </mat-option>
-                                </mat-select>
-                            </div>
-                        </div>
-                        <div id="apexcharts-area">
-                            <apx-chart [series]="chartOptionsOne.series" [chart]="chartOptionsOne.chart"
-                                [xaxis]="chartOptionsOne.xaxis" [dataLabels]="chartOptionsOne.dataLabels"
-                                [grid]="chartOptionsOne.grid" [stroke]="chartOptionsOne.stroke"
-                                [title]="chartOptionsOne.title" [markers]="chartOptionsOne.markers"
-                                [yaxis]="chartOptionsOne.yaxis" [fill]="chartOptionsOne.fill"></apx-chart>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-md-12 col-lg-6 col-xl-3 d-flex">
-                <div class="card">
-                    <div class="card-body">
-                        <apx-chart class="donut-chart-radial" [series]="chartOptionsTwo.series"
-                            [chart]="chartOptionsTwo.chart" [labels]="chartOptionsTwo.labels"
-                            [responsive]="chartOptionsTwo.responsive" [dataLabels]="chartOptionsTwo.dataLabels"
-                            [legend]="chartOptionsTwo.legend"></apx-chart>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-md-12 col-lg-6 col-xl-2 d-flex">
-                <div class="struct-point">
-                    <div class="card patient-structure">
+
+            <div class="row">
+                <div class="col-12 col-md-12 col-lg-12 col-xl-7">
+                    <div class="card">
                         <div class="card-body">
-                            <h5>Nuevos pacientes</h5>
-                            <h3>56<span class="status-green"><img src="assets/img/icons/sort-icon-01.svg" alt=""
-                                        class="me-1">60%</span></h3>
+                            <div class="chart-title patient-visit mb-0">
+                                <h4>Ingresos</h4>
+                                <div class="income-value">
+                                    <h3><span>€</span> 20,560</h3>
+                                    <p><span class="passive-view"><i
+                                                class="feather icon-arrow-up-right me-1"></i>40%</span>
+                                        vs last month</p>
+                                </div>
+                                <div class="form-group mb-0">
+                                    <mat-select [(ngModel)]="selectedValue" class="form-control select"
+                                        placeholder="2022">
+                                        <mat-option *ngFor="let data of selecedList" [value]="data.value">
+                                            {{data.value}}
+                                        </mat-option>
+                                    </mat-select>
+                                </div>
+                            </div>
+                            <div id="apexcharts-area">
+                                <apx-chart [series]="chartOptionsOne.series" [chart]="chartOptionsOne.chart"
+                                    [xaxis]="chartOptionsOne.xaxis" [dataLabels]="chartOptionsOne.dataLabels"
+                                    [grid]="chartOptionsOne.grid" [stroke]="chartOptionsOne.stroke"
+                                    [title]="chartOptionsOne.title" [markers]="chartOptionsOne.markers"
+                                    [yaxis]="chartOptionsOne.yaxis" [fill]="chartOptionsOne.fill"></apx-chart>
+                            </div>
                         </div>
                     </div>
-                    <div class="card patient-structure">
+                </div>
+                <div class="col-12 col-md-12 col-lg-6 col-xl-3 d-flex">
+                    <div class="card">
                         <div class="card-body">
-                            <h5>Antiguos pacientes</h5>
-                            <h3>35<span class="status-pink"><img src="assets/img/icons/sort-icon-02.svg" alt=""
-                                        class="me-1">-20%</span></h3>
+                            <apx-chart class="donut-chart-radial" [series]="chartOptionsTwo.series"
+                                [chart]="chartOptionsTwo.chart" [labels]="chartOptionsTwo.labels"
+                                [responsive]="chartOptionsTwo.responsive" [dataLabels]="chartOptionsTwo.dataLabels"
+                                [legend]="chartOptionsTwo.legend"></apx-chart>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-12 col-lg-6 col-xl-2 d-flex">
+                    <div class="struct-point">
+                        <div class="card patient-structure">
+                            <div class="card-body">
+                                <h5>Nuevos pacientes</h5>
+                                <h3>56<span class="status-green"><img src="assets/img/icons/sort-icon-01.svg" alt=""
+                                            class="me-1">60%</span></h3>
+                            </div>
+                        </div>
+                        <div class="card patient-structure">
+                            <div class="card-body">
+                                <h5>Antiguos pacientes</h5>
+                                <h3>35<span class="status-pink"><img src="assets/img/icons/sort-icon-02.svg" alt=""
+                                            class="me-1">-20%</span></h3>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-
-
-
-
         </div>
     </div>
+</div>
