@@ -1,3 +1,5 @@
+<!-- Esta página solo la tiene el doctor -->
+
 <div class="page-wrapper">
     <div class="content">
     
@@ -6,9 +8,9 @@
             <div class="row">
                 <div class="col-sm-12">
                     <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a [routerLink]="routes.patientsList">Patients </a></li>
+                        <li class="breadcrumb-item"><a [routerLink]="routes.patientsList">Pacientes </a></li>
                         <li class="breadcrumb-item"><i class="feather icon-chevron-right"></i></li>
-                        <li class="breadcrumb-item active">Add Patient</li>
+                        <li class="breadcrumb-item active">Añadir paciente</li>
                     </ul>
                 </div>
             </div>
@@ -23,54 +25,54 @@
                             <div class="row">
                                 <div class="col-12">
                                     <div class="form-heading">
-                                        <h4>Patinets Details</h4>
+                                        <h4>Detalles del paciente</h4>
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6 col-xl-4">  
                                     <div class="form-group local-forms">
-                                        <label >First Name <span class="login-danger">*</span></label>
+                                        <label >Nombre <span class="login-danger">*</span></label>
                                         <input class="form-control" type="text" placeholder="" >
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6 col-xl-4">
                                     <div class="form-group local-forms">
-                                        <label >Last Name <span class="login-danger">*</span></label>
+                                        <label >Apellidos <span class="login-danger">*</span></label>
                                         <input class="form-control" type="text" placeholder="" >
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6 col-xl-4">
                                     <div class="form-group local-forms">
-                                        <label >User Name <span class="login-danger">*</span></label>
+                                        <label >Nombre de usuario <span class="login-danger">*</span></label>
                                         <input class="form-control" type="text" placeholder="" >
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6 col-xl-6">
                                     <div class="form-group local-forms">
-                                        <label >Mobile <span class="login-danger">*</span></label>
+                                        <label >Móvil <span class="login-danger">*</span></label>
                                         <input class="form-control" type="text" placeholder="" >
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6 col-xl-6">
                                     <div class="form-group local-forms">
-                                        <label >Email <span class="login-danger">*</span></label>
+                                        <label >Correo electrónico <span class="login-danger">*</span></label>
                                         <input class="form-control" type="email" placeholder="" >
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6 col-xl-6">
                                     <div class="form-group local-forms">
-                                        <label >Password <span class="login-danger">*</span></label>
+                                        <label >Contraseña <span class="login-danger">*</span></label>
                                         <input class="form-control" type="password" placeholder="" >
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6 col-xl-6">
                                     <div class="form-group local-forms">
-                                        <label >Confirm Password <span class="login-danger">*</span></label>
+                                        <label >Confirmar contraseña <span class="login-danger">*</span></label>
                                         <input class="form-control" type="password" placeholder="" >
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6 col-xl-6">
                                     <div class="form-group local-forms">
-                                        <label >Date Of Birth  <span class="login-danger">*</span></label>
+                                        <label >Fecha de nacimiento  <span class="login-danger">*</span></label>
                                         <input class="form-control datetimepicker" type="text"  placeholder="" matInput [matDatepicker]="picker">
                                         <mat-datepicker #picker></mat-datepicker>
                                         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
@@ -78,121 +80,60 @@
                                 </div>
                                 <div class="col-12 col-md-6 col-xl-6">
                                     <div class="form-group select-gender">
-                                        <label class="gen-label">Gender<span class="login-danger">*</span></label>
+                                        <label class="gen-label">Género<span class="login-danger">*</span></label>
                                         <div class="form-check-inline">
                                             <label class="form-check-label">
-                                                <input type="radio" name="gender" class="form-check-input">Male
+                                                <input type="radio" name="gender" class="form-check-input">Masculino
                                             </label>
                                         </div>
                                         <div class="form-check-inline">
                                             <label class="form-check-label">
-                                                <input type="radio" name="gender" class="form-check-input">Female
+                                                <input type="radio" name="gender" class="form-check-input">Femenino
                                             </label>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-12 col-md-6 col-xl-4">
-                                    <div class="form-group local-forms">
-                                        <label >Education <span class="login-danger">*</span></label>
-                                        <input class="form-control" type="text" placeholder="" >
-                                    </div>
-                                </div>
-                                <div class="col-12 col-md-6 col-xl-4">
-                                    <div class="form-group local-forms">
-                                        <label >Designation <span class="login-danger">*</span></label>
-                                        <input class="form-control" type="text" placeholder="" >
-                                    </div>
-                                </div>
-                                <div class="col-12 col-md-6 col-xl-4">
-                                    <div class="form-group local-forms">
-                                        <label >Department <span class="login-danger">*</span></label>
-                                        
-                                        <mat-select [(ngModel)]="selectedValue" [ngModelOptions]="{standalone: true}" class="form-control select"  placeholder="Select  Department">
-                                            <mat-option *ngFor="let data of selectedList1" [value]="data.value">
-                                            {{data.value}}
-                                            </mat-option>
-                                        </mat-select>
-                                    </div>
-                                </div>
+                                
                                 <div class="col-12 col-sm-12">
                                     <div class="form-group local-forms">
-                                        <label>Address  <span class="login-danger">*</span></label>
+                                        <label>Dirección  <span class="login-danger">*</span></label>
                                         <textarea class="form-control" rows="3" cols="30"></textarea>
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6 col-xl-3">
                                     <div class="form-group local-forms">
-                                        <label >City <span class="login-danger">*</span></label>
-                                        
-                                        <mat-select [(ngModel)]="selectedValue" [ngModelOptions]="{standalone: true}" class="form-control select"  placeholder="Select City">
-                                            <mat-option *ngFor="let data of selectedList2" [value]="data.value">
-                                            {{data.value}}
-                                            </mat-option>
-                                        </mat-select>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-md-6 col-xl-3">
-                                    <div class="form-group local-forms">
-                                        <label >Country  <span class="login-danger">*</span></label>
-                                        
-                                        <mat-select [(ngModel)]="selectedValue" [ngModelOptions]="{standalone: true}" class="form-control select"  placeholder="Select Country">
-                                            <mat-option *ngFor="let data of selectedList3" [value]="data.value">
-                                            {{data.value}}
-                                            </mat-option>
-                                        </mat-select>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-md-6 col-xl-3">
-                                    <div class="form-group local-forms">
-                                        <label >State/Province <span class="login-danger">*</span></label>
-                                        
-                                        <mat-select [(ngModel)]="selectedValue" [ngModelOptions]="{standalone: true}" class="form-control select"  placeholder="Select State">
-                                            <mat-option *ngFor="let data of selectedList4" [value]="data.value">
-                                            {{data.value}}
-                                            </mat-option>
-                                        </mat-select>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-md-6 col-xl-3">
-                                    <div class="form-group local-forms">
-                                        <label >Postal Code <span class="login-danger">*</span></label>
+                                        <label >Ciudad <span class="login-danger">*</span></label>
                                         <input class="form-control" type="text" placeholder="" >
                                     </div>
                                 </div>
-                                <div class="col-12 col-sm-12">
+                                <div class="col-12 col-md-6 col-xl-3">
                                     <div class="form-group local-forms">
-                                        <label>Start Biography  <span class="login-danger">*</span></label>
-                                        <textarea class="form-control" rows="3" cols="30"></textarea>
+                                        <label >País  <span class="login-danger">*</span></label>
+                                        <input class="form-control" type="text" placeholder="" >
                                     </div>
                                 </div>
+                                
+                                <div class="col-12 col-md-6 col-xl-3">
+                                    <div class="form-group local-forms">
+                                        <label >Código postal <span class="login-danger">*</span></label>
+                                        <input class="form-control" type="text" placeholder="" >
+                                    </div>
+                                </div>
+                               
                                 <div class="col-12 col-md-6 col-xl-6">
                                     <div class="form-group local-top-form">
                                         <label class="local-top">Avatar <span class="login-danger">*</span></label>
                                         <div class="settings-btn upload-files-avator">
                                             <input type="file" accept="image/*" name="image" id="file" onchange="loadFile(event)" class="hide-input">
-                                            <label for="file" class="upload">Choose File</label>
+                                            <label for="file" class="upload">Seleccionar imagen</label>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-12 col-md-6 col-xl-6">
-                                    <div class="form-group select-gender">
-                                        <label class="gen-label">Status <span class="login-danger">*</span></label>
-                                        <div class="form-check-inline">
-                                            <label class="form-check-label">
-                                                <input type="radio" name="gender" class="form-check-input">Active
-                                            </label>
-                                        </div>
-                                        <div class="form-check-inline">
-                                            <label class="form-check-label">
-                                                <input type="radio" name="gender" class="form-check-input">In Active
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
+                                
                                 <div class="col-12">
                                     <div class="doctor-submit text-end">
-                                        <button type="submit" class="btn btn-primary submit-form me-2">Submit</button>
-                                        <button type="submit" class="btn btn-primary cancel-form">Cancel</button>
+                                        <button type="submit" class="btn btn-primary submit-form me-2">Guardar</button>
+                                        <button type="submit" class="btn btn-primary cancel-form">Cancelar</button>
                                     </div>
                                 </div>
                             </div>

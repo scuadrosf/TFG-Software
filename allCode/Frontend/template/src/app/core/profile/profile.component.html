@@ -4,14 +4,14 @@
         <div class="row">
             <div class="col-sm-7 col-6">
                 <ul class="breadcrumb">
-                    <li class="breadcrumb-item"><a [routerLink]="routes.adminDashboard">Dashboard </a></li>
+                    <li class="breadcrumb-item"><a [routerLink]="routes.adminDashboard">Inicio </a></li>
                     <li class="breadcrumb-item"><i class="feather icon-chevron-right"></i></li>
-                    <li class="breadcrumb-item active">My Profile</li>
+                    <li class="breadcrumb-item active">((Nombre completo del usuario))</li>
                 </ul>
             </div>
 
             <div class="col-sm-5 col-6 text-end m-b-30">
-                <a [routerLink]="routes.editProfile" class="btn btn-primary btn-rounded"><i class="fa fa-plus"></i> Edit Profile</a>
+                <a [routerLink]="routes.editProfile" class="btn btn-primary btn-rounded"><i class="fa fa-plus"></i> Editar perfil</a>
             </div>
         </div>
         <div class="card-box profile-header">
@@ -26,33 +26,32 @@
                         <div class="profile-basic">
                             <div class="row">
                                 <div class="col-md-5">
+                                    <!-- Poner los datos del cliente que ha pinchado o iniciado sesión -->
                                     <div class="profile-info-left">
                                         <h3 class="user-name m-t-0 mb-0">Cristina Groves</h3>
-                                        <small class="text-muted">Gynecologist</small>
-                                        <div class="staff-id">Employee ID : DR-0001</div>
-                                        <div class="staff-msg"><a [routerLink]="routes.chat" class="btn btn-primary">Send Message</a></div>
+                                        <div class="staff-msg"><a [routerLink]="routes.addAppointment" class="btn btn-primary">Pedir cita</a></div>
                                     </div>
                                 </div>
                                 <div class="col-md-7">
                                     <ul class="personal-info">
                                         <li>
-                                            <span class="title">Phone:</span>
+                                            <span class="title">Móvil:</span>
                                             <span class="text"><a href="">770-889-6484</a></span>
                                         </li>
                                         <li>
-                                            <span class="title">Email:</span>
+                                            <span class="title">Correo electrónico:</span>
                                             <span class="text"><a href="">cristinagroves@example.com</a></span>
                                         </li>
                                         <li>
-                                            <span class="title">Birthday:</span>
+                                            <span class="title">Fecha de nacimiento:</span>
                                             <span class="text">3rd March</span>
                                         </li>
                                         <li>
-                                            <span class="title">Address:</span>
+                                            <span class="title">Dirección:</span>
                                             <span class="text">714 Burwell Heights Road, Bridge City, TX, 77611</span>
                                         </li>
                                         <li>
-                                            <span class="title">Gender:</span>
+                                            <span class="title">Género:</span>
                                             <span class="text">Female</span>
                                         </li>
                                     </ul>
@@ -65,12 +64,14 @@
         </div>
         <div class="profile-tabs">
             <ul class="nav nav-tabs nav-tabs-bottom">
-                <li class="nav-item"><a class="nav-link active" href="#about-cont" data-bs-toggle="tab">About</a></li>
-                <li class="nav-item"><a class="nav-link" href="#bottom-tab2" data-bs-toggle="tab">Profile</a></li>
-                <li class="nav-item"><a class="nav-link" href="#bottom-tab3" data-bs-toggle="tab">Messages</a></li>
+                <li class="nav-item"><a class="nav-link active" href="#about-cont" data-bs-toggle="tab">Historial médico</a></li>
+                <li class="nav-item"><a class="nav-link" href="#bottom-tab2" data-bs-toggle="tab">Documentos</a></li>
             </ul>
 
-            <div class="tab-content">
+            <!-- PONER EL HISTORIAL MÉDICO DEL USUARIO Y LOS DOCUMENTOS SUBIDOS -->
+
+
+            <!-- <div class="tab-content">
                 <div class="tab-pane show active" id="about-cont">
         <div class="row">
             <div class="col-md-12">
@@ -156,5 +157,5 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 </div>
