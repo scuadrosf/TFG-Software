@@ -552,7 +552,7 @@ export class DataService {
           subMenus: [],
         },
         {
-          menuValue: 'Calendar',
+          menuValue: 'Calendario',
           route: routes.calendar,
           hasSubRoute: false,
           showSubRoute: false,
