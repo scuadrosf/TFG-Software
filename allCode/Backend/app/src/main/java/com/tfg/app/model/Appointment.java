@@ -1,7 +1,14 @@
-package main.java.com.tfg.app.model;
+package com.tfg.app.model;
 
+import java.sql.Date;
 
-@Entity(name = "appointmentTable")
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+
+@Entity (name = "appointmentTable")
 public class Appointment {
     
     @Id
@@ -9,8 +16,8 @@ public class Appointment {
     private Long id;
 
     private Date bookDate;
-    private Date From;
-    private Date To;
+    private Date from;
+    private Date to;
     private String description;
 
     private Intervention intervention;
@@ -18,15 +25,12 @@ public class Appointment {
     @ManyToOne
     private User user;
 
-
-
-    
     public Appointment(Long id, Date bookDate, Date from, Date to, String description, Intervention intervention,
             User user) {
         this.id = id;
         this.bookDate = bookDate;
-        From = from;
-        To = to;
+        this.from = from;
+        this.to = to;
         this.description = description;
         this.intervention = intervention;
         this.user = user;
@@ -49,19 +53,19 @@ public class Appointment {
     }
 
     public Date getFrom() {
-        return From;
+        return from;
     }
 
     public void setFrom(Date from) {
-        From = from;
+        this.from = from;
     }
 
     public Date getTo() {
-        return To;
+        return to;
     }
 
     public void setTo(Date to) {
-        To = to;
+        this.to = to;
     }
 
     public String getDescription() {

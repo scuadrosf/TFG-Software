@@ -1,8 +1,18 @@
-package main.java.com.tfg.app.model;
+package com.tfg.app.model;
 
-@Entity(name = "interventionTable")
+import java.sql.Date;
+import java.util.List;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+
+@Entity (name = "interventionTable")
 public class Intervention {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -64,7 +74,5 @@ public class Intervention {
         this.documents = documents;
     }
 
-
     
-
 }

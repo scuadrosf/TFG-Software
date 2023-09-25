@@ -1,8 +1,16 @@
-package main.java.com.tfg.app.model;
+package com.tfg.app.model;
 
 import java.sql.Blob;
+import java.sql.Date;
 
-@Entity(name = "docTable")
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Lob;
+import javax.persistence.OneToOne;
+
+@Entity (name = "docTable")
 public class Document {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

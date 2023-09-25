@@ -1,8 +1,22 @@
-package main.java.com.tfg.app.model;
+package com.tfg.app.model;
 
-@Entity(name ="userTable")
+import java.sql.Blob;
+import java.sql.Date;
+import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Lob;
+import javax.persistence.OneToMany;
+
+@Entity (name = "userTable")
 public class User {
- 
+    
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -41,10 +55,9 @@ public class User {
     @OneToMany
     private List<Document> documents;
 
-    
     public User(Long id, String name, String lastName, String dNI, String email, String encodedPassword, String address,
             String city, String country, int postalCode, int phone, String genre, Date birth, List<String> roles,
-            Blob profileAvatarFile) {
+            Blob profileAvatarFile, Intervention intervention, Appointment appointment, List<Document> documents) {
         this.id = id;
         this.name = name;
         this.lastName = lastName;
@@ -60,6 +73,9 @@ public class User {
         this.birth = birth;
         this.roles = roles;
         this.profileAvatarFile = profileAvatarFile;
+        this.intervention = intervention;
+        this.appointment = appointment;
+        this.documents = documents;
     }
 
     public Long getId() {
@@ -182,6 +198,29 @@ public class User {
         this.profileAvatarFile = profileAvatarFile;
     }
 
+    public Intervention getIntervention() {
+        return intervention;
+    }
+
+    public void setIntervention(Intervention intervention) {
+        this.intervention = intervention;
+    }
+
+    public Appointment getAppointment() {
+        return appointment;
+    }
+
+    public void setAppointment(Appointment appointment) {
+        this.appointment = appointment;
+    }
+
+    public List<Document> getDocuments() {
+        return documents;
+    }
+
+    public void setDocuments(List<Document> documents) {
+        this.documents = documents;
+    }
 
     
 }
