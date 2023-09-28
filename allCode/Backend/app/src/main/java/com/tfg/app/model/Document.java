@@ -1,14 +1,14 @@
 package com.tfg.app.model;
 
 import java.sql.Blob;
-import java.sql.Date;
+import java.time.LocalDate;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 
 @Entity (name = "docTable")
 public class Document {
@@ -16,25 +16,22 @@ public class Document {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private Date creationDate;
+    private LocalDate creationDate;
     private String link;
 
     @Lob
     private Blob file;
 
-    @OneToOne
+    @ManyToOne
     private Intervention intervention;
 
-    @OneToOne 
-    private User user;
 
-    public Document(Long id, Date creationDate, String link, Blob file, Intervention intervention, User user) {
+    public Document(Long id, LocalDate creationDate, String link, Blob file, Intervention intervention) {
         this.id = id;
         this.creationDate = creationDate;
         this.link = link;
         this.file = file;
         this.intervention = intervention;
-        this.user = user;
     }
 
     public Long getId() {
@@ -45,11 +42,11 @@ public class Document {
         this.id = id;
     }
 
-    public Date getCreationDate() {
+    public LocalDate getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(Date creationDate) {
+    public void setCreationDate(LocalDate creationDate) {
         this.creationDate = creationDate;
     }
 
@@ -75,14 +72,6 @@ public class Document {
 
     public void setIntervention(Intervention intervention) {
         this.intervention = intervention;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     

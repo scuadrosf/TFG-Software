@@ -1,16 +1,17 @@
 package com.tfg.app.model;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 
-@Entity (name = "interventionTable")
+@Entity(name = "interventionTable")
 public class Intervention {
 
     @Id
@@ -20,13 +21,16 @@ public class Intervention {
     @ManyToOne
     private User user;
 
-    private Date interventionDate;
+    private LocalDate interventionDate;
     private String type;
 
-    @OneToOne
+    @OneToMany(mappedBy = "intervention", cascade = CascadeType.ALL)
     private List<Document> documents;
 
-    public Intervention(Long id, User user, Date interventionDate, String type, List<Document> documents) {
+    @ManyToOne
+    private Appointment appointment;
+
+    public Intervention(Long id, User user, LocalDate interventionDate, String type, List<Document> documents) {
         this.id = id;
         this.user = user;
         this.interventionDate = interventionDate;
@@ -42,19 +46,22 @@ public class Intervention {
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
+
+   
+
+    public Appointment getAppointment() {
+        return appointment;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setAppointment(Appointment appointment) {
+        this.appointment = appointment;
     }
 
-    public Date getInterventionDate() {
+    public LocalDate getInterventionDate() {
         return interventionDate;
     }
 
-    public void setInterventionDate(Date interventionDate) {
+    public void setInterventionDate(LocalDate interventionDate) {
         this.interventionDate = interventionDate;
     }
 
@@ -72,6 +79,14 @@ public class Intervention {
 
     public void setDocuments(List<Document> documents) {
         this.documents = documents;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     

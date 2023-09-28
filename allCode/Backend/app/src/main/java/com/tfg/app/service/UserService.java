@@ -31,4 +31,13 @@ public class UserService {
         return users.findById(id);
     }
 
+    public Optional<User> findByDNI(String DNI){
+        return users.findByDNI(DNI);
+    }
+
+    public boolean existDNI(String dni) {
+        Optional<User> user = findByDNI(dni);
+        return user.isPresent();
+    }
+
 }

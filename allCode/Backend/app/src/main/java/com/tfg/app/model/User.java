@@ -1,9 +1,10 @@
 package com.tfg.app.model;
 
 import java.sql.Blob;
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -13,6 +14,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.OneToMany;
+
+import com.tfg.app.controller.DTOS.UserDTO;
 
 @Entity (name = "userTable")
 public class User {
@@ -28,15 +31,15 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
-    private String encodedPassword;
+    private String passwordEncoded;
 
     private String address;
     private String city;
     private String country;
     private int postalCode;
     private int phone;
-    private String genre;
-    private Date birth;
+    private String gender;
+    private LocalDate birth;
 
 
     @ElementCollection(fetch = FetchType.EAGER)
@@ -46,36 +49,50 @@ public class User {
     private Blob profileAvatarFile;
 
 
-    @OneToMany
-    private Intervention intervention;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Intervention> interventions;
 
-    @OneToMany
-    private Appointment appointment;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Appointment> appointments;
 
-    @OneToMany
-    private List<Document> documents;
 
-    public User(Long id, String name, String lastName, String dNI, String email, String encodedPassword, String address,
-            String city, String country, int postalCode, int phone, String genre, Date birth, List<String> roles,
-            Blob profileAvatarFile, Intervention intervention, Appointment appointment, List<Document> documents) {
+    public User(Long id, String name, String lastName, String dNI, String email, String passwordEncoded, String address,
+            String city, String country, int postalCode, int phone, String gender, LocalDate birth, List<String> roles,
+            Blob profileAvatarFile, List<Intervention> interventions, List<Appointment> appointments) {
         this.id = id;
         this.name = name;
         this.lastName = lastName;
         DNI = dNI;
         this.email = email;
-        this.encodedPassword = encodedPassword;
+        this.passwordEncoded = passwordEncoded;
         this.address = address;
         this.city = city;
         this.country = country;
         this.postalCode = postalCode;
         this.phone = phone;
-        this.genre = genre;
+        this.gender = gender;
         this.birth = birth;
         this.roles = roles;
         this.profileAvatarFile = profileAvatarFile;
-        this.intervention = intervention;
-        this.appointment = appointment;
-        this.documents = documents;
+        this.interventions = interventions;
+        this.appointments = appointments;
+    }
+
+    public User(UserDTO userDTO) {
+        super();
+        this.name = userDTO.getName();
+        this.lastName = userDTO.getLastName();
+        this.DNI = userDTO.getDNI();
+        this.email = userDTO.getEmail();
+        this.passwordEncoded = userDTO.getPasswordEncoded();
+        this.address = userDTO.getAddress();
+        this.city = userDTO.getCity();
+        this.country = userDTO.getCountry();
+        this.postalCode = userDTO.getPostalCode();
+        this.phone = userDTO.getPhone();
+        this.gender = userDTO.getGender();
+        this.birth = userDTO.getBirth();
+        this.roles = List.of("USER");
     }
 
     public Long getId() {
@@ -118,12 +135,12 @@ public class User {
         this.email = email;
     }
 
-    public String getEncodedPassword() {
-        return encodedPassword;
+    public String getPasswordEncoded() {
+        return passwordEncoded;
     }
 
-    public void setEncodedPassword(String encodedPassword) {
-        this.encodedPassword = encodedPassword;
+    public void setPasswordEncoded(String passwordEncoded) {
+        this.passwordEncoded = passwordEncoded;
     }
 
     public String getAddress() {
@@ -166,19 +183,19 @@ public class User {
         this.phone = phone;
     }
 
-    public String getGenre() {
-        return genre;
+    public String getGender() {
+        return gender;
     }
 
-    public void setGenre(String genre) {
-        this.genre = genre;
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
-    public Date getBirth() {
+    public LocalDate getBirth() {
         return birth;
     }
 
-    public void setBirth(Date birth) {
+    public void setBirth(LocalDate birth) {
         this.birth = birth;
     }
 
@@ -198,29 +215,23 @@ public class User {
         this.profileAvatarFile = profileAvatarFile;
     }
 
-    public Intervention getIntervention() {
-        return intervention;
+
+    public List<Appointment> getAppointments() {
+        return appointments;
     }
 
-    public void setIntervention(Intervention intervention) {
-        this.intervention = intervention;
+    public void setAppointments(List<Appointment> appointments) {
+        this.appointments = appointments;
     }
 
-    public Appointment getAppointment() {
-        return appointment;
+    public List<Intervention> getInterventions() {
+        return interventions;
     }
 
-    public void setAppointment(Appointment appointment) {
-        this.appointment = appointment;
+    public void setInterventions(List<Intervention> interventions) {
+        this.interventions = interventions;
     }
 
-    public List<Document> getDocuments() {
-        return documents;
-    }
-
-    public void setDocuments(List<Document> documents) {
-        this.documents = documents;
-    }
-
+    
     
 }

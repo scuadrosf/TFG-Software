@@ -1,38 +1,42 @@
 package com.tfg.app.model;
 
-import java.sql.Date;
+import java.time.LocalDate;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
-@Entity (name = "appointmentTable")
+@Entity(name = "appointmentTable")
 public class Appointment {
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private Date bookDate;
-    private Date from;
-    private Date to;
+    private LocalDate bookDate;
+    private LocalDate fromDate;
+    private LocalDate toDate;
     private String description;
 
-    private Intervention intervention;
+    @OneToMany(mappedBy = "appointment", cascade = CascadeType.ALL)
+    private List<Intervention> interventions;
 
     @ManyToOne
     private User user;
 
-    public Appointment(Long id, Date bookDate, Date from, Date to, String description, Intervention intervention,
+    public Appointment(Long id, LocalDate bookDate, LocalDate from, LocalDate to, String description, List<Intervention> interventions,
             User user) {
         this.id = id;
         this.bookDate = bookDate;
-        this.from = from;
-        this.to = to;
+        this.fromDate = from;
+        this.toDate = to;
         this.description = description;
-        this.intervention = intervention;
+        this.interventions = interventions;
         this.user = user;
     }
 
@@ -44,28 +48,34 @@ public class Appointment {
         this.id = id;
     }
 
-    public Date getBookDate() {
+   
+
+    public LocalDate getBookDate() {
         return bookDate;
     }
 
-    public void setBookDate(Date bookDate) {
+    public void setBookDate(LocalDate bookDate) {
         this.bookDate = bookDate;
     }
 
-    public Date getFrom() {
-        return from;
+    public LocalDate getFromDate() {
+        return fromDate;
     }
 
-    public void setFrom(Date from) {
-        this.from = from;
+    public void setFromDate(LocalDate fromDate) {
+        this.fromDate = fromDate;
     }
 
-    public Date getTo() {
-        return to;
+    public LocalDate getToDate() {
+        return toDate;
     }
 
-    public void setTo(Date to) {
-        this.to = to;
+    public void setToDate(LocalDate toDate) {
+        this.toDate = toDate;
+    }
+
+    public List<Intervention> getInterventions() {
+        return interventions;
     }
 
     public String getDescription() {
@@ -76,13 +86,11 @@ public class Appointment {
         this.description = description;
     }
 
-    public Intervention getIntervention() {
-        return intervention;
+    public List<Intervention> getIntervention() {
+        return interventions;
     }
 
-    public void setIntervention(Intervention intervention) {
-        this.intervention = intervention;
-    }
+    
 
     public User getUser() {
         return user;
@@ -90,6 +98,10 @@ public class Appointment {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public void setInterventions(List<Intervention> interventions) {
+        this.interventions = interventions;
     }
 
     
