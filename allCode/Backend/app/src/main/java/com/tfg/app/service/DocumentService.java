@@ -20,7 +20,7 @@ public class DocumentService {
     }
 
     public void save(Document document) {
-        documents.save(this.documents.save(document));
+        this.documents.save(document);
     }
 
     public List<Document> findAll() {

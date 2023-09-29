@@ -20,7 +20,7 @@ public class UserService {
     }
 
     public void save(User user) {
-        users.save(this.users.save(user));
+        this.users.save(user);
     }
 
     public List<User> findAll() {
@@ -31,12 +31,12 @@ public class UserService {
         return users.findById(id);
     }
 
-    public Optional<User> findByDNI(String DNI){
-        return users.findByDNI(DNI);
+    public Optional<User> findBydni(String dni){
+        return users.findBydni(dni);
     }
 
     public boolean existDNI(String dni) {
-        Optional<User> user = findByDNI(dni);
+        Optional<User> user = findBydni(dni);
         return user.isPresent();
     }
 

@@ -15,6 +15,8 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tfg.app.controller.DTOS.UserDTO;
 
 @Entity (name = "userTable")
@@ -26,11 +28,14 @@ public class User {
 
     private String name;
     private String lastName;
-    private String DNI;
+
+    @Column(nullable = false, unique = true)
+    private String dni;
 
     @Column(nullable = false, unique = true)
     private String email;
 
+    @JsonIgnore
     private String passwordEncoded;
 
     private String address;
@@ -39,6 +44,8 @@ public class User {
     private int postalCode;
     private int phone;
     private String gender;
+
+    @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDate birth;
 
 
@@ -46,23 +53,36 @@ public class User {
     private List<String> roles;
 
     @Lob
+    @JsonIgnore
     private Blob profileAvatarFile;
 
-
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Intervention> interventions;
-
+    
+    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Appointment> appointments;
 
 
-    public User(Long id, String name, String lastName, String dNI, String email, String passwordEncoded, String address,
+    public User() {
+    }
+
+    public User(String name, String dni, String email, String passwordEncoded, String ... roles) {
+        this.name = name;
+        this.dni = dni;
+        this.email = email;
+        this.passwordEncoded = passwordEncoded;
+        this.roles = List.of(roles);
+    }
+
+    public User(Long id, String name, String lastName, String dni, String email, String passwordEncoded, String address,
             String city, String country, int postalCode, int phone, String gender, LocalDate birth, List<String> roles,
             Blob profileAvatarFile, List<Intervention> interventions, List<Appointment> appointments) {
         this.id = id;
         this.name = name;
         this.lastName = lastName;
-        DNI = dNI;
+        this.dni = dni;
         this.email = email;
         this.passwordEncoded = passwordEncoded;
         this.address = address;
@@ -82,7 +102,7 @@ public class User {
         super();
         this.name = userDTO.getName();
         this.lastName = userDTO.getLastName();
-        this.DNI = userDTO.getDNI();
+        this.dni = userDTO.getDNI();
         this.email = userDTO.getEmail();
         this.passwordEncoded = userDTO.getPasswordEncoded();
         this.address = userDTO.getAddress();
@@ -120,11 +140,11 @@ public class User {
     }
 
     public String getDNI() {
-        return DNI;
+        return dni;
     }
 
-    public void setDNI(String dNI) {
-        DNI = dNI;
+    public void setDNI(String dni) {
+        this.dni = dni;
     }
 
     public String getEmail() {
@@ -207,6 +227,10 @@ public class User {
         this.roles = roles;
     }
 
+    public void setRoles(String ... roles) {
+        this.roles = List.of(roles);
+    }
+
     public Blob getProfileAvatarFile() {
         return profileAvatarFile;
     }
@@ -230,6 +254,10 @@ public class User {
 
     public void setInterventions(List<Intervention> interventions) {
         this.interventions = interventions;
+    }
+
+    public String getEncodedPassword() {
+        return passwordEncoded;
     }
 
     

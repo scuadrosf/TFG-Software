@@ -20,7 +20,7 @@ public class InterventionService {
     }
 
     public void save(Intervention intervention) {
-        interventions.save(this.interventions.save(intervention));
+        this.interventions.save(intervention);
     }
 
     public List<Intervention> findAll() {

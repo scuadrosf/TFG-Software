@@ -5,6 +5,7 @@ import static org.springframework.web.servlet.support.ServletUriComponentsBuilde
 import java.net.URI;
 import java.security.Principal;
 import java.util.Arrays;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -46,7 +47,7 @@ public class UserRestController {
         Principal principal = request.getUserPrincipal();
 
         if (principal != null){
-            userService.findByDNI(principal.getName()).ifPresent(us -> currentUser = us);
+            userService.findBydni(principal.getName()).ifPresent(us -> currentUser = us);
             model.addAttribute("currentUser", currentUser);
         }else{
             model.addAttribute("logged", false);
@@ -57,7 +58,7 @@ public class UserRestController {
     public ResponseEntity<User> me(HttpServletRequest request){
         Principal principal = request.getUserPrincipal();
         if (principal != null){
-            return ResponseEntity.ok(userRepository.findByDNI(principal.getName()).orElseThrow());
+            return ResponseEntity.ok(userRepository.findBydni(principal.getName()).orElseThrow());
         }else{
             return ResponseEntity.notFound().build();
         }
@@ -79,5 +80,11 @@ public class UserRestController {
         }else{
             return new ResponseEntity<User>(HttpStatus.FORBIDDEN);
         }
+    }
+
+    @GetMapping("/userList")
+    public ResponseEntity<List<User>> getAllUsers(){
+        List<User> userList = userService.findAll();
+        return ResponseEntity.ok(userList);
     }
 }

@@ -19,7 +19,7 @@ public class AppointmentService {
     }
 
     public void save(Appointment appointment) {
-        appointments.save(this.appointments.save(appointment));
+        this.appointments.save(appointment);
     }
 
     public List<Appointment> findAll() {
