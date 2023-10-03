@@ -6,8 +6,6 @@ import java.net.URI;
 import java.security.Principal;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tfg.app.controller.DTOS.UserDTO;
 import com.tfg.app.model.User;
-import com.tfg.app.repository.UserRepository;
 import com.tfg.app.service.UserService;
 
 @RestController
@@ -34,8 +31,6 @@ public class UserRestController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private UserRepository userRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
 

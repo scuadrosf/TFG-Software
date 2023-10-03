@@ -1,38 +1,40 @@
 package com.tfg.app.controller.DTOS;
 
 import java.time.LocalDate;
+import java.util.Optional;
+
+import com.tfg.app.model.Appointment;
+import com.tfg.app.model.User;
 
 public class InterventionDTO {
     
     private LocalDate interventionDate;
     private String type;
-    private Long idUser;
-    private Long idAppointment;
+    private User user;
+    private Optional<Appointment> appointment;
     
     
 
-    public InterventionDTO(LocalDate interventionDate, String type, Long idUser, Long idAppointment) {
+    
+
+    
+
+    public InterventionDTO(LocalDate interventionDate, String type, User user, Optional<Appointment> currentApointment) {
         this.interventionDate = interventionDate;
         this.type = type;
-        this.idUser = idUser;
-        this.idAppointment = idAppointment;
+        this.user = user;
+        this.appointment = currentApointment;
     }
 
-    public Long getIdUser() {
-        return idUser;
+    public User getUser() {
+        return user;
     }
 
-    public void setIdUser(Long idUser) {
-        this.idUser = idUser;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public Long getIdAppointment() {
-        return idAppointment;
-    }
-
-    public void setIdAppointment(Long idAppointment) {
-        this.idAppointment = idAppointment;
-    }
+   
 
     public LocalDate getInterventionDate() {
         return interventionDate;
@@ -48,6 +50,14 @@ public class InterventionDTO {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public Optional<Appointment> getAppointment() {
+        return appointment;
+    }
+
+    public void setAppointment(Optional<Appointment> appointment) {
+        this.appointment = appointment;
     }
 
     

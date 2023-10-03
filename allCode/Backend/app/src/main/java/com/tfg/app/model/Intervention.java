@@ -11,7 +11,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.tfg.app.controller.DTOS.InterventionDTO;
 
 @Entity(name = "interventionTable")
 public class Intervention {
@@ -38,19 +37,21 @@ public class Intervention {
         this.interventionDate = interventionDate;
     }
 
-    public Intervention(Long id, User user, LocalDate interventionDate, String type, List<Document> documents) {
-        this.id = id;
+    public Intervention(User user, LocalDate interventionDate, String type, List<Document> documents, Appointment appointment) {
         this.user = user;
         this.interventionDate = interventionDate;
         this.type = type;
         this.documents = documents;
+        this.appointment = appointment;
     }
 
-    public Intervention(InterventionDTO interventionDTO) {
-        super();
-        this.interventionDate = interventionDTO.getInterventionDate();
-        this.type = interventionDTO.getType();
-    }
+    // public Intervention(InterventionDTO interventionDTO) {
+    //     super();
+    //     this.interventionDate = interventionDTO.getInterventionDate();
+    //     this.type = interventionDTO.getType();
+    //     this.user = interventionDTO.getUser();
+    //     this.appointment = interventionDTO.getAppointment();
+    // }
 
 
     public Long getId() {
@@ -62,15 +63,6 @@ public class Intervention {
     }
 
 
-   
-
-    public Appointment getAppointment() {
-        return appointment;
-    }
-
-    public void setAppointment(Appointment appointment) {
-        this.appointment = appointment;
-    }
 
     public LocalDate getInterventionDate() {
         return interventionDate;
@@ -102,6 +94,14 @@ public class Intervention {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Appointment getAppointment() {
+        return appointment;
+    }
+
+    public void setAppointment(Appointment appointment) {
+        this.appointment = appointment;
     }
 
     
