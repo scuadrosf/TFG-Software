@@ -1,6 +1,7 @@
 package com.tfg.app.model;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -11,6 +12,9 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tfg.app.controller.DTOS.AppointmentDTO;
+
 @Entity(name = "appointmentTable")
 public class Appointment {
     
@@ -18,9 +22,12 @@ public class Appointment {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDate bookDate;
-    private LocalDate fromDate;
-    private LocalDate toDate;
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime fromDate;
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime toDate;
     private String description;
 
     @OneToMany(mappedBy = "appointment", cascade = CascadeType.ALL)
@@ -29,7 +36,7 @@ public class Appointment {
     @ManyToOne
     private User user;
 
-    public Appointment(Long id, LocalDate bookDate, LocalDate from, LocalDate to, String description, List<Intervention> interventions,
+    public Appointment(Long id, LocalDate bookDate, LocalDateTime from, LocalDateTime to, String description, List<Intervention> interventions,
             User user) {
         this.id = id;
         this.bookDate = bookDate;
@@ -38,6 +45,17 @@ public class Appointment {
         this.description = description;
         this.interventions = interventions;
         this.user = user;
+    }
+
+    public Appointment() {
+    }
+
+    public Appointment(AppointmentDTO appointmentDTO) {
+        super();
+        this.bookDate = appointmentDTO.getBookDate();
+        this.fromDate = appointmentDTO.getFromDate();
+        this.toDate = appointmentDTO.getToDate();
+        this.description = appointmentDTO.getDescription();
     }
 
     public Long getId() {
@@ -58,19 +76,19 @@ public class Appointment {
         this.bookDate = bookDate;
     }
 
-    public LocalDate getFromDate() {
+    public LocalDateTime getFromDate() {
         return fromDate;
     }
 
-    public void setFromDate(LocalDate fromDate) {
+    public void setFromDate(LocalDateTime fromDate) {
         this.fromDate = fromDate;
     }
 
-    public LocalDate getToDate() {
+    public LocalDateTime getToDate() {
         return toDate;
     }
 
-    public void setToDate(LocalDate toDate) {
+    public void setToDate(LocalDateTime toDate) {
         this.toDate = toDate;
     }
 

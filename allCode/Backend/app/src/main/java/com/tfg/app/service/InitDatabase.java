@@ -21,7 +21,7 @@ public class InitDatabase {
         User user = new User();
 
         user.setName("admin");
-        user.setDNI("33W");
+        user.setUsername("33W");
         user.setEmail("admin@gmail.com");
         user.setPasswordEncoded(passwordEncoder.encode("12345"));
         user.setRoles("USER","ADMIN");

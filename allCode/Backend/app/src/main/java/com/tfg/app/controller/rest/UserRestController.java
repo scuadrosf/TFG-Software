@@ -6,6 +6,7 @@ import java.net.URI;
 import java.security.Principal;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -39,37 +40,41 @@ public class UserRestController {
     private PasswordEncoder passwordEncoder;
 
 
+
     User currentUser;
 
-    
     @ModelAttribute
-    public void addAttributes(Model model, HttpServletRequest request){
-        Principal principal = request.getUserPrincipal();
+	public void addAttributes(Model model, HttpServletRequest request) {
+		Principal principal = request.getUserPrincipal();
 
-        if (principal != null){
-            userService.findBydni(principal.getName()).ifPresent(us -> currentUser = us);
-            model.addAttribute("currentUser", currentUser);
-        }else{
-            model.addAttribute("logged", false);
-        }
-    }
+		if (principal != null) {
+			userService.findByEmail(principal.getName()).ifPresent(us -> currentUser = us);
+			model.addAttribute("curretUser", currentUser);
+
+		} else {
+			model.addAttribute("logged", false);
+		}
+	}
 
     @GetMapping("/me")
-    public ResponseEntity<User> me(HttpServletRequest request){
-        Principal principal = request.getUserPrincipal();
-        if (principal != null){
-            return ResponseEntity.ok(userRepository.findBydni(principal.getName()).orElseThrow());
-        }else{
-            return ResponseEntity.notFound().build();
-        }
-    }
+    public ResponseEntity<User> me(HttpServletRequest request) {
+
+		Principal principal = request.getUserPrincipal();
+
+		if (principal != null) {
+			return ResponseEntity.ok(userService.findByEmail(principal.getName()).orElseThrow());
+		} else {
+			return ResponseEntity.notFound().build();
+		}
+	}
+
 
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<User> register (@RequestBody UserDTO userDTO){
         User user = new User(userDTO);
 
-        if(!userService.existDNI(user.getDNI())){
+        if(!userService.existUsername(user.getUsername())){
             user.setPasswordEncoded(passwordEncoder.encode(user.getPasswordEncoded()));
             user.setRoles(Arrays.asList("USER"));
 

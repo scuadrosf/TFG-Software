@@ -19,7 +19,6 @@ import com.tfg.app.security.jwt.JwtRequestFilter;
 
 
 
-
 @Configuration
 @Order(1)
 public class RestSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -52,12 +51,12 @@ public class RestSecurityConfig extends WebSecurityConfigurerAdapter {
 
 		http.antMatcher("/api/**");
 		
-		// http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/destinations/reviews/**").hasRole("USER");
-		// http.authorizeRequests().antMatchers(HttpMethod.DELETE, "/api/destinations/reviews/**").hasRole("USER");
-		// http.authorizeRequests().antMatchers(HttpMethod.DELETE, "/api/destinations/**").hasRole("ADMIN");
-		// http.authorizeRequests().antMatchers(HttpMethod.PUT, "/api/destinations/**").hasRole("ADMIN");	
-		// http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/destinations/**").hasRole("ADMIN");	
-		// http.authorizeRequests().antMatchers(HttpMethod.PUT, "/api/users/**").hasRole("ADMIN");	
+		http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/destinations/reviews/**").hasRole("USER");
+		http.authorizeRequests().antMatchers(HttpMethod.DELETE, "/api/destinations/reviews/**").hasRole("USER");
+		http.authorizeRequests().antMatchers(HttpMethod.DELETE, "/api/destinations/**").hasRole("ADMIN");
+		http.authorizeRequests().antMatchers(HttpMethod.PUT, "/api/destinations/**").hasRole("ADMIN");	
+		http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/destinations/**").hasRole("ADMIN");	
+		http.authorizeRequests().antMatchers(HttpMethod.PUT, "/api/users/**").hasRole("ADMIN");	
 
 
 		

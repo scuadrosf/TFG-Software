@@ -32,29 +32,29 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
     	
     	// Public pages
-        // http.authorizeRequests().antMatchers("/index").permitAll();
-        // http.authorizeRequests().antMatchers("/login").permitAll();
-        // http.authorizeRequests().antMatchers("/loginerror").permitAll();
-        // http.authorizeRequests().antMatchers("/notEmptyHouse").permitAll();
-        // http.authorizeRequests().antMatchers("/logout").permitAll();
-        // http.authorizeRequests().antMatchers("/register").permitAll();
-        // http.authorizeRequests().antMatchers("/services/*").permitAll();
-        // http.authorizeRequests().antMatchers("/catering/*").permitAll();
-        // http.authorizeRequests().antMatchers("/tourism/*").permitAll();
-        // http.authorizeRequests().antMatchers("/review/*").permitAll();
-        // http.authorizeRequests().antMatchers("/house/*").permitAll();
+        http.authorizeRequests().antMatchers("/index").permitAll();
+        http.authorizeRequests().antMatchers("/login").permitAll();
+        http.authorizeRequests().antMatchers("/loginerror").permitAll();
+        http.authorizeRequests().antMatchers("/notEmptyHouse").permitAll();
+        http.authorizeRequests().antMatchers("/logout").permitAll();
+        http.authorizeRequests().antMatchers("/register").permitAll();
+        http.authorizeRequests().antMatchers("/services/*").permitAll();
+        http.authorizeRequests().antMatchers("/catering/*").permitAll();
+        http.authorizeRequests().antMatchers("/tourism/*").permitAll();
+        http.authorizeRequests().antMatchers("/review/*").permitAll();
+        http.authorizeRequests().antMatchers("/house/*").permitAll();
 
 
         // Private pages
-        // http.authorizeRequests().antMatchers("/profile").hasAnyRole("ADMIN", "USER");
-        // http.authorizeRequests().antMatchers("/administrator").hasAnyRole("ADMIN");
+        http.authorizeRequests().antMatchers("/profile").hasAnyRole("ADMIN", "USER");
+        http.authorizeRequests().antMatchers("/administrator").hasAnyRole("ADMIN");
 
 
         // Login form
-        // http.formLogin().loginPage("/login");
-        // http.formLogin().usernameParameter("username");
-        // http.formLogin().passwordParameter("password");
-        // http.formLogin().defaultSuccessUrl("/index");
-        // http.formLogin().failureUrl("/loginerror");
+        http.formLogin().loginPage("/login");
+        http.formLogin().usernameParameter("username");
+        http.formLogin().passwordParameter("password");
+        http.formLogin().defaultSuccessUrl("/index");
+        http.formLogin().failureUrl("/loginerror");
     }    
 }

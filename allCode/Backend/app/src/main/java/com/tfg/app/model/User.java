@@ -30,7 +30,7 @@ public class User {
     private String lastName;
 
     @Column(nullable = false, unique = true)
-    private String dni;
+    private String username;
 
     @Column(nullable = false, unique = true)
     private String email;
@@ -68,21 +68,21 @@ public class User {
     public User() {
     }
 
-    public User(String name, String dni, String email, String passwordEncoded, String ... roles) {
+    public User(String name, String username, String email, String passwordEncoded, String ... roles) {
         this.name = name;
-        this.dni = dni;
+        this.username = username;
         this.email = email;
         this.passwordEncoded = passwordEncoded;
         this.roles = List.of(roles);
     }
 
-    public User(Long id, String name, String lastName, String dni, String email, String passwordEncoded, String address,
+    public User(Long id, String name, String lastName, String username, String email, String passwordEncoded, String address,
             String city, String country, int postalCode, int phone, String gender, LocalDate birth, List<String> roles,
             Blob profileAvatarFile, List<Intervention> interventions, List<Appointment> appointments) {
         this.id = id;
         this.name = name;
         this.lastName = lastName;
-        this.dni = dni;
+        this.username = username;
         this.email = email;
         this.passwordEncoded = passwordEncoded;
         this.address = address;
@@ -102,7 +102,7 @@ public class User {
         super();
         this.name = userDTO.getName();
         this.lastName = userDTO.getLastName();
-        this.dni = userDTO.getDNI();
+        this.username = userDTO.getUsername();
         this.email = userDTO.getEmail();
         this.passwordEncoded = userDTO.getPasswordEncoded();
         this.address = userDTO.getAddress();
@@ -113,6 +113,11 @@ public class User {
         this.gender = userDTO.getGender();
         this.birth = userDTO.getBirth();
         this.roles = List.of("USER");
+    }
+
+    public User(String username, String password) {
+        this.username = username;
+        this.passwordEncoded = password;
     }
 
     public Long getId() {
@@ -139,12 +144,12 @@ public class User {
         this.lastName = lastName;
     }
 
-    public String getDNI() {
-        return dni;
+    public String getUsername() {
+        return username;
     }
 
-    public void setDNI(String dni) {
-        this.dni = dni;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getEmail() {

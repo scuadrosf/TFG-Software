@@ -6,7 +6,7 @@ public class UserDTO {
     
     private String name;
     private String lastName;
-    private String dni;
+    private String username;
     private String email;
     private String passwordEncoded;
     private String address;
@@ -17,11 +17,11 @@ public class UserDTO {
     private String gender;
     private LocalDate birth;
 
-    public UserDTO(String name, String lastName, String dni, String email, String passwordEncoded, String address,
+    public UserDTO(String name, String lastName, String username, String email, String passwordEncoded, String address,
             String city, String country, int postalCode, int phone, String gender, LocalDate birth) {
         this.name = name;
         this.lastName = lastName;
-        this.dni = dni;
+        this.username = username;
         this.email = email;
         this.passwordEncoded = passwordEncoded;
         this.address = address;
@@ -49,12 +49,12 @@ public class UserDTO {
         this.lastName = lastName;
     }
 
-    public String getDNI() {
-        return dni;
+    public String getUsername() {
+        return username;
     }
 
-    public void setDNI(String dni) {
-        this.dni = dni;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getEmail() {

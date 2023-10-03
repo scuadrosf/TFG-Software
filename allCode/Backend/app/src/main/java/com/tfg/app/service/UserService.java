@@ -31,13 +31,21 @@ public class UserService {
         return users.findById(id);
     }
 
-    public Optional<User> findBydni(String dni){
-        return users.findBydni(dni);
+    public Optional<User> findByUsername(String dni){
+        return users.findByUsername(dni);
     }
 
-    public boolean existDNI(String dni) {
-        Optional<User> user = findBydni(dni);
+    public boolean existUsername(String dni) {
+        Optional<User> user = findByUsername(dni);
         return user.isPresent();
     }
+    public Optional<User> findByEmail(String email){
+        return users.findByEmail(email);
+    }
+    public Optional<User> findByName(String name){
+        return users.findByName(name);
+    }
+
+
 
 }
