@@ -25,13 +25,7 @@ export class DataService {
       })
     );
   }
-  public getStaffList(): Observable<apiResultFormat> {
-    return this.http.get<apiResultFormat>('assets/json/staff-list.json').pipe(
-      map((res: apiResultFormat) => {
-        return res;
-      })
-    );
-  }
+  
   public getAppointmentList(): Observable<apiResultFormat> {
     return this.http.get<apiResultFormat>('assets/json/appointment-list.json').pipe(
       map((res: apiResultFormat) => {
@@ -39,13 +33,7 @@ export class DataService {
       })
     );
   }
-  public getStaffHoliday(): Observable<apiResultFormat> {
-    return this.http.get<apiResultFormat>('assets/json/staff-holiday.json').pipe(
-      map((res: apiResultFormat) => {
-        return res;
-      })
-    );
-  }
+  
   public getSchedule(): Observable<apiResultFormat> {
     return this.http.get<apiResultFormat>('assets/json/schedule.json').pipe(
       map((res: apiResultFormat) => {
@@ -53,13 +41,7 @@ export class DataService {
       })
     );
   }
-  public getInvoices(): Observable<apiResultFormat> {
-    return this.http.get<apiResultFormat>('assets/json/invoices.json').pipe(
-      map((res: apiResultFormat) => {
-        return res;
-      })
-    );
-  }
+  
   public getPayments(): Observable<apiResultFormat> {
     return this.http.get<apiResultFormat>('assets/json/payments.json').pipe(
       map((res: apiResultFormat) => {
@@ -74,20 +56,8 @@ export class DataService {
       })
     );
   }
-  public getTaxes(): Observable<apiResultFormat> {
-    return this.http.get<apiResultFormat>('assets/json/taxes.json').pipe(
-      map((res: apiResultFormat) => {
-        return res;
-      })
-    );
-  }
-  public getProvidentFund(): Observable<apiResultFormat> {
-    return this.http.get<apiResultFormat>('assets/json/provident-fund.json').pipe(
-      map((res: apiResultFormat) => {
-        return res;
-      })
-    );
-  }
+  
+  
   public getDepartmentList(): Observable<apiResultFormat> {
     return this.http.get<apiResultFormat>('assets/json/department-list.json').pipe(
       map((res: apiResultFormat) => {
@@ -95,34 +65,8 @@ export class DataService {
       })
     );
   }
-  public getSalary(): Observable<apiResultFormat> {
-    return this.http.get<apiResultFormat>('assets/json/salary.json').pipe(
-      map((res: apiResultFormat) => {
-        return res;
-      })
-    );
-  }
-  public getAssetsList(): Observable<apiResultFormat> {
-    return this.http.get<apiResultFormat>('assets/json/assets-list.json').pipe(
-      map((res: apiResultFormat) => {
-        return res;
-      })
-    );
-  }
-  public getExpenseReports(): Observable<apiResultFormat> {
-    return this.http.get<apiResultFormat>('assets/json/expense-reports.json').pipe(
-      map((res: apiResultFormat) => {
-        return res;
-      })
-    );
-  }
-  public getInvoiceReports(): Observable<apiResultFormat> {
-    return this.http.get<apiResultFormat>('assets/json/invoice-reports.json').pipe(
-      map((res: apiResultFormat) => {
-        return res;
-      })
-    );
-  }
+  
+  
   public getAllInvoice(): Observable<apiResultFormat> {
     return this.http.get<apiResultFormat>('assets/json/all-invoice.json').pipe(
       map((res: apiResultFormat) => {
@@ -172,27 +116,7 @@ export class DataService {
       })
     );
   }
-  public getStaffLeave(): Observable<apiResultFormat> {
-    return this.http.get<apiResultFormat>('assets/json/staff-leave.json').pipe(
-      map((res: apiResultFormat) => {
-        return res;
-      })
-    );
-  }
-  public getEvents() {
-    return this.http.get<apiResultFormat>('assets/json/scheduleevents.json').pipe(
-      map((res: apiResultFormat) => {
-        return res;
-      })
-    );
-  }
-  public getDataTables() {
-    return this.http.get<apiResultFormat>('assets/json/data-tables.json').pipe(
-      map((res: apiResultFormat) => {
-        return res;
-      })
-    );
-  }
+  
   public sideBar = [
     {
       tittle: 'Menú',
