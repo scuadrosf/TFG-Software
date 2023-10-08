@@ -6,6 +6,8 @@ import java.net.URI;
 import java.security.Principal;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,42 +37,39 @@ public class UserRestController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-
-
     User currentUser;
 
     @ModelAttribute
-	public void addAttributes(Model model, HttpServletRequest request) {
-		Principal principal = request.getUserPrincipal();
+    public void addAttributes(Model model, HttpServletRequest request) {
+        Principal principal = request.getUserPrincipal();
 
-		if (principal != null) {
-			userService.findByEmail(principal.getName()).ifPresent(us -> currentUser = us);
-			model.addAttribute("curretUser", currentUser);
+        if (principal != null) {
+            userService.findByEmail(principal.getName()).ifPresent(us -> currentUser = us);
+            model.addAttribute("curretUser", currentUser);
 
-		} else {
-			model.addAttribute("logged", false);
-		}
-	}
+        } else {
+            model.addAttribute("logged", false);
+        }
+    }
 
     @GetMapping("/me")
     public ResponseEntity<User> me(HttpServletRequest request) {
 
-		Principal principal = request.getUserPrincipal();
+        Principal principal = request.getUserPrincipal();
 
-		if (principal != null) {
-			return ResponseEntity.ok(userService.findByEmail(principal.getName()).orElseThrow());
-		} else {
-			return ResponseEntity.notFound().build();
-		}
-	}
-
+        if (principal != null) {
+            return ResponseEntity.ok(userService.findByEmail(principal.getName()).orElseThrow());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<User> register (@RequestBody UserDTO userDTO){
+    public ResponseEntity<User> register(@RequestBody UserDTO userDTO) {
         User user = new User(userDTO);
 
-        if(!userService.existUsername(user.getUsername())){
+        if (!userService.existUsername(user.getUsername())) {
             user.setPasswordEncoded(passwordEncoder.encode(user.getPasswordEncoded()));
             user.setRoles(Arrays.asList("USER"));
 
@@ -77,14 +77,24 @@ public class UserRestController {
             URI location = fromCurrentRequest().path("/{id}").buildAndExpand(user.getId()).toUri();
 
             return ResponseEntity.created(location).body(user);
-        }else{
+        } else {
             return new ResponseEntity<User>(HttpStatus.FORBIDDEN);
         }
     }
 
     @GetMapping("/userList")
-    public ResponseEntity<List<User>> getAllUsers(){
+    public ResponseEntity<List<User>> getAllUsers() {
         List<User> userList = userService.findAll();
         return ResponseEntity.ok(userList);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<User> getUserById(@PathVariable Long id) {
+        Optional<User> user = userService.findById(id);
+        if (user.isPresent()){
+            return ResponseEntity.ok(user.get());
+        }else{
+            return ResponseEntity.notFound().build();
+        }
     }
 }

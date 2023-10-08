@@ -32,7 +32,6 @@ public class LoginRestController {
 			@CookieValue(name = "accessToken", required = false) String accessToken,
 			@CookieValue(name = "refreshToken", required = false) String refreshToken,
 			@RequestBody LoginRequest loginRequest) {
-		
 		return userService.login(loginRequest, accessToken, refreshToken);
 	}
 

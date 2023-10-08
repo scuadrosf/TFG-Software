@@ -1,0 +1,62 @@
+<!-- Main Wrapper -->
+<div class="main-wrapper login-body">
+    <div class="container-fluid px-0">
+        <div class="row">
+
+            <!-- Login logo -->
+            <div class="col-lg-6 login-wrap">
+                <div class="login-sec">
+                    <div class="log-img">
+                        <img class="img-fluid" src="assets/img/login-02.png" alt="Logo">
+                    </div>
+                </div>
+            </div>
+            <!-- /Login logo -->
+
+            <!-- Login Content -->
+            <div class="col-lg-6 login-wrap-bg">
+                <div class="login-wrapper">
+                    <div class="loginbox">
+                        <div class="login-right">
+                            <div class="login-right-wrap">
+                                <div class="account-logo">
+                                    <img class="logo" src="assets/img/favicon.png" alt="">
+                                </div>
+                                <h2>Iniciar sesión</h2>
+                                <!-- Form -->
+                                <form action="index.html">
+                                    <div class="form-group">
+                                        <label>Correo electrónico <span class="login-danger">*</span></label>
+                                        <input #username class="form-control" type="text">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Contraseña <span class="login-danger">*</span></label>
+                                        <input #password class="form-control pass-input" type="password">
+                                        <span class="profile-views feather-eye-off toggle-password"></span>
+                                    </div>
+                                    <div class="forgotpass">
+                                        <a href="forgot-password.html">¿Has olvidado la contraseña?</a>
+                                    </div>
+                                    <div class="form-group login-btn">
+                                        <button class="btn btn-primary btn-block" (click)="onLogin(username.value, password.value)">Acceder</button>
+                                    </div>
+                                </form>
+                                <!-- /Form -->
+
+                                <div class="next-sign">
+                                    <p class="account-subtitle">Need an account? <a href="register.html">Sign Up</a>
+                                    </p>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- /Login Content -->
+
+        </div>
+    </div>
+</div>
+<!-- /Main Wrapper -->
