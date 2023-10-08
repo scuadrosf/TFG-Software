@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { User } from '../models/user.model';
+import { UserService } from './user.service';
 
 
 const BASE_URL = '/api/auth/';
@@ -13,28 +14,23 @@ const BASE_URL = '/api/auth/';
 export class AuthService {
 
   user: User | undefined;
+  logged: boolean = false;
 
-  constructor(private httpClient: HttpClient) {
+  constructor(private httpClient: HttpClient, private userService: UserService) {
+    this.reqIsLogged();
   }
 
   private loggedIn = new BehaviorSubject<boolean>(false);
 
   reqIsLogged() {
-    try {
-      this.httpClient.get('/api/users/me').subscribe(
-        response => {
-          this.user = response as User;
-          this.loggedIn.next(true);
-        },
-        error => {
-          console.error('Error occurred during request:', error);
-          alert('No se pudo iniciar sesión. Por favor, inténtalo de nuevo más tarde.');
-        }
-      );
-    } catch (error) {
-      console.error('Something went wrong:', error);
-      alert('No se pudo iniciar sesión. Por favor, inténtalo de nuevo más tarde.');
-    }
+    this.httpClient.get('/api/users/me', { withCredentials: true }).subscribe(
+      response => {
+        this.user = response as User;
+        this.logged = true
+      },
+      _ => {
+        throw new Error('Something bad happened');
+      });
   }
 
   get isLoggedIn() {
@@ -74,5 +70,19 @@ export class AuthService {
         this.user = undefined;
       });
   }
+
+  isLogged() {
+    return this.logged;
+  }
+
+  isAdmin() {
+    return this.isLogged() && this.user?.roles.indexOf('ADMIN') !== -1;
+  }
+
+  currentUser() {
+    return this.user;
+  }
+
+  
 
 }

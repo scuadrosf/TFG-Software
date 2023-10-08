@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.tfg.app.model.Appointment;
+import com.tfg.app.model.User;
 import com.tfg.app.repository.AppointmentRepository;
 
 @Service
@@ -28,5 +29,13 @@ public class AppointmentService {
 
     public Optional<Appointment> findById(Long id) {
         return appointments.findById(id);
+    }
+
+    public List<Appointment> findByUserId(Long userId) {
+        return appointments.findByUserId(userId);
+    }
+
+    public void deleteAll(List<Appointment> appointmentList) {
+        appointments.deleteAll(appointmentList);
     }
 }
