@@ -35,8 +35,7 @@
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "node_modules/bootstrap/scss/bootstrap.scss",
-              "node_modules/slick-carousel/slick/slick.scss",
-              "node_modules/slick-carousel/slick/slick-theme.scss",
+      
               "src/assets/icons/fontawesome/css/all.min.css",
               "src/assets/icons/fontawesome/css/fontawesome.min.css",
               "src/assets/icons/feather/css/iconfont.css",
@@ -44,8 +43,8 @@
             ],
             "scripts": [
               "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
-              "node_modules/jquery/dist/jquery.min.js",
-              "node_modules/slick-carousel/slick/slick.min.js"
+              "node_modules/jquery/dist/jquery.min.js"
+          
             ]
           },
           "configurations": {

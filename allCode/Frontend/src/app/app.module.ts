@@ -12,6 +12,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { DashboardsComponent } from './components/dashboards/dashboards.component';
 import { HeaderComponent } from './components/common-components/header/header.component';
+import { ProfileComponent } from './components/profile/profile.component';
+import { SettingsComponent } from './components/settings/settings.component';
 import { SidebarComponent } from './components/common-components/sidebar/sidebar.component';
 
 @NgModule({
@@ -20,7 +22,9 @@ import { SidebarComponent } from './components/common-components/sidebar/sidebar
     LoginComponent,
     DashboardsComponent,
     HeaderComponent,
-    SidebarComponent
+    SidebarComponent,
+    ProfileComponent,
+    SettingsComponent
   ],
   imports: [
     BrowserModule,

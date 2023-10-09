@@ -1,10 +1,12 @@
 <div class="header">
     <div class="header-left">
-        <a href="index.html" class="logo">
+        <a routerLink="dashboard" class="logo">
             <img src="assets/img/favicon.png" width="35" height="35" alt="">
         </a>
     </div>
-    <a id="toggle_btn" href="javascript:void(0);"><img src="assets/img/icons/bar-icon.svg"  alt=""></a>
+      
+    <button (click)="onToggleSideBar()" id="toggle_btn"><img src="assets/img/icons/bar-icon.svg"  alt=""></button>
+    
     <a id="mobile_btn" class="mobile_btn float-start" href="#sidebar"><img src="assets/img/icons/bar-icon.svg"  alt=""></a>
     <div class="top-nav-search mob-view">
         <form>
@@ -89,7 +91,7 @@
             <a href="javascript:void(0);" id="open_msg_box" class="hasnotifications nav-link"><img src="assets/img/icons/note-icon-01.svg" alt=""><span class="pulse"></span> </a>
         </li>
         <li class="nav-item dropdown has-arrow user-profile-list">
-            <a href="#" class="dropdown-toggle nav-link user-link" data-bs-toggle="dropdown">
+            <a href="javascrip:void(0)" class="dropdown-toggle nav-link user-link" data-bs-toggle="dropdown">
                 <div *ngIf="authService.isLogged()" class="user-names">
                     <h5>{{currentUser()?.name}}</h5>
                     <div *ngIf="authService.isAdmin()">
@@ -100,27 +102,27 @@
                     </div>
                 </div>
                 <span class="user-img">
-                    <img [src]="profileAvatarUrls" alt="Admin">
+                    <img [src]="profileAvatarUrls" alt="avatar">
                 </span>
             </a>
             <div class="dropdown-menu">
-                <a class="dropdown-item" href="profile.html">My Profile</a>
-                <a class="dropdown-item" href="edit-profile.html">Edit Profile</a>
-                <a class="dropdown-item" href="settings.html">Settings</a>
-                <a class="dropdown-item" href="login.html">Logout</a>
+                <a class="dropdown-item" (click)="myProfile()">Mi perfil</a>
+                <!-- <a class="dropdown-item" href="edit-profile.html">Edit Profile</a> -->
+                <a class="dropdown-item" (click)="settings()">Ajustes</a>
+                <a class="dropdown-item" (click)="logout()">Cerrar sesión</a>
             </div>
         </li>
         <li class="nav-item ">
-            <a href="settings.html"  class="hasnotifications nav-link"><img src="assets/img/icons/setting-icon-01.svg" alt=""> </a>
+            <a (click)="settings()"  class="hasnotifications nav-link"><img src="assets/img/icons/setting-icon-01.svg" alt=""> </a>
         </li>
     </ul>
     <div class="dropdown mobile-user-menu float-end">
-        <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa-solid fa-ellipsis-vertical"></i></a>
+        <a href="javascript:void(0)" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa-solid fa-ellipsis-vertical"></i></a>
         <div class="dropdown-menu dropdown-menu-end">
-            <a class="dropdown-item" href="profile.html">My Profile</a>
-            <a class="dropdown-item" href="edit-profile.html">Edit Profile</a>
-            <a class="dropdown-item" href="settings.html">Settings</a>
-            <a class="dropdown-item" href="login.html">Logout</a>
+            <a class="dropdown-item" (click)="myProfile()">Mi perfil</a>>
+            <!-- <a class="dropdown-item" href="edit-profile.html">Edit Profile</a> -->
+            <a class="dropdown-item" (click)="settings()">Ajustes</a>
+            <a class="dropdown-item" (click)="logout()">Cerrar sesión</a>>
         </div>
     </div>
 </div>
