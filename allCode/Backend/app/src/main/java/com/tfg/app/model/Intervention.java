@@ -2,6 +2,8 @@ package com.tfg.app.model;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,7 +24,7 @@ public class Intervention {
     @ManyToOne
     private User user;
 
-    @JsonFormat(pattern="yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate interventionDate;
     private String type;
 
@@ -37,7 +39,8 @@ public class Intervention {
         this.interventionDate = interventionDate;
     }
 
-    public Intervention(User user, LocalDate interventionDate, String type, List<Document> documents, Appointment appointment) {
+    public Intervention(User user, LocalDate interventionDate, String type, List<Document> documents,
+            Appointment appointment) {
         this.user = user;
         this.interventionDate = interventionDate;
         this.type = type;
@@ -46,13 +49,12 @@ public class Intervention {
     }
 
     // public Intervention(InterventionDTO interventionDTO) {
-    //     super();
-    //     this.interventionDate = interventionDTO.getInterventionDate();
-    //     this.type = interventionDTO.getType();
-    //     this.user = interventionDTO.getUser();
-    //     this.appointment = interventionDTO.getAppointment();
+    // super();
+    // this.interventionDate = interventionDTO.getInterventionDate();
+    // this.type = interventionDTO.getType();
+    // this.user = interventionDTO.getUser();
+    // this.appointment = interventionDTO.getAppointment();
     // }
-
 
     public Long getId() {
         return id;
@@ -61,8 +63,6 @@ public class Intervention {
     public void setId(Long id) {
         this.id = id;
     }
-
-
 
     public LocalDate getInterventionDate() {
         return interventionDate;
@@ -100,9 +100,8 @@ public class Intervention {
         return appointment;
     }
 
-    public void setAppointment(Appointment appointment) {
-        this.appointment = appointment;
+    public void setAppointment(Appointment currentApointment) {
+        this.appointment = currentApointment;
     }
 
-    
 }

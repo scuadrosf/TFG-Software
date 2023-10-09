@@ -14,7 +14,9 @@ const BASE_URL = '/api/auth/';
 export class AuthService {
 
   user: User | undefined;
+  userAux!: User;
   logged: boolean = false;
+  profileAvatarUrls!: string;
 
   constructor(private httpClient: HttpClient, private userService: UserService) {
     this.reqIsLogged();
@@ -26,6 +28,7 @@ export class AuthService {
     this.httpClient.get('/api/users/me', { withCredentials: true }).subscribe(
       response => {
         this.user = response as User;
+        this.userAux = response as User;
         this.logged = true
       },
       _ => {
@@ -66,8 +69,11 @@ export class AuthService {
   logOut() {
     return this.httpClient.post(BASE_URL + 'logout', { withCredentials: true })
       .subscribe((response: any) => {
+        console.log(this.user);
         this.loggedIn.next(false);
         this.user = undefined;
+        console.log(this.user);
+        window.location.reload();
       });
   }
 
@@ -80,9 +86,22 @@ export class AuthService {
   }
 
   currentUser() {
-    return this.user;
+    return this.userAux;
   }
 
-  
+  // getProfileAvatar(): any {
+  //   this.userService.getMe().subscribe((response) => {
+  //     this.user = response;
+
+
+  //     this.userService.getProfileAvatar(response.id).subscribe(blob => {
+  //       const objectUrl = URL.createObjectURL(blob);
+  //       this.profileAvatarUrls = objectUrl;
+  //     });
+  //   });
+  //   return this.profileAvatarUrls;
+  // }
+
+
 
 }

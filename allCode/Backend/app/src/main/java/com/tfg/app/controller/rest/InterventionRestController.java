@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -69,12 +70,15 @@ public class InterventionRestController {
         }
     }
 
-    @PostMapping("/{id}")
-    public ResponseEntity<Object> addIntervention(@PathVariable Long id) {
-        Optional<Appointment> currentApointment = appointmentService.findById(id);
+    @PostMapping("/{appointmentId}")
+    public ResponseEntity<Object> addIntervention(@PathVariable("appointmentId") Long appointmentId, @RequestBody Intervention intervention) {
+        Optional<Appointment> currentApointment = appointmentService.findById(appointmentId);
         LocalDate date = LocalDate.now();
         if (currentApointment.isPresent()) {
-            Intervention intervention = new Intervention(currentUser, date, "null" , new ArrayList<>(),currentApointment.get());
+            intervention.setUser(currentUser);
+            intervention.setInterventionDate(date);
+            intervention.setAppointment(currentApointment.get());
+            currentApointment.get().getInterventions().add(intervention);
             interventionService.save(intervention);
             return ResponseEntity.status(HttpStatus.CREATED).body(intervention);
         } else {

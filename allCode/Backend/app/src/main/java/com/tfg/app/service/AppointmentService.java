@@ -6,7 +6,9 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.tfg.app.controller.DTOS.InterventionDTO;
 import com.tfg.app.model.Appointment;
+import com.tfg.app.model.Intervention;
 import com.tfg.app.model.User;
 import com.tfg.app.repository.AppointmentRepository;
 

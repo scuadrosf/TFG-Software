@@ -8,7 +8,7 @@ import { SidebarService } from 'src/app/services/side-bar.service';
 
 })
 export class SidebarComponent implements OnInit {
-  isSidebarOpen: boolean = false;
+  isSidebarOpen: boolean = true;
 
   constructor(private sidebarService: SidebarService) { }
 

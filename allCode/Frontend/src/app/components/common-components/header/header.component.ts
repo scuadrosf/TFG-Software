@@ -10,7 +10,7 @@ import { UserService } from 'src/app/services/user.service';
   selector: 'app-header',
   templateUrl: './header.component.html',
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent  {
   showFiller = false;
   isSideBarOpen: boolean = false;
 
@@ -18,20 +18,22 @@ export class HeaderComponent implements OnInit {
   nameUser: string[] = [];
   lastNameUser: string[] = [];
   isAdmin!: boolean;
+  user: User | undefined;
 
   profileAvatarUrls!: string;
   avatarFile: File[] = [];
 
-  constructor(public authService: AuthService, private sidebarService: SidebarService, private router: Router, public userService: UserService) { }
-
-  ngOnInit(): void {
-
+  constructor(public authService: AuthService, private sidebarService: SidebarService, private router: Router, public userService: UserService) {
     this.userService.getMe().subscribe((response) => {
+      this.user = response;
+
+
       this.userService.getProfileAvatar(response.id).subscribe(blob => {
-        this.profileAvatarUrls = URL.createObjectURL(blob);
+        const objectUrl = URL.createObjectURL(blob);
+        this.profileAvatarUrls = objectUrl;
       });
     });
-  }
+   }
 
   currentUser() {
     return this.authService.currentUser();
@@ -53,5 +55,4 @@ export class HeaderComponent implements OnInit {
   onToggleSideBar(): void {
     this.sidebarService.toggleSidebar();
   }
-
 }

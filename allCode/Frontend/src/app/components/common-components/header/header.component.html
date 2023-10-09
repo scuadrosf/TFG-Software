@@ -90,30 +90,31 @@
         <li class="nav-item dropdown d-none d-sm-block">
             <a href="javascript:void(0);" id="open_msg_box" class="hasnotifications nav-link"><img src="assets/img/icons/note-icon-01.svg" alt=""><span class="pulse"></span> </a>
         </li>
-        <li class="nav-item dropdown has-arrow user-profile-list">
-            <a href="javascrip:void(0)" class="dropdown-toggle nav-link user-link" data-bs-toggle="dropdown">
+        <li  class="nav-item dropdown has-arrow user-profile-list">
+            <a href="javascript:void(0)" class="dropdown-toggle nav-link user-link" data-bs-toggle="dropdown">
                 <div *ngIf="authService.isLogged()" class="user-names">
-                    <h5>{{currentUser()?.name}}</h5>
+                    <h5>{{currentUser().name}}</h5>
                     <div *ngIf="authService.isAdmin()">
-                        <span>Administrador</span>
+                        <span>Doctor</span>
                     </div>
                     <div *ngIf="!authService.isAdmin()">
                         <span>Paciente</span>
                     </div>
                 </div>
+                
                 <span class="user-img">
-                    <img [src]="profileAvatarUrls" alt="avatar">
+                    <img [src]="profileAvatarUrls" alt="" >
                 </span>
             </a>
             <div class="dropdown-menu">
-                <a class="dropdown-item" (click)="myProfile()">Mi perfil</a>
+                <a class="dropdown-item" style="cursor: pointer;" (click)="myProfile()">Mi perfil</a>
                 <!-- <a class="dropdown-item" href="edit-profile.html">Edit Profile</a> -->
-                <a class="dropdown-item" (click)="settings()">Ajustes</a>
-                <a class="dropdown-item" (click)="logout()">Cerrar sesión</a>
+                <a class="dropdown-item" style="cursor: pointer;" (click)="settings()">Ajustes</a>
+                <a class="dropdown-item" style="cursor: pointer;" (click)="logout()">Cerrar sesión</a>
             </div>
         </li>
         <li class="nav-item ">
-            <a (click)="settings()"  class="hasnotifications nav-link"><img src="assets/img/icons/setting-icon-01.svg" alt=""> </a>
+            <a style="cursor: pointer;" (click)="settings()"  class="hasnotifications nav-link"><img src="assets/img/icons/setting-icon-01.svg" alt=""> </a>
         </li>
     </ul>
     <div class="dropdown mobile-user-menu float-end">

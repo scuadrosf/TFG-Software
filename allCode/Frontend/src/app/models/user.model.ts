@@ -7,7 +7,7 @@ export interface User {
     id: number;
     name: string;
     lastName: string;
-    DNI: string;
+    username: string;
     email: string;
     encodedPassword: string;
     address: string;

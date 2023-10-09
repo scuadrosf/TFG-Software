@@ -96,6 +96,8 @@ public class Appointment {
         return interventions;
     }
 
+    
+
     public String getDescription() {
         return description;
     }
@@ -103,11 +105,6 @@ public class Appointment {
     public void setDescription(String description) {
         this.description = description;
     }
-
-    public List<Intervention> getIntervention() {
-        return interventions;
-    }
-
     
 
     public User getUser() {

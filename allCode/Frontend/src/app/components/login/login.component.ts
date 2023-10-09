@@ -14,8 +14,9 @@ export class LoginComponent {
   onLogin(user: string, pass: string) {
     this.authService.logIn(user, pass).subscribe(
       (_) => {
-        this.router.navigate(['/'])
+        this.router.navigate(['/dashboard'])
         console.log(this.authService.isLoggedIn)
+        // window.location.reload();
       },
       (_) => { console.error('ERROR SESION') }
     )
