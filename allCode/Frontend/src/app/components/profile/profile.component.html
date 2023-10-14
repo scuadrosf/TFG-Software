@@ -11,14 +11,14 @@
             </div>
 
             <div class="col-sm-5 col-6 text-end m-b-30">
-                <a routerLink="/editProfile" class="btn btn-primary btn-rounded"><i class="fa fa-plus"></i> Editar
+                <a routerLink="/editprofile" class="btn btn-primary btn-rounded"><i class="fa fa-plus"></i> Editar
                     perfil</a>
             </div>
         </div>
         <div class="card-box profile-header">
             <div class="row">
                 <div class="col-md-12">
-                    <div class="profile-view">
+                    <div *ngIf="!authService.isAdmin()" class="profile-view">
                         <div class="profile-img-wrap">
                             <div class="profile-img">
                                 <a href="javascript:void(0);"><img class="avatar" [src]="profileAvatarUrls" alt=""></a>
@@ -63,6 +63,32 @@
                             </div>
                         </div>
                     </div>
+                    <div *ngIf="authService.isAdmin()" class="profile-view">
+                        <div class="user-img">
+                            <div class="profile-img">
+                                <a href="javascript:void(0);"><img class="avatar" [src]="profileAvatarUrls" alt=""></a>
+                            </div>
+                        </div>
+                        <div class="profile-basic">
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <div class="profile-info-left">
+                                        <h3 class="user-name m-t-0 mb-0">{{authService.currentUser().name}}
+                                            {{authService.currentUser().lastName}}</h3>
+                                        <div>DNI: {{authService.currentUser().username}}</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-7">
+                                    <ul class="personal-info">
+                                        <li>
+                                            <span class="title">Correo electrónico:</span>
+                                            <span class="text">{{authService.currentUser().email}}</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -78,8 +104,8 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card-box">
-                                <h3 class="card-title">PONER LA SECCIÓN DE HISTORIAL MÉDICO</h3>
-                                <div class="experience-box">
+                                <h3 class="card-title">Registro de intervenciones</h3>
+                                <div class="experience-box" *ngFor="let intervention of interventions">
                                     <ul class="experience-list">
                                         <li>
                                             <div class="experience-user">
@@ -87,63 +113,10 @@
                                             </div>
                                             <div class="experience-content">
                                                 <div class="timeline-content">
-                                                    <a href="#/" class="name">International College of Medical Science
-                                                        (UG)</a>
-                                                    <div>MBBS</div>
-                                                    <span class="time">2001 - 2003</span>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="experience-user">
-                                                <div class="before-circle"></div>
-                                            </div>
-                                            <div class="experience-content">
-                                                <div class="timeline-content">
-                                                    <a href="#/" class="name">International College of Medical Science
-                                                        (PG)</a>
-                                                    <div>MD - Obstetrics & Gynaecology</div>
-                                                    <span class="time">1997 - 2001</span>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="card-box ">
-                                <h3 class="card-title">Experience</h3>
-                                <div class="experience-box">
-                                    <ul class="experience-list">
-                                        <li>
-                                            <div class="experience-user">
-                                                <div class="before-circle"></div>
-                                            </div>
-                                            <div class="experience-content">
-                                                <div class="timeline-content">
-                                                    <a href="#/" class="name">Consultant Gynecologist</a>
-                                                    <span class="time">Jan 2014 - Present (4 years 8 months)</span>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="experience-user">
-                                                <div class="before-circle"></div>
-                                            </div>
-                                            <div class="experience-content">
-                                                <div class="timeline-content">
-                                                    <a href="#/" class="name">Consultant Gynecologist</a>
-                                                    <span class="time">Jan 2009 - Present (6 years 1 month)</span>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="experience-user">
-                                                <div class="before-circle"></div>
-                                            </div>
-                                            <div class="experience-content">
-                                                <div class="timeline-content">
-                                                    <a href="#/" class="name">Consultant Gynecologist</a>
-                                                    <span class="time">Jan 2004 - Present (5 years 2 months)</span>
+                                                    <a href="#/" class="name">{{intervention.appointment.description}}</a>
+                                                    <!-- Poner que ser routerlink al panel de documentos al pinchar en la description -->
+                                                    <div>{{intervention.user.name}}</div>
+                                                    <span class="time">{{intervention.interventionDate}}</span>
                                                 </div>
                                             </div>
                                         </li>
@@ -155,9 +128,6 @@
                 </div>
                 <div class="tab-pane" id="documents">
                     Hacer como una especie de explorador de archivos, o mostrar todos los archivos por días
-                </div>
-                <div class="tab-pane" id="bottom-tab3">
-                    Tab content 3
                 </div>
             </div>
         </div>

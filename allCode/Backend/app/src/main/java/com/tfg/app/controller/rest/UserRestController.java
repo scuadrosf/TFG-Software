@@ -14,6 +14,7 @@ import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.sql.rowset.serial.SerialBlob;
+import javax.sql.rowset.serial.SerialException;
 
 import org.hibernate.engine.jdbc.BlobProxy;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,12 +95,12 @@ public class UserRestController {
 
         if (!userService.existUsername(user.getUsername())) {
             String imageUrl = "/static/assets/predAvatar.png";
-			try {
-				Resource image = new ClassPathResource(imageUrl);
-				user.setProfileAvatarFile(BlobProxy.generateProxy(image.getInputStream(), image.contentLength()));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+            try {
+                Resource image = new ClassPathResource(imageUrl);
+                user.setProfileAvatarFile(BlobProxy.generateProxy(image.getInputStream(), image.contentLength()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             user.setPasswordEncoded(passwordEncoder.encode(user.getPasswordEncoded()));
             user.setRoles(Arrays.asList("USER"));
 
@@ -112,29 +113,68 @@ public class UserRestController {
         }
     }
 
-    @PostMapping("/{id}")
-	public ResponseEntity<?> updateUser(@PathVariable long id,
-			@RequestParam(value = "name", required= false) String name,
-			@RequestParam(value = "lastName", required = false) String lastName,
-			@RequestParam(value = "profileAvatarFile", required = false) MultipartFile profileAvatarFile) {
-		try {
-			User user = userService.findById(id).orElseThrow();
-            if (name != null)
-			    user.setName(name);
-            if (lastName != null)
-			    user.setLastName(lastName);
+    // @PutMapping("/{id}")
+    // public ResponseEntity<?> updateUser(@PathVariable long id, @RequestBody
+    // UserEditDTO userEditDTO) {
+    // try {
+    // Optional<User> user = userService.findById(id);
+    // if (user.isPresent()) {
+    // // if (userEditDTO.ge != null)
+    // // user.setName(name);
+    // // if (lastName != null)
+    // // user.setLastName(lastName);
+    // User newUser = new User(userEditDTO);
 
-			if (profileAvatarFile != null) {
-				byte[] imageBytes = profileAvatarFile.getBytes();
-				Blob imageBlob = new SerialBlob(imageBytes);
-				user.setProfileAvatarFile(imageBlob);
-			}
-			User updatedUser = userRepository.save(user);
-			return ResponseEntity.ok(updatedUser);
-		} catch (Exception ex) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating profile");
-		}
-	}
+    // if (userEditDTO.getProfileAvatarFile() != null) {
+    // // byte[] imageBytes = userEditDTO.getProfileAvatarFile();
+    // // Blob imageBlob = new SerialBlob(imageBytes);
+    // newUser.setProfileAvatarFile(userEditDTO.getProfileAvatarFile());
+    // }
+    // userRepository.save(newUser);
+    // return ResponseEntity.ok(newUser);
+    // } else {
+    // return ResponseEntity.badRequest().body("User not found");
+    // }
+    // } catch (Exception ex) {
+    // return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error
+    // updating profile");
+    // }
+    // }
+
+    @PostMapping("/{id}")
+    public ResponseEntity<?> updateUser(@PathVariable Long id,
+            @RequestParam(value = "address") String address,
+            @RequestParam(value = "city", required = false) String city,
+            @RequestParam(value = "country", required = false) String country,
+            @RequestParam(value = "postalCode", required = false) String postalCode,
+            @RequestParam(value = "phone", required = false) String phone,
+            @RequestParam(value = "profileAvatarFile", required = false) MultipartFile profileAvatarFile)
+            throws IOException, SerialException, SQLException {
+
+        User user = userService.findById(id).orElseThrow();
+        if (address != null) {
+            user.setAddress(address);
+        }
+        if (city != null) {
+            user.setCity(city);
+        }
+        if (country != null) {
+            user.setCountry(country);
+        }
+        if (postalCode != null) {
+            user.setPostalCode(postalCode);
+        }
+        if(phone != null){
+            user.setPhone(phone);
+        }
+        if (profileAvatarFile != null) {
+            byte[] imageBytes = profileAvatarFile.getBytes();
+            Blob imageBlob = new SerialBlob(imageBytes);
+            user.setProfileAvatarFile(imageBlob);
+        }
+        User updatedUser = userRepository.save(user);
+        return ResponseEntity.ok(updatedUser);
+    }
 
     @GetMapping("/userList")
     public ResponseEntity<List<User>> getAllUsers() {
@@ -159,7 +199,6 @@ public class UserRestController {
         Optional<User> user = userService.findByEmail(principal.getName());
         User useraux = user.get();
         useraux.setEmail(userDTO.getEmail());
-        useraux.setName(userDTO.getName());
         useraux.setPasswordEncoded(userDTO.getPasswordEncoded());
         useraux.setAddress(userDTO.getAddress());
         useraux.setCity(userDTO.getCity());

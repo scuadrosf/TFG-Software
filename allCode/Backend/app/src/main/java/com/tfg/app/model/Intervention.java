@@ -2,8 +2,6 @@ package com.tfg.app.model;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,6 +11,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tfg.app.controller.DTOS.InterventionDTO;
 
 @Entity(name = "interventionTable")
 public class Intervention {
@@ -48,13 +47,25 @@ public class Intervention {
         this.appointment = appointment;
     }
 
-    // public Intervention(InterventionDTO interventionDTO) {
-    // super();
-    // this.interventionDate = interventionDTO.getInterventionDate();
-    // this.type = interventionDTO.getType();
-    // this.user = interventionDTO.getUser();
-    // this.appointment = interventionDTO.getAppointment();
-    // }
+    public Intervention(InterventionDTO interventionDTO) {
+        super();
+        this.interventionDate = interventionDTO.getInterventionDate();
+        this.type = interventionDTO.getType();
+        this.user = interventionDTO.getUser();
+        this.appointment = interventionDTO.getAppointment();
+    }
+
+    public Intervention(User currentUser, Appointment appointment2, List<Document> documents, LocalDate date) {
+        this.user = currentUser;
+        this.appointment = appointment2;
+        this.documents = documents;
+        this.interventionDate = date;
+    }
+
+    public Intervention(User currentUser, Appointment appointment) {
+        this.user = currentUser;
+        this.appointment = appointment;
+    }
 
     public Long getId() {
         return id;

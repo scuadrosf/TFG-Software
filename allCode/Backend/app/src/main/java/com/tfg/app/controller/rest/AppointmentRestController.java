@@ -6,12 +6,11 @@ import java.net.URI;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,9 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tfg.app.controller.DTOS.AppointmentDTO;
-import com.tfg.app.controller.DTOS.InterventionDTO;
 import com.tfg.app.model.Appointment;
-import com.tfg.app.model.Intervention;
 import com.tfg.app.model.User;
 import com.tfg.app.service.AppointmentService;
 import com.tfg.app.service.UserService;
@@ -68,6 +65,12 @@ public class AppointmentRestController {
         appointmentService.save(appointment);
         URI location = fromCurrentRequest().path("/{id}").buildAndExpand(appointment.getId()).toUri();
         return ResponseEntity.created(location).body(appointment);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Optional<Appointment>> getAppointment(@PathVariable Long id){
+        Optional<Appointment> appointment = appointmentService.findById(id);
+        return ResponseEntity.ok(appointment);
     }
 
 }

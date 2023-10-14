@@ -9,14 +9,14 @@ public class AppointmentDTO {
     private LocalDateTime fromDate;
     private LocalDateTime toDate;
     private String description;
-    private Long userId;
+    // private Long userId;
     
-    public AppointmentDTO(LocalDate bookDate, LocalDateTime fromDate, LocalDateTime toDate, String description, Long userId) {
+    public AppointmentDTO(LocalDate bookDate, LocalDateTime fromDate, LocalDateTime toDate, String description) {
         this.bookDate = bookDate;
         this.fromDate = fromDate;
         this.toDate = toDate;
         this.description = description;
-        this.userId = userId;
+        // this.userId = userId;
     }
 
     public LocalDate getBookDate() {
@@ -50,14 +50,5 @@ public class AppointmentDTO {
     public void setDescription(String description) {
         this.description = description;
     }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
     
 }

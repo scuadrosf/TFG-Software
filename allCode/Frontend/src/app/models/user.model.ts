@@ -13,8 +13,8 @@ export interface User {
     address: string;
     city: string;
     country: string;
-    postalCode: number;
-    phone: number;
+    postalCode: string;
+    phone: string;
     gender: string;
     birth: Date;
     roles: string[];

@@ -3,12 +3,14 @@ import { LoginComponent } from "./components/login/login.component"
 import { DashboardsComponent } from "./components/dashboards/dashboards.component"
 import { SettingsComponent } from "./components/settings/settings.component"
 import { ProfileComponent } from "./components/profile/profile.component"
+import { EditProfileComponent } from "./components/profile/edit-profile/edit-profile.component"
 
 const appRoutes = [
     {path: 'dashboard', component: DashboardsComponent},
     {path: 'auth', component: LoginComponent},
     {path: 'settings', component: SettingsComponent},
     {path: 'profile', component: ProfileComponent},
+    {path: 'editprofile', component: EditProfileComponent},
     
 
     {path: '', component: LoginComponent}

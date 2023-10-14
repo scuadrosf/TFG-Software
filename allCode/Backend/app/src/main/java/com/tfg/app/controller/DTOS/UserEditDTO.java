@@ -1,19 +1,23 @@
 package com.tfg.app.controller.DTOS;
 
+import java.io.File;
+import java.sql.Blob;
+
+import org.springframework.web.multipart.MultipartFile;
+
 public class UserEditDTO {
-    private String name;
     private String email;
     private String passwordEncoded;
     private String address;
     private String city;
     private String country;
-    private int postalCode;
-    private int phone;
+    private String postalCode;
+    private String phone;
+    private Blob profileAvatarFile;
 
 
-    public UserEditDTO(String name, String email, String passwordEncoded, String address, String city, String country,
-            int postalCode, int phone) {
-        this.name = name;
+    public UserEditDTO(String email, String passwordEncoded, String address, String city, String country,
+    String postalCode, String phone, Blob profileAvatarFile) {
         this.email = email;
         this.passwordEncoded = passwordEncoded;
         this.address = address;
@@ -21,16 +25,7 @@ public class UserEditDTO {
         this.country = country;
         this.postalCode = postalCode;
         this.phone = phone;
-    }
-
-
-    public String getName() {
-        return name;
-    }
-
-
-    public void setName(String name) {
-        this.name = name;
+        this.profileAvatarFile = profileAvatarFile;
     }
 
 
@@ -84,24 +79,34 @@ public class UserEditDTO {
     }
 
 
-    public int getPostalCode() {
+    public String getPostalCode() {
         return postalCode;
     }
 
 
-    public void setPostalCode(int postalCode) {
+    public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
     }
 
 
-    public int getPhone() {
+    public String getPhone() {
         return phone;
     }
 
 
-    public void setPhone(int phone) {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 
-    
+
+    public Blob getProfileAvatarFile() {
+        return profileAvatarFile;
+    }
+
+
+    public void setProfileAvatarFile(Blob profileAvatarFile) {
+        this.profileAvatarFile = profileAvatarFile;
+    }
+
+ 
 }

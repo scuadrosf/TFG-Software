@@ -89,19 +89,5 @@ export class AuthService {
     return this.userAux;
   }
 
-  // getProfileAvatar(): any {
-  //   this.userService.getMe().subscribe((response) => {
-  //     this.user = response;
-
-
-  //     this.userService.getProfileAvatar(response.id).subscribe(blob => {
-  //       const objectUrl = URL.createObjectURL(blob);
-  //       this.profileAvatarUrls = objectUrl;
-  //     });
-  //   });
-  //   return this.profileAvatarUrls;
-  // }
-
-
 
 }

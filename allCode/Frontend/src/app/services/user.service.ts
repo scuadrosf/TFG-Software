@@ -4,7 +4,7 @@ import { User } from '../models/user.model';
 import { Observable, catchError, map, throwError } from 'rxjs';
 
 
-const baseUrl = '/api/users';
+const baseUrl = '/api/users/';
 
 @Injectable({
   providedIn: 'root'
@@ -15,27 +15,29 @@ export class UserService {
   constructor(private httpClient: HttpClient) { }
 
   getMe(): Observable<User> {
-    return this.httpClient.get<User>(baseUrl + "/me") as Observable<User>
+    return this.httpClient.get<User>(baseUrl + "me") as Observable<User>
   }
 
   getProfileAvatar(userId: number): Observable<Blob> {
-    return this.httpClient.get((baseUrl + '/profileAvatarFile/' + userId), { responseType: 'blob' });
+    return this.httpClient.get((baseUrl + 'profileAvatarFile/' + userId), { responseType: 'blob' });
   }
 
   getUserList(): Observable<User[]> {
-    return this.httpClient.get<User[]>(baseUrl + '/userList');
+    return this.httpClient.get<User[]>(baseUrl + 'userList');
   }
 
-  editUser(user: User, profileAvatarFile?: File): Observable<any> {
-
+  updateUser(updatedUser: User, profileAvatarFile?: File): Observable<any>{
     const formData = new FormData();
-    formData.append('name', user.name || '');
-    formData.append('lastName', user.lastName || '');
-    if (profileAvatarFile) {
+    formData.append('address', updatedUser.address || '');
+    formData.append('city', updatedUser.city || '');
+    formData.append('country', updatedUser.country || '');
+    formData.append('postalCode', updatedUser.postalCode || '');
+    formData.append('phone', updatedUser.phone || '');
+    if (profileAvatarFile){
       formData.append('profileAvatarFile', profileAvatarFile);
     }
 
-    return this.httpClient.post('/api/users/' + user.id, formData).pipe(
+    return this.httpClient.post(baseUrl + updatedUser.id, formData).pipe(
       catchError((error) => {
         return throwError(error);
       })

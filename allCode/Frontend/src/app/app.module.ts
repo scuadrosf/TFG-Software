@@ -15,6 +15,7 @@ import { HeaderComponent } from './components/common-components/header/header.co
 import { ProfileComponent } from './components/profile/profile.component';
 import { SettingsComponent } from './components/settings/settings.component';
 import { SidebarComponent } from './components/common-components/sidebar/sidebar.component';
+import { EditProfileComponent } from './components/profile/edit-profile/edit-profile.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { SidebarComponent } from './components/common-components/sidebar/sidebar
     HeaderComponent,
     SidebarComponent,
     ProfileComponent,
-    SettingsComponent
+    SettingsComponent,
+    EditProfileComponent
   ],
   imports: [
     BrowserModule,
