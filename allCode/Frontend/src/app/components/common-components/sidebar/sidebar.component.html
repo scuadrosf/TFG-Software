@@ -1,11 +1,18 @@
 <!-- sidebar.component.html -->
 
+<div *ngIf="authService.isLogged()" class="sidebar">
+  <h2 class="sidebarNew"> Menú</h2>
+  <div ngbDropdown class="sidebarNew">
+    <a type="button" class="btn btn-outline-primary bto" routerLink="/dashboard">Inicio </a>
 
-  <div *ngIf="isSidebarOpen" class="sidebar">
-    <h2>Menú</h2>
-    <ul>
-      <li><a routerLink="/dashboard">Inicio</a></li>
-      <li><a routerLink="/about">Acerca de</a></li>
-      <!-- Otros elementos del menú -->
-    </ul>
+    <button type="button" class="btn btn-outline-primary bto" id="dropdownBasic1" ngbDropdownToggle>
+      Pacientes
+    </button>
+    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+      <a routerLink="/userList" ngbDropdownItem>Lista</a>
+      <a routerLink="/addUser" ngbDropdownItem>Dar de alta</a>
+      <a routerLink="/userList" ngbDropdownItem>Lista de pacientes</a>
+      
+    </div>
   </div>
+</div>
