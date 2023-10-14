@@ -1,10 +1,12 @@
 package com.tfg.app.controller.rest;
 
+import java.net.URI;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentRequest;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -17,9 +19,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.tfg.app.controller.DTOS.InterventionDTO;
 import com.tfg.app.model.Appointment;
 import com.tfg.app.model.Intervention;
 import com.tfg.app.model.User;
@@ -71,54 +73,36 @@ public class InterventionRestController {
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<List<Intervention>> getUserIntervention(@PathVariable("userId") Long id){
+    public ResponseEntity<List<Intervention>> getUserIntervention(@PathVariable("userId") Long id) {
         Optional<User> user = userService.findById(id);
-        if (user.isPresent()){
-            List<Intervention> interventionList= interventionService.findByUserId(id);
+        if (user.isPresent()) {
+            List<Intervention> interventionList = interventionService.findByUserId(id);
             return ResponseEntity.ok().body(interventionList);
         }
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PostMapping("/{appointmentId}")
-    public ResponseEntity<Object> addIntervention(@PathVariable("appointmentId") Long appointmentId) {
+    public ResponseEntity<Object> addIntervention(@PathVariable("appointmentId") Long appointmentId,
+            @RequestParam (value="type", required = true) String type) {
         Optional<Appointment> currentApointment = appointmentService.findById(appointmentId);
         LocalDate date = LocalDate.now();
         if (currentApointment.isPresent()) {
-            Intervention intervention = new Intervention(currentUser, currentApointment.get(), new ArrayList<>(), date);
+            Intervention intervention = new Intervention();
+            intervention.setInterventionDate(date);
+            intervention.setAppointment(currentApointment.get());
+            intervention.setDocuments(new ArrayList<>());
+            intervention.setType(type);
+            intervention.setUser(currentUser);
+            currentApointment.get().getInterventions().add(intervention);
             interventionService.save(intervention);
-            InterventionDTO responseDTO = new InterventionDTO(date, null, currentUser, currentApointment.get(),
-                    new ArrayList<>());
-            return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
+            appointmentService.save(currentApointment.get());
+            URI location = fromCurrentRequest().path("/{id}").buildAndExpand(intervention.getId()).toUri();
+            return ResponseEntity.created(location).body(intervention);
         } else {
             String errorMessage = "Primero debe pedir cita";
             return ResponseEntity.badRequest().body(errorMessage);
         }
     }
-    // @PostMapping("/{appointmentId}")
-    // public ResponseEntity<Intervention>
-    // addIntervention(@PathVariable("appointmentId") Long appointmentId,
-    // @RequestBody InterventionDTO interventionDTO) {
-    // Optional<Appointment> currentApointment =
-    // appointmentService.findById(appointmentId);
-    // Intervention intervention = new Intervention(interventionDTO);
-    // LocalDate date = LocalDate.now();
-    // if (currentApointment.isPresent()) {
-    // // intervention.setType("Empaste");
-    // intervention.setUser(currentUser);
-    // intervention.setInterventionDate(date);
-    // intervention.setAppointment(currentApointment.get());
-    // intervention.setDocuments(new ArrayList<>());
-    // currentApointment.get().getInterventions().add(intervention);
-    // interventionService.save(intervention);
-    // currentApointment.get().getInterventions().add(intervention);
-    // URI location =
-    // fromCurrentRequest().path("/{id}").buildAndExpand(intervention.getId()).toUri();
-    // return ResponseEntity.created(location).body(intervention);
-    // }
-    // else {
-    // String errorMessage = "Primero debe pedir cita";
-    // return ResponseEntity.notFound().build();
-    // }
-    // }
+
 }

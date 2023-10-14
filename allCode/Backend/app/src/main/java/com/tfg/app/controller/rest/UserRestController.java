@@ -113,34 +113,6 @@ public class UserRestController {
         }
     }
 
-    // @PutMapping("/{id}")
-    // public ResponseEntity<?> updateUser(@PathVariable long id, @RequestBody
-    // UserEditDTO userEditDTO) {
-    // try {
-    // Optional<User> user = userService.findById(id);
-    // if (user.isPresent()) {
-    // // if (userEditDTO.ge != null)
-    // // user.setName(name);
-    // // if (lastName != null)
-    // // user.setLastName(lastName);
-    // User newUser = new User(userEditDTO);
-
-    // if (userEditDTO.getProfileAvatarFile() != null) {
-    // // byte[] imageBytes = userEditDTO.getProfileAvatarFile();
-    // // Blob imageBlob = new SerialBlob(imageBytes);
-    // newUser.setProfileAvatarFile(userEditDTO.getProfileAvatarFile());
-    // }
-    // userRepository.save(newUser);
-    // return ResponseEntity.ok(newUser);
-    // } else {
-    // return ResponseEntity.badRequest().body("User not found");
-    // }
-    // } catch (Exception ex) {
-    // return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error
-    // updating profile");
-    // }
-    // }
-
     @PostMapping("/{id}")
     public ResponseEntity<?> updateUser(@PathVariable Long id,
             @RequestParam(value = "address") String address,

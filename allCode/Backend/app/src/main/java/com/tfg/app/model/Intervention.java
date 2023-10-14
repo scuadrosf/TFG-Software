@@ -47,13 +47,13 @@ public class Intervention {
         this.appointment = appointment;
     }
 
-    public Intervention(InterventionDTO interventionDTO) {
-        super();
-        this.interventionDate = interventionDTO.getInterventionDate();
-        this.type = interventionDTO.getType();
-        this.user = interventionDTO.getUser();
-        this.appointment = interventionDTO.getAppointment();
-    }
+    // public Intervention(InterventionDTO interventionDTO) {
+    //     super();
+    //     this.interventionDate = interventionDTO.getInterventionDate();
+    //     this.type = interventionDTO.getType();
+    //     this.user = interventionDTO.getUser();
+    //     this.appointment = interventionDTO.getAppointment();
+    // }
 
     public Intervention(User currentUser, Appointment appointment2, List<Document> documents, LocalDate date) {
         this.user = currentUser;
@@ -65,6 +65,9 @@ public class Intervention {
     public Intervention(User currentUser, Appointment appointment) {
         this.user = currentUser;
         this.appointment = appointment;
+    }
+
+    public Intervention() {
     }
 
     public Long getId() {
