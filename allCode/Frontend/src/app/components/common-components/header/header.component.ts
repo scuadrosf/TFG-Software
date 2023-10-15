@@ -3,29 +3,29 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { User } from 'src/app/models/user.model';
 import { AuthService } from 'src/app/services/auth.service';
-import { SidebarService } from 'src/app/services/side-bar.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
 })
-export class HeaderComponent  {
-  showFiller = false;
-  isSideBarOpen: boolean = false;
+export class HeaderComponent implements OnInit {
 
-  currentUserId!: number;
-  nameUser: string[] = [];
-  lastNameUser: string[] = [];
+  nameUser: string | undefined;
   isAdmin!: boolean;
   user: User | undefined;
 
-  profileAvatarUrls!: string;
+  profileAvatarUrls: string | undefined;
   avatarFile: File[] = [];
 
-  constructor(public authService: AuthService, private sidebarService: SidebarService, private router: Router, public userService: UserService) {
+  constructor(public authService: AuthService, private router: Router, public userService: UserService) {
+
+  }
+
+  ngOnInit(): void {
     this.userService.getMe().subscribe((response) => {
       this.user = response;
+      this.nameUser = response.name;
 
 
       this.userService.getProfileAvatar(response.id).subscribe(blob => {
@@ -33,7 +33,7 @@ export class HeaderComponent  {
         this.profileAvatarUrls = objectUrl;
       });
     });
-   }
+  }
 
   currentUser() {
     return this.authService.currentUser();
@@ -52,7 +52,7 @@ export class HeaderComponent  {
     this.router.navigate(['/settings'])
   }
 
-  onToggleSideBar(): void {
-    this.sidebarService.toggleSidebar();
-  }
+  // onToggleSideBar(): void {
+  //   this.sidebarService.toggleSidebar();
+  // }
 }

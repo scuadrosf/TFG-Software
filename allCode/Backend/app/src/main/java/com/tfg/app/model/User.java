@@ -46,7 +46,7 @@ public class User {
     private String phone;
     private String gender;
 
-    @JsonFormat(pattern="yyyy-MM-dd")
+    @JsonFormat(pattern="dd-MM-yyyy")
     private LocalDate birth;
 
 

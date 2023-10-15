@@ -16,6 +16,10 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { SettingsComponent } from './components/settings/settings.component';
 import { SidebarComponent } from './components/common-components/sidebar/sidebar.component';
 import { EditProfileComponent } from './components/profile/edit-profile/edit-profile.component';
+import { PatientComponent } from './components/patient/patient.component';
+import { AddPatientComponent } from './components/patient/add-patient/add-patient.component';
+import { EditPatientComponent } from './components/patient/edit-patient/edit-patient.component';
+import { ErrorPageComponent } from './components/error-page/error-page.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +30,11 @@ import { EditProfileComponent } from './components/profile/edit-profile/edit-pro
     SidebarComponent,
     ProfileComponent,
     SettingsComponent,
-    EditProfileComponent
+    EditProfileComponent,
+    PatientComponent,
+    AddPatientComponent,
+    EditPatientComponent,
+    ErrorPageComponent
   ],
   imports: [
     BrowserModule,
