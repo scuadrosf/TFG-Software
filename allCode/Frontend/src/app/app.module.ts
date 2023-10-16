@@ -20,6 +20,7 @@ import { PatientComponent } from './components/patient/patient.component';
 import { AddPatientComponent } from './components/patient/add-patient/add-patient.component';
 import { EditPatientComponent } from './components/patient/edit-patient/edit-patient.component';
 import { ErrorPageComponent } from './components/error-page/error-page.component';
+import { MyprofileComponent } from './components/profile/myprofile/myprofile.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { ErrorPageComponent } from './components/error-page/error-page.component
     PatientComponent,
     AddPatientComponent,
     EditPatientComponent,
-    ErrorPageComponent
+    ErrorPageComponent,
+    MyprofileComponent
   ],
   imports: [
     BrowserModule,

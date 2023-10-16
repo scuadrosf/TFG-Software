@@ -26,29 +26,34 @@ export class AddPatientComponent {
 
 
   addPatient() {
-    const userData = {
-      name: this.name,
-      lastName: this.lastName,
-      email: this.email,
-      passwordEncoded: this.passwordEncoded,
-      username: this.username,
-      gender: this.gender,
-      phone: this.phone,
-      birth: this.birth,
-      address: this.address,
-      country: this.country,
-      city: this.city,
-      postalCode: this.postalCode,
-    }
-    console.log(this.gender);
-    this.authService.register(userData).subscribe(
-      (_) => {
-        this.router.navigate(['/patient-list']);
-      },
-      (_) => {
-        console.error("error");
-        this.router.navigate(['/error-page'])
+    if (this.authService.isAdmin()) {
+      const userData = {
+        name: this.name,
+        lastName: this.lastName,
+        email: this.email,
+        passwordEncoded: this.passwordEncoded,
+        username: this.username,
+        gender: this.gender,
+        phone: this.phone,
+        birth: this.birth,
+        address: this.address,
+        country: this.country,
+        city: this.city,
+        postalCode: this.postalCode,
       }
-    );
+      console.log(this.gender);
+      this.authService.register(userData).subscribe(
+        (_) => {
+          alert('Paciente creado');
+          this.router.navigate(['/patient-list']);
+        },
+        (_) => {
+          console.error("error");
+          this.router.navigate(['/error-page'])
+        }
+      );
+    }else{
+      console.error(this.authService.currentUser())
+    }
   }
 }

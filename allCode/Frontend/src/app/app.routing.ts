@@ -8,12 +8,14 @@ import { PatientComponent } from "./components/patient/patient.component"
 import { AddPatientComponent } from "./components/patient/add-patient/add-patient.component"
 import { EditPatientComponent } from "./components/patient/edit-patient/edit-patient.component"
 import { ErrorPageComponent } from "./components/error-page/error-page.component"
+import { MyprofileComponent } from "./components/profile/myprofile/myprofile.component"
 
 const appRoutes = [
     {path: 'dashboard', component: DashboardsComponent},
     {path: 'auth', component: LoginComponent},
     {path: 'settings', component: SettingsComponent},
-    {path: 'profile', component: ProfileComponent},
+    {path: 'profile', component: MyprofileComponent},
+    {path: 'profile/:id', component: ProfileComponent},
     {path: 'editprofile', component: EditProfileComponent},
     {path: 'patient-list', component: PatientComponent},
     {path: 'add-patient', component: AddPatientComponent},

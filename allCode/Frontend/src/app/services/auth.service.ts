@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { User } from '../models/user.model';
 import { UserService } from './user.service';
+import { ActivatedRoute } from '@angular/router';
 
 
 const BASE_URL = '/api/auth/';
@@ -12,13 +13,14 @@ const BASE_URL = '/api/auth/';
   providedIn: 'root'
 })
 export class AuthService {
-
+  userId!: number;
   user: User | undefined;
   userAux!: User;
   logged: boolean = false;
   profileAvatarUrls!: string;
 
-  constructor(private httpClient: HttpClient, private userService: UserService) {
+  constructor(private httpClient: HttpClient, private userService: UserService, private activatedRoute: ActivatedRoute) {
+    this.userId = activatedRoute.snapshot.params['id'];
     this.reqIsLogged();
   }
 
@@ -83,6 +85,11 @@ export class AuthService {
 
   isAdmin() {
     return this.isLogged() && this.user?.roles.indexOf('ADMIN') !== -1;
+  }
+
+  isUser(){
+    return !this.userService.checkAdmin(this.userId);
+  // CheckAdmin returns false if is USER and returns true if is ADMIN
   }
 
   currentUser() {

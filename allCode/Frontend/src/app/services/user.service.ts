@@ -25,6 +25,10 @@ export class UserService {
   getUserList(): Observable<User[]> {
     return this.httpClient.get<User[]>(baseUrl + 'userList');
   }
+  
+  getUser(id: number): Observable<User>{
+    return this.httpClient.get<User>(baseUrl+ id);
+  }
 
   updateUser(updatedUser: User, profileAvatarFile?: File): Observable<any>{
     const formData = new FormData();
@@ -48,7 +52,7 @@ export class UserService {
     return this.httpClient.delete('/api/users/' + user.id).subscribe();
   }
 
-  checkAdmin(user: User): Observable<boolean> {
-    return this.httpClient.get<boolean>('/api/users/rol/' + user.id);
+  checkAdmin(id: number): Observable<boolean> {
+    return this.httpClient.get<boolean>('/api/users/rol/' + id);
   }
 }
