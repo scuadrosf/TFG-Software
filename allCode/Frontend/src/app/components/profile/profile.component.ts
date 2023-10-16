@@ -12,7 +12,7 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class ProfileComponent implements OnInit {
 
-  user: User | undefined;
+  user!: User;
   idUser!: number;
   profileAvatarUrls!: string;
   isAdmin: boolean = false;

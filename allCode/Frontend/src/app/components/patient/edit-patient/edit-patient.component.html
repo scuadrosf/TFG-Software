@@ -1,1 +1,109 @@
-<p>edit-patient works!</p>
+<div class="page-wrapper">
+    <div class="content">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="row">
+                <div class="col-sm-12">
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a routerLink="/profile">Mi perfil </a></li>
+                        <li class="breadcrumb-item"><i class="feather icon-chevron-right"></i></li>
+                        <li class="breadcrumb-item active">Editar perfil</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- /Page Header -->
+
+        <div class="card-box">
+            <h3 class="card-title">Información básica</h3>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="profile-img-wrap">
+                        <img class="inline-block" [src]="profileAvatarUrls" alt="user">
+                        <div class="fileupload btn">
+                            <span class="btn-text">Cambiar</span>
+                            <input type="file" class="upload" id="avatarFile" name="avatarFile" accept=".png, .jpg, .jpeg"
+                            (change)="onFileSelected($event)">
+                        </div>
+                    </div>
+                    <div class="profile-basic">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group local-forms">
+                                    <label class="focus-label">Nombre</label>
+                                    <span type="text" class="form-control floating">{{this.user.name}}</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group local-forms">
+                                    <label class="focus-label">Apellidos </label>
+                                    <span type="text" class="form-control floating">{{user.lastName}}</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group local-forms">
+                                    <label class="focus-label">Documento Nacional de Identidad (DNI) </label>
+                                    <span type="text" class="form-control floating">{{user.username}}</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group local-forms">
+                                    <label class="focus-label">Correo electrónico </label>
+                                    <span type="email" class="form-control floating">{{user.email}}</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group local-forms">
+                                    <label class="focus-label">Género</label>
+                                    <span type="text" class="form-control floating">{{user.gender}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-box">
+            <h3 class="card-title">Información de contacto</h3>
+            <div class="row">
+                <div class="col-md-12">
+                    <br>
+                    <div class="form-group local-forms">
+                        <label class="focus-label">Dirección</label>
+                        <input type="text" [placeholder]="this.user.address" [(ngModel)]="address" name="address" class="form-control floating">
+                        
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group local-forms">
+                        <label class="focus-label">Ciudad</label>
+                        <input type="text" [placeholder]="this.user.city" class="form-control floating" [(ngModel)]="city" name="city">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group local-forms">
+                        <label class="focus-label">País</label>
+                        <input type="text" [placeholder]="this.user.country" [(ngModel)]="country" name="country" class="form-control floating">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group local-forms">
+                        <label class="focus-label">Código postal</label>
+                        <input type="text" [placeholder]="this.user.postalCode" [(ngModel)]="postalCode" name="postalCode" class="form-control floating">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group local-forms">
+                        <label class="focus-label">Teléfono</label>
+                        <input type="text" [placeholder]="this.user.phone" [(ngModel)]="phone" name="phone" class="form-control floating">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center m-t-20">
+            <button class="btn btn-primary submit-btn" (click)="editUser()" type="button">Guardar</button>
+        </div>
+        <br>
+    </div>
+</div>

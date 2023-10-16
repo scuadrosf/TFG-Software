@@ -16,6 +16,7 @@ const appRoutes = [
     {path: 'settings', component: SettingsComponent},
     {path: 'profile', component: MyprofileComponent},
     {path: 'profile/:id', component: ProfileComponent},
+    {path: 'editprofile/:id', component: EditProfileComponent},
     {path: 'editprofile', component: EditProfileComponent},
     {path: 'patient-list', component: PatientComponent},
     {path: 'add-patient', component: AddPatientComponent},

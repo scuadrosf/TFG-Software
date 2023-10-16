@@ -48,11 +48,12 @@ export class HeaderComponent implements OnInit {
     this.router.navigate(['/auth']);
   }
 
-  myProfile() {
-    this.router.navigate(['/profile'])
-  }
   settings() {
     this.router.navigate(['/settings'])
+  }
+
+  myProfile(){
+    this.router.navigate(['/profile/'])
   }
 
   // onToggleSideBar(): void {

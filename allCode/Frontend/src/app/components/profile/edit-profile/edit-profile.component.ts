@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { User } from 'src/app/models/user.model';
 import { AuthService } from 'src/app/services/auth.service';
 import { UserService } from 'src/app/services/user.service';
+
 
 @Component({
   selector: 'app-edit-profile',
@@ -10,6 +11,7 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class EditProfileComponent implements OnInit {
 
+  userId!: number;
   user!: User;
   profileAvatarUrls!: string
   address!: string
@@ -19,9 +21,10 @@ export class EditProfileComponent implements OnInit {
   phone!: string
   avatarFile!: File;
 
-  constructor(private router: Router, private userService: UserService, public authService: AuthService) { }
+  constructor(private router: Router, private userService: UserService, public authService: AuthService, private activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
+    this.userId = this.activatedRoute.snapshot.params['id'];
     this.userService.getMe().subscribe((response) => {
       this.user = response;
 
@@ -37,6 +40,7 @@ export class EditProfileComponent implements OnInit {
     if (event.target.files && event.target.files.length > 0) {
       this.avatarFile = event.target.files[0];
     }
+    
   }
 
   editUser() {
@@ -55,7 +59,7 @@ export class EditProfileComponent implements OnInit {
         (_) => {
           console.log(this.user);
           this.ngOnInit();
-          this.router.navigate(['/profile']);
+          window.history.back();
         },
       );
     }

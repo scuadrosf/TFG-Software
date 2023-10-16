@@ -45,7 +45,7 @@ export class AddPatientComponent {
       this.authService.register(userData).subscribe(
         (_) => {
           alert('Paciente creado');
-          this.router.navigate(['/patient-list']);
+          window.history.back();
         },
         (_) => {
           console.error("error");
