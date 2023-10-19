@@ -67,6 +67,18 @@ public class AppointmentRestController {
         return ResponseEntity.created(location).body(appointment);
     }
 
+    @PostMapping("/user={userId}")
+    public ResponseEntity<Appointment> addAppointmentToUser(@RequestBody AppointmentDTO appointmentDTO, @PathVariable ("userId") Long userId) {
+        Appointment appointment = new Appointment(appointmentDTO);
+        User user = userService.findById(userId).orElseThrow();
+        if (user!= null)
+            appointment.setUser(user);
+        appointment.setInterventions(new ArrayList<>());
+        appointmentService.save(appointment);
+        URI location = fromCurrentRequest().path("/{id}").buildAndExpand(appointment.getId()).toUri();
+        return ResponseEntity.created(location).body(appointment);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Optional<Appointment>> getAppointment(@PathVariable Long id){
         Optional<Appointment> appointment = appointmentService.findById(id);

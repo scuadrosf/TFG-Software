@@ -61,29 +61,29 @@ public class InterventionRestController {
         return ResponseEntity.ok().body(interventionList);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Intervention> getInterventionById(@PathVariable Long id) {
-        Optional<Intervention> intervention = interventionService.findById(id);
-        if (intervention.isPresent()) {
-            Intervention interventionAux = intervention.get();
-            return new ResponseEntity<>(interventionAux, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
+    // @GetMapping("/{id}")
+    // public ResponseEntity<Intervention> getInterventionById(@PathVariable Long id) {
+    //     Optional<Intervention> intervention = interventionService.findById(id);
+    //     if (intervention.isPresent()) {
+    //         Intervention interventionAux = intervention.get();
+    //         return new ResponseEntity<>(interventionAux, HttpStatus.OK);
+    //     } else {
+    //         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    //     }
+    // }
 
     @GetMapping("/{userId}")
     public ResponseEntity<List<Intervention>> getUserIntervention(@PathVariable("userId") Long id) {
         Optional<User> user = userService.findById(id);
         if (user.isPresent()) {
-            List<Intervention> interventionList = interventionService.findByUserId(id);
+            List<Intervention> interventionList = interventionService.findByUserId(user.get().getId());
             return ResponseEntity.ok().body(interventionList);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping("/{appointmentId}")
-    public ResponseEntity<Object> addIntervention(@PathVariable("appointmentId") Long appointmentId,
+    @PostMapping("/{appointmentId}/user={userId}")
+    public ResponseEntity<Object> addIntervention(@PathVariable("appointmentId") Long appointmentId, @PathVariable("userId") Long userId,
             @RequestParam (value="type", required = true) String type) {
         Optional<Appointment> currentApointment = appointmentService.findById(appointmentId);
         LocalDate date = LocalDate.now();
@@ -93,7 +93,9 @@ public class InterventionRestController {
             intervention.setAppointment(currentApointment.get());
             intervention.setDocuments(new ArrayList<>());
             intervention.setType(type);
-            intervention.setUser(currentUser);
+            User user = userService.findById(userId).orElseThrow(() -> new IllegalArgumentException("Invalid User Id: " + userId));
+            if(user != null)
+                intervention.setUser(user);
             currentApointment.get().getInterventions().add(intervention);
             interventionService.save(intervention);
             appointmentService.save(currentApointment.get());

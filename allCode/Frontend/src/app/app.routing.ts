@@ -9,6 +9,9 @@ import { AddPatientComponent } from "./components/patient/add-patient/add-patien
 import { EditPatientComponent } from "./components/patient/edit-patient/edit-patient.component"
 import { ErrorPageComponent } from "./components/error-page/error-page.component"
 import { MyprofileComponent } from "./components/profile/myprofile/myprofile.component"
+import { DocumentsComponent } from "./components/documents/documents.component"
+import { DocumentsOfInterventionComponent } from "./components/documents/documents-of-intervention/documents-of-intervention.component"
+import { AddAppointmentComponent } from "./components/appointment/add-appointment/add-appointment.component"
 
 const appRoutes = [
     {path: 'dashboard', component: DashboardsComponent},
@@ -21,7 +24,12 @@ const appRoutes = [
     {path: 'patient-list', component: PatientComponent},
     {path: 'add-patient', component: AddPatientComponent},
     {path: 'edit-patient/:id', component: EditPatientComponent},
-    
+    // Show all documents of ONE patient
+    {path: 'documents/:id', component: DocumentsComponent},
+    // Show all documents of THAT intervention
+    {path: 'documents/:idUser/:idIntervention', component: DocumentsOfInterventionComponent},
+    {path: 'add-appointment/:id', component: AddAppointmentComponent},
+
 
     {path: '', component: LoginComponent},
     {path: '**', component: ErrorPageComponent}

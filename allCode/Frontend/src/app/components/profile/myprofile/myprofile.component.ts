@@ -31,13 +31,13 @@ export class MyprofileComponent {
         this.profileAvatarUrls = objectUrl;
       });
 
-      // this.interventionService.getUserInterventions(this.user.id).subscribe(list => {
-      //   this.interventions = list;
-      //   console.log("AQUI " + this.interventions);
-      // });
-      if (this.authService.isAdmin()){
-        this.isAdmin=true;
-      }
+      this.userService.checkAdmin(this.user.id).subscribe(isAdmin => {
+        this.isAdmin = isAdmin;
+      });
+
+      this.interventionService.getUserInterventions(this.user.id).subscribe((list: Intervention[]) => {
+        this.interventions = list;
+      });
     });
   }
 }

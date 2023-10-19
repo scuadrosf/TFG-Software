@@ -11,7 +11,7 @@
             </div>
 
             <div class="col-sm-5 col-6 text-end m-b-30">
-                <a routerLink="/editprofile" class="btn btn-primary btn-rounded"><i class="fa fa-plus"></i> Editar
+                <a routerLink="/editprofile" class="btn btn-outline-primary btn-rounded"><i class="fa fa-plus"></i> Editar
                     perfil</a>
             </div>
         </div>
@@ -96,7 +96,8 @@
             <ul class="nav nav-tabs nav-tabs-bottom">
                 <li class="nav-item"><a class="nav-link active" href="#history" data-bs-toggle="tab">Historial
                         médico</a></li>
-                <li class="nav-item"><a class="nav-link" href="#documents" data-bs-toggle="tab">Documentos</a></li>
+                <li class="nav-item"><a class="nav-link" routerLink="/documents/{{user.id}}"
+                        data-bs-toggle="tab">Documentos</a></li>
             </ul>
 
             <div class="tab-content">
@@ -105,6 +106,9 @@
                         <div class="col-md-12">
                             <div class="card-box">
                                 <h3 class="card-title">Registro de intervenciones</h3>
+                                <div *ngIf="(interventions.length === 0)">
+                                    <p>{{user.name}} {{user.lastName}} no ha tenido intervenciones</p>
+                                </div>
                                 <div class="experience-box" *ngFor="let intervention of interventions">
                                     <ul class="experience-list">
                                         <li>
@@ -113,10 +117,13 @@
                                             </div>
                                             <div class="experience-content">
                                                 <div class="timeline-content">
-                                                    <a href="#/" class="name">{{intervention.appointment.description}}</a>
-                                                    <!-- Poner que ser routerlink al panel de documentos al pinchar en la description -->
-                                                    <div>{{intervention.user.name}}</div>
-                                                    <span class="time">{{intervention.interventionDate}}</span>
+                                                    <!-- <a href="#/" class="name">{{intervention.appointment.description}}</a> -->
+                                                    <a
+                                                        routerLink="/documents/{{user.id}}/{{intervention.id}}">{{intervention.type}}</a>
+                                                    <!-- Esto llevará justamente los documentos de esa intervención -->
+                                                    <span class="time">{{intervention.interventionDate |
+                                                        date:'dd-MM-yyyy'}}</span>
+
                                                 </div>
                                             </div>
                                         </li>

@@ -12,7 +12,6 @@ import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.tfg.app.controller.DTOS.InterventionDTO;
 
 @Entity(name = "interventionTable")
 public class Intervention {
