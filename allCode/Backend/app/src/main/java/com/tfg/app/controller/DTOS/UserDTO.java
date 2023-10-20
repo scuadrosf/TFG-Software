@@ -12,13 +12,13 @@ public class UserDTO {
     private String address;
     private String city;
     private String country;
-    private int postalCode;
-    private int phone;
+    private String postalCode;
+    private String phone;
     private String gender;
     private LocalDate birth;
 
     public UserDTO(String name, String lastName, String username, String email, String passwordEncoded, String address,
-            String city, String country, int postalCode, int phone, String gender, LocalDate birth) {
+            String city, String country, String postalCode, String phone, String gender, LocalDate birth) {
         this.name = name;
         this.lastName = lastName;
         this.username = username;
@@ -95,19 +95,19 @@ public class UserDTO {
         this.country = country;
     }
 
-    public int getPostalCode() {
+    public String getPostalCode() {
         return postalCode;
     }
 
-    public void setPostalCode(int postalCode) {
+    public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
     }
 
-    public int getPhone() {
+    public String getPhone() {
         return phone;
     }
 
-    public void setPhone(int phone) {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 

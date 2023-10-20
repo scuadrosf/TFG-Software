@@ -29,4 +29,12 @@ public class AppointmentService {
     public Optional<Appointment> findById(Long id) {
         return appointments.findById(id);
     }
+
+    public List<Appointment> findByUserId(Long userId) {
+        return appointments.findByUserId(userId);
+    }
+
+    public void deleteAll(List<Appointment> appointmentList) {
+        appointments.deleteAll(appointmentList);
+    }
 }

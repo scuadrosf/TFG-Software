@@ -11,6 +11,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity(name = "interventionTable")
 public class Intervention {
@@ -22,13 +23,14 @@ public class Intervention {
     @ManyToOne
     private User user;
 
-    @JsonFormat(pattern="yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate interventionDate;
     private String type;
 
     @OneToMany(mappedBy = "intervention", cascade = CascadeType.ALL)
     private List<Document> documents;
 
+    @JsonIgnore
     @ManyToOne
     private Appointment appointment;
 
@@ -37,7 +39,8 @@ public class Intervention {
         this.interventionDate = interventionDate;
     }
 
-    public Intervention(User user, LocalDate interventionDate, String type, List<Document> documents, Appointment appointment) {
+    public Intervention(User user, LocalDate interventionDate, String type, List<Document> documents,
+            Appointment appointment) {
         this.user = user;
         this.interventionDate = interventionDate;
         this.type = type;
@@ -53,6 +56,20 @@ public class Intervention {
     //     this.appointment = interventionDTO.getAppointment();
     // }
 
+    public Intervention(User currentUser, Appointment appointment2, List<Document> documents, LocalDate date) {
+        this.user = currentUser;
+        this.appointment = appointment2;
+        this.documents = documents;
+        this.interventionDate = date;
+    }
+
+    public Intervention(User currentUser, Appointment appointment) {
+        this.user = currentUser;
+        this.appointment = appointment;
+    }
+
+    public Intervention() {
+    }
 
     public Long getId() {
         return id;
@@ -61,8 +78,6 @@ public class Intervention {
     public void setId(Long id) {
         this.id = id;
     }
-
-
 
     public LocalDate getInterventionDate() {
         return interventionDate;
@@ -100,9 +115,8 @@ public class Intervention {
         return appointment;
     }
 
-    public void setAppointment(Appointment appointment) {
-        this.appointment = appointment;
+    public void setAppointment(Appointment currentApointment) {
+        this.appointment = currentApointment;
     }
 
-    
 }

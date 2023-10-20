@@ -18,6 +18,7 @@ import javax.persistence.OneToMany;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tfg.app.controller.DTOS.UserDTO;
+import com.tfg.app.controller.DTOS.UserEditDTO;
 
 @Entity (name = "userTable")
 public class User {
@@ -41,11 +42,11 @@ public class User {
     private String address;
     private String city;
     private String country;
-    private int postalCode;
-    private int phone;
+    private String postalCode;
+    private String phone;
     private String gender;
 
-    @JsonFormat(pattern="yyyy-MM-dd")
+    @JsonFormat(pattern="dd-MM-yyyy")
     private LocalDate birth;
 
 
@@ -68,6 +69,17 @@ public class User {
     public User() {
     }
 
+    public User(UserEditDTO editDTO){
+        super();
+        this.email = editDTO.getEmail();
+        this.passwordEncoded = editDTO.getPasswordEncoded();
+        this.address = editDTO.getAddress();
+        this.city = editDTO.getCity();
+        this.country = editDTO.getCountry();
+        this.postalCode = editDTO.getPostalCode();
+        this.phone = editDTO.getPhone();
+    }
+
     public User(String name, String username, String email, String passwordEncoded, String ... roles) {
         this.name = name;
         this.username = username;
@@ -77,7 +89,7 @@ public class User {
     }
 
     public User(Long id, String name, String lastName, String username, String email, String passwordEncoded, String address,
-            String city, String country, int postalCode, int phone, String gender, LocalDate birth, List<String> roles,
+            String city, String country, String postalCode, String phone, String gender, LocalDate birth, List<String> roles,
             Blob profileAvatarFile, List<Intervention> interventions, List<Appointment> appointments) {
         this.id = id;
         this.name = name;
@@ -192,19 +204,19 @@ public class User {
         this.country = country;
     }
 
-    public int getPostalCode() {
+    public String getPostalCode() {
         return postalCode;
     }
 
-    public void setPostalCode(int postalCode) {
+    public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
     }
 
-    public int getPhone() {
+    public String getPhone() {
         return phone;
     }
 
-    public void setPhone(int phone) {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 

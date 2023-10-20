@@ -29,6 +29,7 @@ public class Appointment {
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime toDate;
     private String description;
+    private String additionalNote;
 
     @OneToMany(mappedBy = "appointment", cascade = CascadeType.ALL)
     private List<Intervention> interventions;
@@ -56,6 +57,7 @@ public class Appointment {
         this.fromDate = appointmentDTO.getFromDate();
         this.toDate = appointmentDTO.getToDate();
         this.description = appointmentDTO.getDescription();
+        this.additionalNote = appointmentDTO.getAdditionalNote();
     }
 
     public Long getId() {
@@ -96,6 +98,8 @@ public class Appointment {
         return interventions;
     }
 
+    
+
     public String getDescription() {
         return description;
     }
@@ -103,11 +107,6 @@ public class Appointment {
     public void setDescription(String description) {
         this.description = description;
     }
-
-    public List<Intervention> getIntervention() {
-        return interventions;
-    }
-
     
 
     public User getUser() {
@@ -120,6 +119,14 @@ public class Appointment {
 
     public void setInterventions(List<Intervention> interventions) {
         this.interventions = interventions;
+    }
+
+    public String getAdditionalNote() {
+        return additionalNote;
+    }
+
+    public void setAdditionalNote(String additionalNote) {
+        this.additionalNote = additionalNote;
     }
 
     

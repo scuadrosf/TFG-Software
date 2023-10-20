@@ -1,10 +1,12 @@
 package com.tfg.app.controller.rest;
 
+import java.net.URI;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentRequest;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tfg.app.model.Appointment;
@@ -58,35 +61,50 @@ public class InterventionRestController {
         return ResponseEntity.ok().body(interventionList);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Intervention> getInterventionById(@PathVariable Long id) {
-        Optional<Intervention> intervention = interventionService.findById(id);
-        if (intervention.isPresent()) {
-            Intervention interventionAux = intervention.get();
-            return new ResponseEntity<>(interventionAux, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    // @GetMapping("/{id}")
+    // public ResponseEntity<Intervention> getInterventionById(@PathVariable Long id) {
+    //     Optional<Intervention> intervention = interventionService.findById(id);
+    //     if (intervention.isPresent()) {
+    //         Intervention interventionAux = intervention.get();
+    //         return new ResponseEntity<>(interventionAux, HttpStatus.OK);
+    //     } else {
+    //         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    //     }
+    // }
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<List<Intervention>> getUserIntervention(@PathVariable("userId") Long id) {
+        Optional<User> user = userService.findById(id);
+        if (user.isPresent()) {
+            List<Intervention> interventionList = interventionService.findByUserId(user.get().getId());
+            return ResponseEntity.ok().body(interventionList);
         }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping("/{id}")
-    public ResponseEntity<Object> addIntervention(@PathVariable Long id) {
-        Optional<Appointment> currentApointment = appointmentService.findById(id);
+    @PostMapping("/{appointmentId}/user={userId}")
+    public ResponseEntity<Object> addIntervention(@PathVariable("appointmentId") Long appointmentId, @PathVariable("userId") Long userId,
+            @RequestParam (value="type", required = true) String type) {
+        Optional<Appointment> currentApointment = appointmentService.findById(appointmentId);
         LocalDate date = LocalDate.now();
         if (currentApointment.isPresent()) {
-            Intervention intervention = new Intervention(currentUser, date, "null" , new ArrayList<>(),currentApointment.get());
+            Intervention intervention = new Intervention();
+            intervention.setInterventionDate(date);
+            intervention.setAppointment(currentApointment.get());
+            intervention.setDocuments(new ArrayList<>());
+            intervention.setType(type);
+            User user = userService.findById(userId).orElseThrow(() -> new IllegalArgumentException("Invalid User Id: " + userId));
+            if(user != null)
+                intervention.setUser(user);
+            currentApointment.get().getInterventions().add(intervention);
             interventionService.save(intervention);
-            return ResponseEntity.status(HttpStatus.CREATED).body(intervention);
+            appointmentService.save(currentApointment.get());
+            URI location = fromCurrentRequest().path("/{id}").buildAndExpand(intervention.getId()).toUri();
+            return ResponseEntity.created(location).body(intervention);
         } else {
             String errorMessage = "Primero debe pedir cita";
             return ResponseEntity.badRequest().body(errorMessage);
         }
-
-        // Intervention intervention = new Intervention(interventionDTO);
-        // interventionService.save(intervention);
-        // URI location =
-        // fromCurrentRequest().path("/{id}").buildAndExpand(intervention.getId()).toUri();
-        // return ResponseEntity.created(location).body(intervention);
-
     }
+
 }

@@ -1,0 +1,142 @@
+<div class="page-wrapper">
+    <div class="content">
+
+        <div class="row">
+            <div class="col-sm-7 col-6">
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a routerLink="/dashboard">Inicio </a></li>
+                    <li class="breadcrumb-item"><i class="feather icon-chevron-right"></i></li>
+                    <li class="breadcrumb-item active">Mi perfil</li>
+                </ul>
+            </div>
+
+            <div class="col-sm-5 col-6 text-end m-b-30">
+                <a routerLink="/editprofile" class="btn btn-outline-primary btn-rounded"><i class="fa fa-plus"></i> Editar
+                    perfil</a>
+            </div>
+        </div>
+        <div class="card-box profile-header">
+            <div class="row">
+                <div class="col-md-12">
+                    <div *ngIf="!isAdmin" class="profile-view">
+                        <div class="profile-img-wrap">
+                            <div class="profile-img">
+                                <a href="javascript:void(0);"><img class="avatar" [src]="profileAvatarUrls" alt=""></a>
+                            </div>
+                        </div>
+                        <div class="profile-basic">
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <div class="profile-info-left">
+                                        <h3 class="user-name m-t-0 mb-0">{{user.name}}
+                                            {{user.lastName}}</h3>
+                                        <div>DNI: {{user.username}}</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-7">
+                                    <ul class="personal-info">
+                                        <li>
+                                            <span class="title">Teléfono:</span>
+                                            <span class="text">{{user.phone}}</span>
+                                        </li>
+                                        <li>
+                                            <span class="title">Correo electrónico:</span>
+                                            <span class="text">{{user.email}}</span>
+                                        </li>
+                                        <li>
+                                            <span class="title">Fecha de nacimiento:</span>
+                                            <span class="text">{{user.birth}}</span>
+                                        </li>
+                                        <li>
+                                            <span class="title">Dirección:</span>
+                                            <span class="text">{{user.address}},
+                                                {{user.city}},
+                                                {{user.postalCode}},
+                                                {{user.country}}</span>
+                                        </li>
+                                        <li>
+                                            <span class="title">Género:</span>
+                                            <span class="text">{{user.gender}}</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="isAdmin" class="profile-view">
+                        <div class="user-img">
+                            <div class="profile-img">
+                                <a href="javascript:void(0);"><img class="avatar" [src]="profileAvatarUrls" alt=""></a>
+                            </div>
+                        </div>
+                        <div class="profile-basic">
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <div class="profile-info-left">
+                                        <h3 class="user-name m-t-0 mb-0">{{user.name}}
+                                            {{user.lastName}}</h3>
+                                        <div>DNI: {{user.username}}</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-7">
+                                    <ul class="personal-info">
+                                        <li>
+                                            <span class="title">Correo electrónico:</span>
+                                            <span class="text">{{user.email}}</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="profile-tabs">
+            <ul class="nav nav-tabs nav-tabs-bottom">
+                <li class="nav-item"><a class="nav-link active" href="#history" data-bs-toggle="tab">Historial
+                        médico</a></li>
+                <li class="nav-item"><a class="nav-link" routerLink="/documents/{{user.id}}"
+                        data-bs-toggle="tab">Documentos</a></li>
+            </ul>
+
+            <div class="tab-content">
+                <div class="tab-pane show active" id="history">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card-box">
+                                <h3 class="card-title">Registro de intervenciones</h3>
+                                <div *ngIf="(interventions.length === 0)">
+                                    <p>{{user.name}} {{user.lastName}} no ha tenido intervenciones</p>
+                                </div>
+                                <div class="experience-box" *ngFor="let intervention of interventions">
+                                    <ul class="experience-list">
+                                        <li>
+                                            <div class="experience-user">
+                                                <div class="before-circle"></div>
+                                            </div>
+                                            <div class="experience-content">
+                                                <div class="timeline-content">
+                                                    <!-- <a href="#/" class="name">{{intervention.appointment.description}}</a> -->
+                                                    <a
+                                                        routerLink="/documents/{{user.id}}/{{intervention.id}}">{{intervention.type}}</a>
+                                                    <!-- Esto llevará justamente los documentos de esa intervención -->
+                                                    <span class="time">{{intervention.interventionDate |
+                                                        date:'dd-MM-yyyy'}}</span>
+
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="documents">
+                    Hacer como una especie de explorador de archivos, o mostrar todos los archivos por días
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
