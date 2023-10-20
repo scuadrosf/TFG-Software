@@ -4,11 +4,12 @@ import { User } from "./user.model";
 export interface Appointment {
 
     id: number;
-    bookDate: Date;
-    fromDate: Date;
-    toDate: Date;
+    bookDate: string;
+    fromDate: string;
+    toDate: string;
     description: string;
     interventions: Intervention[];
     user: User;
+    additionalNote: string;
 
 }

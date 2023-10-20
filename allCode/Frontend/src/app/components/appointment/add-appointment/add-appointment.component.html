@@ -1,14 +1,14 @@
 <div class="page-wrapper">
     <div class="content">
-    
+
         <!-- Page Header -->
         <div class="page-header">
             <div class="row">
                 <div class="col-sm-12">
                     <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a [routerLink]="">Appointment </a></li>
+                        <li class="breadcrumb-item"><a routerLink="/patient-list">Pacientes </a></li>
                         <li class="breadcrumb-item"><i class="feather icon-chevron-right"></i></li>
-                        <li class="breadcrumb-item active">Book Appointment</li>
+                        <li class="breadcrumb-item active">Dar cita</li>
                     </ul>
                 </div>
             </div>
@@ -16,135 +16,118 @@
         <!-- /Page Header -->
         <div class="row">
             <div class="col-sm-12">
-            
+
                 <div class="card">
                     <div class="card-body">
                         <form>
+
                             <div class="row">
                                 <div class="col-12">
                                     <div class="form-heading">
-                                        <h4>Patient Details</h4>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-md-6 col-xl-4">  
-                                    <div class="form-group local-forms">
-                                        <label >First Name <span class="login-danger">*</span></label>
-                                        <input class="form-control" type="text" >
+                                        <h4>Detalles del paciente</h4>
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6 col-xl-4">
                                     <div class="form-group local-forms">
-                                        <label >Last Name <span class="login-danger">*</span></label>
-                                        <input class="form-control" type="text"  >
+                                        <label>Nombre <span class="login-danger">*</span></label>
+                                        <span type="text" class="form-control floating">{{user.name}}</span>
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6 col-xl-4">
-                                    <div class="form-group select-gender">
-                                        <label class="gen-label">Gender<span class="login-danger">*</span></label>
-                                        <div class="form-check-inline">
-                                            <label class="form-check-label">
-                                                <input type="radio" name="gender" class="form-check-input">Male
-                                            </label>
-                                        </div>
-                                        <div class="form-check-inline">
-                                            <label class="form-check-label">
-                                                <input type="radio" name="gender" class="form-check-input">Female
-                                            </label>
-                                        </div>
+                                    <div class="form-group local-forms">
+                                        <label>Apellidos <span class="login-danger">*</span></label>
+                                        <span type="text" class="form-control floating">{{user.lastName}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-4">
+                                    <div class="form-group local-forms">
+                                        <label>Género <span class="login-danger">*</span></label>
+                                        <span type="text" class="form-control floating">{{user.gender}}</span>
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6 col-xl-6">
                                     <div class="form-group local-forms">
-                                        <label >Mobile <span class="login-danger">*</span></label>
-                                        <input class="form-control" type="text" >
+                                        <label>Teléfono <span class="login-danger">*</span></label>
+                                        <span type="text" class="form-control floating">{{user.phone}}</span>
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6 col-xl-6">
                                     <div class="form-group local-forms">
-                                        <label >Email <span class="login-danger">*</span></label>
-                                        <input class="form-control" type="email"  >
+                                        <label>Correo electrónico <span class="login-danger">*</span></label>
+                                        <span type="text" class="form-control floating">{{user.email}}</span>
                                     </div>
                                 </div>
                                 <div class="col-12 col-sm-12">
                                     <div class="form-group local-forms">
-                                        <label>Address  <span class="login-danger">*</span></label>
-                                        <textarea class="form-control" rows="3" cols="30"></textarea>
+                                        <label>Dirección <span class="login-danger">*</span></label>
+                                        <span type="text" class="form-control floating">{{user.address}}, {{user.city}},
+                                            {{user.postalCode}}, {{user.country}}</span>
+                                        <!-- <span type="text" class="form-control floating">direccion</span> -->
                                     </div>
                                 </div>
                                 <div class="col-12">
                                     <div class="form-heading">
-                                        <h4>Appointment Details</h4>
+                                        <h4>Detalles de la cita</h4>
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6 col-xl-4">
                                     <div class="form-group local-forms">
-                                        <label >Date of Appointment <span class="login-danger">*</span></label>
-                                        <!-- <input class="form-control datetimepicker" type="text" matInput  [matDatepicker]="picker">
-                                        <mat-datepicker #picker></mat-datepicker>
-                                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle> -->
+                                        <label>Día <span class="login-danger">*</span></label>
+                                        <input class="form-control datetimepicker" type="date" [(ngModel)]="bookDate"
+                                            name="bookDate" required>
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6 col-xl-4">
                                     <div class="form-group local-forms">
-                                        <label>From <span class="login-danger">*</span></label>
-                                        <div class="time-icon">
-                                            <!-- <input type="text"  class="form-control" [ngxTimepicker]="default1">
-                                            <ngx-material-timepicker #default1></ngx-material-timepicker> -->
-                                        </div>
+                                        <label>Desde <span class="login-danger">*</span></label>
+                                        <input type="datetime-local" class="form-control" [(ngModel)]="fromDate"
+                                            name="fromDate" required>
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6 col-xl-4">
                                     <div class="form-group local-forms">
-                                        <label>To <span class="login-danger">*</span></label>
-                                        <div class="time-icon">
-                                            <!-- <input type="text"  class="form-control" [ngxTimepicker]="default2">
-                                            <ngx-material-timepicker #default2></ngx-material-timepicker> -->
-                                        </div>
+                                        <label>Hasta <span class="login-danger">*</span></label>
+                                        <input type="datetime-local" class="form-control" [(ngModel)]="toDate"
+                                            name="toDate" required>
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6 col-xl-6">
                                     <div class="form-group local-forms">
-                                        <label >Consulting Doctor</label>
-                                        
-                                        <!-- <mat-select [(ngModel)]="selectedValue" [ngModelOptions]="{standalone: true}" class="form-control select"  placeholder="Select Doctor">
-                                            <mat-option *ngFor="let data of selectedList" [value]="data.value">
-                                            {{data.value}}
-                                            </mat-option> -->
-                                        <!-- </mat-select> -->
-                                    </div>
-                                </div>
-                                <div class="col-12 col-md-6 col-xl-6">
-                                    <div class="form-group local-forms">
-                                        <label >Treatment </label>
-                                        <input class="form-control" type="text" >
+                                        <label>Motivo <span class="login-danger">*</span></label>
+                                        <input class="form-control" type="text" [(ngModel)]="description"
+                                            name="description" required>
                                     </div>
                                 </div>
                                 <div class="col-12 col-sm-12">
                                     <div class="form-group local-forms">
-                                        <label>Notes  <span class="login-danger">*</span></label>
-                                        <textarea class="form-control" rows="3" cols="30"></textarea>
+                                        <label>Nota adicional</label>
+                                        <textarea class="form-control" rows="3" cols="30" [(ngModel)]="additionalNote"
+                                            name="additionalNote"></textarea>
                                     </div>
                                 </div>
-                                <div class="col-12 col-md-6 col-xl-6">
+                                <!-- <div class="col-12 col-md-6 col-xl-6">
                                     <div class="form-group local-top-form">
                                         <label class="local-top">Avatar <span class="login-danger">*</span></label>
                                         <div class="settings-btn upload-files-avator">
-                                            <input type="file" accept="image/*" name="image" id="file" onchange="loadFile(event)" class="hide-input">
+                                            <input type="file" accept="image/*" name="image" id="file"
+                                                onchange="loadFile(event)" class="hide-input">
                                             <label for="file" class="upload">Choose File</label>
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
                                 <div class="col-12">
                                     <div class="doctor-submit text-end">
-                                        <button type="submit" class="btn btn-primary submit-form me-2">Submit</button>
-                                        <button type="submit" class="btn btn-primary cancel-form">Cancel</button>
+                                        <button type="submit" class="btn btn-primary submit-form me-2"
+                                            (click)="addAppointment()">Añadir</button>
+                                        <button type="submit" class="btn btn-primary cancel-form"
+                                            (click)="back()">Cancelar</button>
                                     </div>
                                 </div>
                             </div>
                         </form>
                     </div>
-                </div>							
-            </div>					
+                </div>
+            </div>
         </div>
     </div>
 </div>
