@@ -93,7 +93,7 @@
                                                 <div class="dropdown-menu dropdown-menu-end">
                                                     <a class="dropdown-item" routerLink="/edit-patient/{{patient.id}}"><i class="fa-solid fa-pen-to-square m-r-5"></i> Editar paciente</a>
                                                     <a class="dropdown-item" routerLink="/add-appointment/{{patient.id}}"><i class="fa-solid fa-pen-to-square m-r-5"></i> Dar cita</a>
-                                                    <a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#delete_patient"><i class="fa fa-trash-alt m-r-5"></i> Delete</a>
+                                                    <a class="dropdown-item" (click)="deleteUser(patient)" data-bs-toggle="modal" data-bs-target="#delete_patient"><i class="fa fa-trash-alt m-r-5"></i> Eliminar paciente</a>
                                                 </div>
                                             </div>
                                         </td>

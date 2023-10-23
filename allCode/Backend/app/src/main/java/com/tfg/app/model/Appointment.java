@@ -37,8 +37,10 @@ public class Appointment {
     @ManyToOne
     private User user;
 
+    private boolean completed;
+
     public Appointment(Long id, LocalDate bookDate, LocalDateTime from, LocalDateTime to, String description, List<Intervention> interventions,
-            User user) {
+            User user, boolean completed) {
         this.id = id;
         this.bookDate = bookDate;
         this.fromDate = from;
@@ -46,6 +48,7 @@ public class Appointment {
         this.description = description;
         this.interventions = interventions;
         this.user = user;
+        this.completed = completed;
     }
 
     public Appointment() {
@@ -58,6 +61,7 @@ public class Appointment {
         this.toDate = appointmentDTO.getToDate();
         this.description = appointmentDTO.getDescription();
         this.additionalNote = appointmentDTO.getAdditionalNote();
+        this.completed = appointmentDTO.getCompleted();
     }
 
     public Long getId() {
@@ -127,6 +131,14 @@ public class Appointment {
 
     public void setAdditionalNote(String additionalNote) {
         this.additionalNote = additionalNote;
+    }
+
+    public boolean isCompleted() {
+        return completed;
+    }
+
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
     }
 
     

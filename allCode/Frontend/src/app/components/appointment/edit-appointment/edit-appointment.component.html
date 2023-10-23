@@ -1,0 +1,133 @@
+<div class="page-wrapper">
+    <div class="content">
+
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="row">
+                <div class="col-sm-12">
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a routerLink="/appointment-list">Lista de citas </a></li>
+                        <li class="breadcrumb-item"><i class="feather icon-chevron-right"></i></li>
+                        <li class="breadcrumb-item active">Editar cita</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- /Page Header -->
+        <div class="row">
+            <div class="col-sm-12">
+
+                <div class="card">
+                    <div class="card-body">
+                        <form>
+
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="form-heading">
+                                        <h4>Detalles del paciente</h4>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-4">
+                                    <div class="form-group local-forms">
+                                        <label>Nombre <span class="login-danger">*</span></label>
+                                        <span type="text" class="form-control floating">{{user.name}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-4">
+                                    <div class="form-group local-forms">
+                                        <label>Apellidos <span class="login-danger">*</span></label>
+                                        <span type="text" class="form-control floating">{{user.lastName}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-4">
+                                    <div class="form-group local-forms">
+                                        <label>Género <span class="login-danger">*</span></label>
+                                        <span type="text" class="form-control floating">{{user.gender}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-6">
+                                    <div class="form-group local-forms">
+                                        <label>Teléfono <span class="login-danger">*</span></label>
+                                        <span type="text" class="form-control floating">{{user.phone}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-6">
+                                    <div class="form-group local-forms">
+                                        <label>Correo electrónico <span class="login-danger">*</span></label>
+                                        <span type="text" class="form-control floating">{{user.email}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-12">
+                                    <div class="form-group local-forms">
+                                        <label>Dirección <span class="login-danger">*</span></label>
+                                        <span type="text" class="form-control floating">{{user.address}}, {{user.city}},
+                                            {{user.postalCode}}, {{user.country}}</span>
+                                        <!-- <span type="text" class="form-control floating">direccion</span> -->
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-heading">
+                                        <h4>Detalles de la cita</h4>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-4">
+                                    <div class="form-group local-forms">
+                                        <label>Día <span class="login-danger">*</span></label>
+                                        <input class="form-control datetimepicker" type="date" [(ngModel)]="bookDate"
+                                            name="bookDate" value="23/12/2022">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-4">
+                                    <div class="form-group local-forms">
+                                        <label>Desde <span class="login-danger">*</span></label>
+                                        <input type="datetime-local" class="form-control" [(ngModel)]="fromDate"
+                                            name="fromDate" required>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-4">
+                                    <div class="form-group local-forms">
+                                        <label>Hasta <span class="login-danger">*</span></label>
+                                        <input type="datetime-local" class="form-control" [(ngModel)]="toDate"
+                                            name="toDate" required>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-6">
+                                    <div class="form-group local-forms">
+                                        <label>Motivo <span class="login-danger">*</span></label>
+                                        <input class="form-control" type="text" [(ngModel)]="description"
+                                            name="description" required>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-12">
+                                    <div class="form-group local-forms">
+                                        <label>Nota adicional</label>
+                                        <textarea class="form-control" rows="3" cols="30" [(ngModel)]="additionalNote"
+                                            name="additionalNote"></textarea>
+                                    </div>
+                                </div>
+                                <!-- <div class="col-12 col-md-6 col-xl-6">
+                                    <div class="form-group local-top-form">
+                                        <label class="local-top">Avatar <span class="login-danger">*</span></label>
+                                        <div class="settings-btn upload-files-avator">
+                                            <input type="file" accept="image/*" name="image" id="file"
+                                                onchange="loadFile(event)" class="hide-input">
+                                            <label for="file" class="upload">Choose File</label>
+                                        </div>
+                                    </div>
+                                </div> -->
+                                <div class="col-12">
+                                    <div class="doctor-submit text-end">
+                                        <button type="submit" class="btn btn-primary submit-form me-2"
+                                            (click)="confirmEdit()">Confirmar cambios</button>
+                                        <button type="submit" class="btn btn-primary cancel-form"
+                                            (click)="back()">Cancelar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -10,13 +10,15 @@ public class AppointmentDTO {
     private LocalDateTime toDate;
     private String description;
     private String additionalNote;
+    private boolean completed;
     
-    public AppointmentDTO(LocalDate bookDate, LocalDateTime fromDate, LocalDateTime toDate, String description, String additionalNote) {
+    public AppointmentDTO(LocalDate bookDate, LocalDateTime fromDate, LocalDateTime toDate, String description, String additionalNote, boolean completed) {
         this.bookDate = bookDate;
         this.fromDate = fromDate;
         this.toDate = toDate;
         this.description = description;
         this.additionalNote = additionalNote;
+        this.completed = completed;
     }
 
     public LocalDate getBookDate() {
@@ -57,6 +59,14 @@ public class AppointmentDTO {
 
     public void setAdditionalNote(String additionalNote) {
         this.additionalNote = additionalNote;
+    }
+
+    public boolean getCompleted() {
+        return completed;
+    }
+
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
     }
     
 }

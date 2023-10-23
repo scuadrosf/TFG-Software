@@ -11,19 +11,24 @@ import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tfg.app.controller.DTOS.AppointmentDTO;
 import com.tfg.app.model.Appointment;
 import com.tfg.app.model.User;
+import com.tfg.app.repository.AppointmentRepository;
 import com.tfg.app.service.AppointmentService;
 import com.tfg.app.service.UserService;
 
@@ -35,6 +40,9 @@ public class AppointmentRestController {
     private UserService userService;
     @Autowired
     private AppointmentService appointmentService;
+    
+    @Autowired
+    private AppointmentRepository appointmentRepository;
 
     User currentUser;
 
@@ -73,6 +81,7 @@ public class AppointmentRestController {
         User user = userService.findById(userId).orElseThrow();
         if (user!= null)
             appointment.setUser(user);
+        appointment.setCompleted(false);
         appointment.setInterventions(new ArrayList<>());
         appointmentService.save(appointment);
         URI location = fromCurrentRequest().path("/{id}").buildAndExpand(appointment.getId()).toUri();
@@ -85,4 +94,31 @@ public class AppointmentRestController {
         return ResponseEntity.ok(appointment);
     }
 
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Appointment> updateAppointment (@PathVariable Long id, @RequestParam(value="completed") boolean completed){
+        Appointment appointment = appointmentService.findById(id).orElseThrow();
+        if (appointment == null){
+            return ResponseEntity.notFound().build();
+        }else{
+            // appointment.setBookDate(updatedAppointment.getBookDate());
+            // appointment.setFromDate(updatedAppointment.getFromDate());
+            // appointment.setToDate(updatedAppointment.getToDate());
+            // appointment.setAdditionalNote(updatedAppointment.getAdditionalNote());
+            // appointment.setDescription(updatedAppointment.getDescription());
+            appointment.setCompleted (completed);
+
+            Appointment finishAppointment = appointmentRepository.save(appointment);
+            return ResponseEntity.ok(finishAppointment);
+        }
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteAppointment(@PathVariable Long id) {
+        try {
+            appointmentService.delete(id);
+            return ResponseEntity.ok("Appointment eliminado con éxito.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al eliminar el Appointment: " + e.getMessage());
+        }
+    }
 }

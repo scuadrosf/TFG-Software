@@ -12,6 +12,9 @@ import { MyprofileComponent } from "./components/profile/myprofile/myprofile.com
 import { DocumentsComponent } from "./components/documents/documents.component"
 import { DocumentsOfInterventionComponent } from "./components/documents/documents-of-intervention/documents-of-intervention.component"
 import { AddAppointmentComponent } from "./components/appointment/add-appointment/add-appointment.component"
+import { AppointmentComponent } from "./components/appointment/appointment.component"
+import { AddAppointmentMainComponent } from "./components/appointment/add-appointment-main/add-appointment-main.component"
+import { EditAppointmentComponent } from "./components/appointment/edit-appointment/edit-appointment.component"
 
 const appRoutes = [
     {path: 'dashboard', component: DashboardsComponent},
@@ -29,6 +32,9 @@ const appRoutes = [
     // Show all documents of THAT intervention
     {path: 'documents/:idUser/:idIntervention', component: DocumentsOfInterventionComponent},
     {path: 'add-appointment/:id', component: AddAppointmentComponent},
+    {path: 'appointment-list', component: AppointmentComponent},
+    {path: 'add-appointment', component: AddAppointmentMainComponent},
+    {path: 'edit-appointment/:id', component: EditAppointmentComponent},
 
 
     {path: '', component: LoginComponent},

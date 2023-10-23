@@ -11,5 +11,6 @@ export interface Appointment {
     interventions: Intervention[];
     user: User;
     additionalNote: string;
+    completed: boolean;
 
 }

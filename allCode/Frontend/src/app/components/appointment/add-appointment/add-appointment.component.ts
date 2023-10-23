@@ -1,15 +1,15 @@
+import { NgFor } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Appointment } from 'src/app/models/appointment.model';
 import { User } from 'src/app/models/user.model';
 import { AppointmentService } from 'src/app/services/appointment.service';
 import { UserService } from 'src/app/services/user.service';
 
+
 @Component({
   selector: 'app-add-appointment',
   templateUrl: './add-appointment.component.html',
-  styleUrls: ['./add-appointment.component.scss']
 })
 export class AddAppointmentComponent implements OnInit {
 
@@ -39,20 +39,23 @@ export class AddAppointmentComponent implements OnInit {
       description: this.description,
       additionalNote: this.additionalNote
     }
-
-    this.appointmentService.bookAppointment(data, this.userId).subscribe(
-      (_) => {
-        alert('Cita creada');
-        window.history.back();
-      },
-      (_) => {
-        console.error("error");
-        this.router.navigate(['/error-page'])
-      }
-    )
+    if (this.bookDate == null || this.fromDate == null || this.toDate == null || this.description == null)
+      alert("Debe rellenar todos los campos")
+    else {
+      this.appointmentService.bookAppointment(data, this.userId).subscribe(
+        (_) => {
+          alert('Cita creada');
+          window.history.back();
+        },
+        (_) => {
+          console.error("error");
+          this.router.navigate(['/error-page'])
+        }
+      )
+    }
   }
 
-  back(){
+  back() {
     window.history.back();
   }
 }

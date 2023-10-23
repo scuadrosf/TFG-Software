@@ -25,6 +25,8 @@ import { DocumentsComponent } from './components/documents/documents.component';
 import { DocumentsOfInterventionComponent } from './components/documents/documents-of-intervention/documents-of-intervention.component';
 import { AppointmentComponent } from './components/appointment/appointment.component';
 import { AddAppointmentComponent } from './components/appointment/add-appointment/add-appointment.component';
+import { AddAppointmentMainComponent } from './components/appointment/add-appointment-main/add-appointment-main.component';
+import { EditAppointmentComponent } from './components/appointment/edit-appointment/edit-appointment.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +46,9 @@ import { AddAppointmentComponent } from './components/appointment/add-appointmen
     DocumentsComponent,
     DocumentsOfInterventionComponent,
     AppointmentComponent,
-    AddAppointmentComponent
+    AddAppointmentComponent,
+    AddAppointmentMainComponent,
+    EditAppointmentComponent
   ],
   imports: [
     BrowserModule,

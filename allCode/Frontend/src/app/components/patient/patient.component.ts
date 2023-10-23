@@ -9,25 +9,25 @@ import { Router } from '@angular/router';
   templateUrl: './patient.component.html',
   styleUrls: ['./patient.component.scss']
 })
-export class PatientComponent implements OnInit{
+export class PatientComponent implements OnInit {
 
   patientsList: User[] = [];
   profileAvatarUrls: string[] = [];
 
 
-  constructor(private patientService: UserService, private router: Router){}
+  constructor(private patientService: UserService, private router: Router) { }
 
   ngOnInit(): void {
-      this.patientService.getUserList().subscribe((list) => {
-        this.patientsList = list;
-        this.patientsList.forEach(patient => {
-          this.patientService.getProfileAvatar(patient.id).subscribe(blob => {
-            const objectUrl = URL.createObjectURL(blob);
-            this.profileAvatarUrls[patient.id] = objectUrl;
-          });
+    this.patientService.getUserList().subscribe((list) => {
+      this.patientsList = list;
+      this.patientsList.forEach(patient => {
+        this.patientService.getProfileAvatar(patient.id).subscribe(blob => {
+          const objectUrl = URL.createObjectURL(blob);
+          this.profileAvatarUrls[patient.id] = objectUrl;
         });
       });
-      
+    });
+
   }
 
   public sortData(sort: Sort) {
@@ -37,17 +37,29 @@ export class PatientComponent implements OnInit{
       this.patientsList = data;
     } else {
       this.patientsList = data.sort((a, b) => {
-         // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const aValue = (a as any)[sort.active];
-         // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const bValue = (b as any)[sort.active];
         return (aValue < bValue ? -1 : 1) * (sort.direction === 'asc' ? 1 : -1);
       });
     }
   }
 
-  goToProfile(id:number): any {
-    this.router.navigate(['/profile/'+id])
+  goToProfile(id: number): any {
+    this.router.navigate(['/profile/' + id])
   }
 
+  deleteUser(user: User) {
+    const confirmation = window.confirm('Esta seguro de eliminar el usuario');
+    if (confirmation) {
+      this.patientService.deleteUser(user);
+      console.log("Usuario eliminado")
+      this.ngOnInit();
+    }
+    else {
+      console.log("Confirmación de eliminado cancelada")
+    }
+    this.ngOnInit();
+  }
 }
