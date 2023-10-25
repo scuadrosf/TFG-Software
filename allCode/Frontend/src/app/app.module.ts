@@ -28,6 +28,7 @@ import { AddAppointmentComponent } from './components/appointment/add-appointmen
 import { AddAppointmentMainComponent } from './components/appointment/add-appointment-main/add-appointment-main.component';
 import { EditAppointmentComponent } from './components/appointment/edit-appointment/edit-appointment.component';
 import { InterventionComponent } from './components/intervention/intervention.component';
+import { AddInterventionComponent } from './components/intervention/add-intervention/add-intervention.component';
 
 @NgModule({
   declarations: [
@@ -50,7 +51,8 @@ import { InterventionComponent } from './components/intervention/intervention.co
     AddAppointmentComponent,
     AddAppointmentMainComponent,
     EditAppointmentComponent,
-    InterventionComponent
+    InterventionComponent,
+    AddInterventionComponent
   ],
   imports: [
     BrowserModule,
