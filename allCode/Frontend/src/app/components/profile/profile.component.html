@@ -6,7 +6,7 @@
                 <ul class="breadcrumb">
                     <li class="breadcrumb-item"><a routerLink="/dashboard">Inicio </a></li>
                     <li class="breadcrumb-item"><i class="feather icon-chevron-right"></i></li>
-                    <li class="breadcrumb-item active">Mi perfil</li>
+                    <li class="breadcrumb-item active">Perfil de {{user.name}}</li>
                 </ul>
             </div>
 
@@ -15,7 +15,7 @@
                 <a routerLink="/edit-patient/{{idUser}}" class="btn btn-outline-primary btn-rounded mr-2"><i class="fa fa-plus"></i> Editar
                     perfil</a>
                 <a routerLink="/add-appointment/{{idUser}}" class="btn btn-outline-primary btn-rounded mr-3"><i class="fa fa-plus"></i> Dar cita</a>
-                <a routerLink="/edit-patient/{{idUser}}" class="btn btn-outline-primary btn-rounded"><i class="fa fa-plus"></i> Añadir intervención</a>
+                <a routerLink="/appointment-list/{{idUser}}" class="btn btn-outline-primary btn-rounded"><i class="fa fa-plus"></i> Añadir intervención</a>
             </div>
         </div>
         <div class="card-box profile-header">

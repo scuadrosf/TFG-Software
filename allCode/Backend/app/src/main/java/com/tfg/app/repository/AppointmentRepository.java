@@ -7,4 +7,5 @@ import com.tfg.app.model.Appointment;
 
 public interface AppointmentRepository extends JpaRepository<Appointment, Long>{
     List<Appointment> findByUserId(Long userId);
+    List<Appointment> getAllAppointmentsByUserId(Long userId);
 }

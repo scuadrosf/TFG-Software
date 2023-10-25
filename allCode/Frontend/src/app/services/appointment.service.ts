@@ -30,6 +30,10 @@ export class AppointmentService {
     return this.httpClient.get<Appointment[]>(baseUrl + "all");
   }
 
+  getAllAppointmentsByUser(id: number): Observable<Appointment[]>{
+    return this.httpClient.get<Appointment[]>(baseUrl + "all/"+id);
+  }
+
   getAppointment(id: number): Observable<Appointment> {
     return this.httpClient.get<Appointment>(baseUrl + id);
   }

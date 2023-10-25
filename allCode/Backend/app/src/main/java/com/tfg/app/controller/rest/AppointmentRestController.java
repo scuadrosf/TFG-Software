@@ -12,7 +12,6 @@ import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -105,11 +104,6 @@ public class AppointmentRestController {
         if (appointment == null) {
             return ResponseEntity.notFound().build();
         } else {
-            // appointment.setBookDate(updatedAppointment.getBookDate());
-            // appointment.setFromDate(updatedAppointment.getFromDate());
-            // appointment.setToDate(updatedAppointment.getToDate());
-            // appointment.setAdditionalNote(updatedAppointment.getAdditionalNote());
-            // appointment.setDescription(updatedAppointment.getDescription());
             appointment.setCompleted(completed);
 
             Appointment finishAppointment = appointmentRepository.save(appointment);
@@ -155,6 +149,17 @@ public class AppointmentRestController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error al eliminar el Appointment: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/all/{id}")
+    public ResponseEntity<List<Appointment>> getAppointmentByUser(@PathVariable Long id){
+        User user = userService.findById(id).orElseThrow();
+        if (user != null){
+            List<Appointment> appointments = appointmentService.getAllAppointmentsByUserId(id);
+            return ResponseEntity.ok(appointments);
+        }else{
+            return ResponseEntity.notFound().build();
         }
     }
 }

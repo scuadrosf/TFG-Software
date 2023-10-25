@@ -19,7 +19,6 @@ export class AppointmentComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.todayNow = new Date();
     this.appointmentService.getAllAppointments().subscribe(list => {
       this.appointmentList = list;
       this.appointmentList.forEach(appointment => {

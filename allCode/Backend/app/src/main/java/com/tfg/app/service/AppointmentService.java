@@ -37,4 +37,8 @@ public class AppointmentService {
     public void deleteAll(List<Appointment> appointmentList) {
         appointments.deleteAll(appointmentList);
     }
+
+    public List<Appointment> getAllAppointmentsByUserId(Long id) {
+        return appointments.getAllAppointmentsByUserId(id);
+    }
 }
