@@ -27,6 +27,7 @@ import { AppointmentComponent } from './components/appointment/appointment.compo
 import { AddAppointmentComponent } from './components/appointment/add-appointment/add-appointment.component';
 import { AddAppointmentMainComponent } from './components/appointment/add-appointment-main/add-appointment-main.component';
 import { EditAppointmentComponent } from './components/appointment/edit-appointment/edit-appointment.component';
+import { InterventionComponent } from './components/intervention/intervention.component';
 
 @NgModule({
   declarations: [
@@ -48,7 +49,8 @@ import { EditAppointmentComponent } from './components/appointment/edit-appointm
     AppointmentComponent,
     AddAppointmentComponent,
     AddAppointmentMainComponent,
-    EditAppointmentComponent
+    EditAppointmentComponent,
+    InterventionComponent
   ],
   imports: [
     BrowserModule,

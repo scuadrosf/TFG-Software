@@ -36,8 +36,31 @@ export class EditAppointmentComponent {
     });
   }
 
-  confirmEdit(){
-
+  confirmEdit() {
+    const confirm = window.confirm("¿Desea confirmar cambios?")
+    if (confirm) {
+      if (this.appointment) {
+        if(this.bookDate)
+          this.appointment.bookDate = this.bookDate;
+        if(this.fromDate)
+          this.appointment.fromDate = this.fromDate;
+        if(this.toDate)
+          this.appointment.toDate = this.toDate;
+        if(this.description)
+          this.appointment.description = this.description;
+        if (this.additionalNote)
+          this.appointment.additionalNote = this.additionalNote;
+        this.appointmentService.updateFullAppointment(this.appointment).subscribe(
+          (_) => {
+            console.log(this.appointment);
+            this.ngOnInit();
+            window.history.back();
+          },
+        );
+      }
+    }else{
+      console.log("Cancelado por el usuario");
+    }
   }
 
 

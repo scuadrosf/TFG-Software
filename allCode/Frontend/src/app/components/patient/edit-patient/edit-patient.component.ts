@@ -40,28 +40,33 @@ export class EditPatientComponent {
     if (event.target.files && event.target.files.length > 0) {
       this.avatarFile = event.target.files[0];
     }
-    
+
   }
 
   editUser() {
-    if (this.user) {
-      if (this.address)
-        this.user.address = this.address;
-      if (this.city)
-        this.user.city = this.city;
-      if (this.country)
-        this.user.country = this.country;
-      if (this.postalCode)
-        this.user.postalCode = this.postalCode;
-      if (this.phone)
-        this.user.phone = this.phone;
-      this.userService.updateUser(this.user, this.avatarFile).subscribe(
-        (_) => {
-          console.log(this.user);
-          this.ngOnInit();
-          window.history.back();
-        },
-      );
+    const confirm = window.confirm("¿Desea confirmar los cambios?")
+    if (confirm) {
+      if (this.user) {
+        if (this.address)
+          this.user.address = this.address;
+        if (this.city)
+          this.user.city = this.city;
+        if (this.country)
+          this.user.country = this.country;
+        if (this.postalCode)
+          this.user.postalCode = this.postalCode;
+        if (this.phone)
+          this.user.phone = this.phone;
+        this.userService.updateUser(this.user, this.avatarFile).subscribe(
+          (_) => {
+            console.log(this.user);
+            this.ngOnInit();
+            window.history.back();
+          },
+        );
+      }
+    } else {
+      console.log("Cancelado por el usuario");
     }
   }
 

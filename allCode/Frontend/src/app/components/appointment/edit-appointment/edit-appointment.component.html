@@ -74,7 +74,7 @@
                                     <div class="form-group local-forms">
                                         <label>Día <span class="login-danger">*</span></label>
                                         <input class="form-control datetimepicker" type="date" [(ngModel)]="bookDate"
-                                            name="bookDate" value="23/12/2022">
+                                            name="bookDate" required>
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6 col-xl-4">
@@ -93,16 +93,16 @@
                                 </div>
                                 <div class="col-12 col-md-6 col-xl-6">
                                     <div class="form-group local-forms">
-                                        <label>Motivo <span class="login-danger">*</span></label>
+                                        <label>Motivo</label>
                                         <input class="form-control" type="text" [(ngModel)]="description"
-                                            name="description" required>
+                                            name="description" placeholder="{{appointment.description}}">
                                     </div>
                                 </div>
                                 <div class="col-12 col-sm-12">
                                     <div class="form-group local-forms">
                                         <label>Nota adicional</label>
                                         <textarea class="form-control" rows="3" cols="30" [(ngModel)]="additionalNote"
-                                            name="additionalNote"></textarea>
+                                            placeholder="{{appointment.additionalNote}}" name="additionalNote"></textarea>
                                     </div>
                                 </div>
                                 <!-- <div class="col-12 col-md-6 col-xl-6">
@@ -116,6 +116,7 @@
                                     </div>
                                 </div> -->
                                 <div class="col-12">
+                                    <p> * Es necesario seleccionar el día, el desde y el hasta para completar los cambios</p>
                                     <div class="doctor-submit text-end">
                                         <button type="submit" class="btn btn-primary submit-form me-2"
                                             (click)="confirmEdit()">Confirmar cambios</button>

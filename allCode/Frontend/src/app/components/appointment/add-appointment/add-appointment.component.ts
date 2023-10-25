@@ -39,6 +39,9 @@ export class AddAppointmentComponent implements OnInit {
       description: this.description,
       additionalNote: this.additionalNote
     }
+    console.log(this.bookDate);
+    console.log(this.fromDate);
+    
     if (this.bookDate == null || this.fromDate == null || this.toDate == null || this.description == null)
       alert("Debe rellenar todos los campos")
     else {

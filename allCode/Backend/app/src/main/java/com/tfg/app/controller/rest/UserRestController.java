@@ -113,7 +113,7 @@ public class UserRestController {
         }
     }
 
-    @PostMapping("/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<?> updateUser(@PathVariable Long id,
             @RequestParam(value = "address") String address,
             @RequestParam(value = "city", required = false) String city,

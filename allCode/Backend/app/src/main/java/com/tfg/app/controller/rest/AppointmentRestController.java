@@ -4,12 +4,15 @@ import static org.springframework.web.servlet.support.ServletUriComponentsBuilde
 
 import java.net.URI;
 import java.security.Principal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +43,7 @@ public class AppointmentRestController {
     private UserService userService;
     @Autowired
     private AppointmentService appointmentService;
-    
+
     @Autowired
     private AppointmentRepository appointmentRepository;
 
@@ -76,10 +79,11 @@ public class AppointmentRestController {
     }
 
     @PostMapping("/user={userId}")
-    public ResponseEntity<Appointment> addAppointmentToUser(@RequestBody AppointmentDTO appointmentDTO, @PathVariable ("userId") Long userId) {
+    public ResponseEntity<Appointment> addAppointmentToUser(@RequestBody AppointmentDTO appointmentDTO,
+            @PathVariable("userId") Long userId) {
         Appointment appointment = new Appointment(appointmentDTO);
         User user = userService.findById(userId).orElseThrow();
-        if (user!= null)
+        if (user != null)
             appointment.setUser(user);
         appointment.setCompleted(false);
         appointment.setInterventions(new ArrayList<>());
@@ -89,28 +93,59 @@ public class AppointmentRestController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Appointment>> getAppointment(@PathVariable Long id){
+    public ResponseEntity<Optional<Appointment>> getAppointment(@PathVariable Long id) {
         Optional<Appointment> appointment = appointmentService.findById(id);
         return ResponseEntity.ok(appointment);
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Appointment> updateAppointment (@PathVariable Long id, @RequestParam(value="completed") boolean completed){
+    public ResponseEntity<Appointment> updateAppointment(@PathVariable Long id,
+            @RequestParam(value = "completed") boolean completed) {
         Appointment appointment = appointmentService.findById(id).orElseThrow();
-        if (appointment == null){
+        if (appointment == null) {
             return ResponseEntity.notFound().build();
-        }else{
+        } else {
             // appointment.setBookDate(updatedAppointment.getBookDate());
             // appointment.setFromDate(updatedAppointment.getFromDate());
             // appointment.setToDate(updatedAppointment.getToDate());
             // appointment.setAdditionalNote(updatedAppointment.getAdditionalNote());
             // appointment.setDescription(updatedAppointment.getDescription());
-            appointment.setCompleted (completed);
+            appointment.setCompleted(completed);
 
             Appointment finishAppointment = appointmentRepository.save(appointment);
             return ResponseEntity.ok(finishAppointment);
         }
     }
+
+    @PutMapping("/fullupdate/{id}")
+    public ResponseEntity<?> updateAppointment(@PathVariable Long id,
+            @RequestParam(value = "bookDate", required = false) String bookDate,
+            @RequestParam(value = "fromDate", required = false) String fromDate,
+            @RequestParam(value = "toDate", required = false) String toDate,
+            @RequestParam(value = "description", required = false) String description,
+            @RequestParam(value = "additionalNote", required = false) String additionalNote) {
+
+        Appointment appointment = appointmentService.findById(id).orElseThrow();
+        if (bookDate != null){
+            appointment.setBookDate(LocalDate.parse(bookDate));
+        }
+        if (fromDate != null){
+            appointment.setFromDate(LocalDateTime.parse(fromDate));
+        }
+        if (toDate != null){
+            appointment.setToDate(LocalDateTime.parse(toDate));
+        }
+        if (description != null){
+            appointment.setDescription(description);
+        }
+        if (additionalNote != null){
+            appointment.setAdditionalNote(additionalNote);
+        }
+        Appointment updatedAppointment = appointmentRepository.save(appointment);
+        return ResponseEntity.ok(updatedAppointment);
+    }
+
+    
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteAppointment(@PathVariable Long id) {
@@ -118,7 +153,8 @@ public class AppointmentRestController {
             appointmentService.delete(id);
             return ResponseEntity.ok("Appointment eliminado con éxito.");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al eliminar el Appointment: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al eliminar el Appointment: " + e.getMessage());
         }
     }
 }

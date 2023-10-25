@@ -36,10 +36,20 @@ export class AppointmentService {
 
   updateAppointment(id: number, completed: boolean): Observable<Appointment> {
     const params = new HttpParams().set('completed', completed.toString());
-    return this.httpClient.put<Appointment>(baseUrl + "update/" + id, null, {params});
+    return this.httpClient.put<Appointment>(baseUrl + "update/" + id, null, { params });
   }
 
-  deleteAppointment(id: number){
-    return this.httpClient.delete(baseUrl +"delete/"+id);
+  deleteAppointment(id: number) {
+    return this.httpClient.delete(baseUrl + "delete/" + id);
+  }
+
+  updateFullAppointment(appointment: Appointment): Observable<any> {
+    const formData = new FormData();
+    formData.append('bookDate', appointment.bookDate || '');
+    formData.append('fromDate', appointment.fromDate || '');
+    formData.append('toDate', appointment.toDate || '');
+    formData.append('description', appointment.description || '');
+    formData.append('additionalNote', appointment.additionalNote || '');
+    return this.httpClient.put(baseUrl + "fullupdate/" + appointment.id, formData);
   }
 }

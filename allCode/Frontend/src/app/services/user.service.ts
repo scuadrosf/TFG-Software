@@ -41,7 +41,7 @@ export class UserService {
       formData.append('profileAvatarFile', profileAvatarFile);
     }
 
-    return this.httpClient.post(baseUrl + updatedUser.id, formData).pipe(
+    return this.httpClient.put(baseUrl + updatedUser.id, formData).pipe(
       catchError((error) => {
         return throwError(error);
       })

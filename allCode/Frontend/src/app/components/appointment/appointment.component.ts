@@ -6,7 +6,6 @@ import { UserService } from 'src/app/services/user.service';
 @Component({
   selector: 'app-appointment',
   templateUrl: './appointment.component.html',
-  styleUrls: ['./appointment.component.scss']
 })
 export class AppointmentComponent implements OnInit {
 
