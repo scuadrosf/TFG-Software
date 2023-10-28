@@ -56,6 +56,7 @@ export class PatientComponent implements OnInit {
       this.patientService.deleteUser(user);
       console.log("Usuario eliminado")
       this.ngOnInit();
+      // window.location.reload();
     }
     else {
       console.log("Confirmación de eliminado cancelada")

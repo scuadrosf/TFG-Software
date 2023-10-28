@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Appointment } from 'src/app/models/appointment.model';
 import { AppointmentService } from 'src/app/services/appointment.service';
+import { InterventionService } from 'src/app/services/intervention.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -9,13 +11,14 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class AppointmentComponent implements OnInit {
 
+
   appointmentList: Appointment[] = [];
   profileAvatarUrls: string[] = [];
   todayNow!: Date;
   fechaBaseDatos!: Date;
   isCompleted: boolean = false;
 
-  constructor(private appointmentService: AppointmentService, private userService: UserService) { }
+  constructor(private router: Router, private appointmentService: AppointmentService, private userService: UserService, private interventionService: InterventionService) { }
 
 
   ngOnInit(): void {
@@ -58,5 +61,12 @@ export class AppointmentComponent implements OnInit {
       console.log("Confirmación de eliminado cancelada")
     }
     this.ngOnInit();
+  }
+
+  addIntervention(idAppointment: number) {
+    this.appointmentService.getAppointment(idAppointment).subscribe(appointment => {
+      this.router.navigate(['appointment-list/'+appointment.user.id+'/add-intervention/'+idAppointment])
+
+    })
   }
 }

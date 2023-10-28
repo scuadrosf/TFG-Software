@@ -1,17 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Intervention } from 'src/app/models/intervention.model';
 import { User } from 'src/app/models/user.model';
 import { AppointmentService } from 'src/app/services/appointment.service';
 import { InterventionService } from 'src/app/services/intervention.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
-  selector: 'app-add-intervention',
-  templateUrl: './add-intervention.component.html'
+  selector: 'app-edit-intervention',
+  templateUrl: './edit-intervention.component.html',
 })
-export class AddInterventionComponent implements OnInit {
+export class EditInterventionComponent {
 
   appointmentId!: number;
+  interventionId!: number;
+  intervention!: Intervention;
   userId!: number;
   user!: User;
   type!: string;
@@ -19,35 +22,23 @@ export class AddInterventionComponent implements OnInit {
   constructor(private userService: UserService, private appointmentService: AppointmentService, private interventionService: InterventionService, private activatedRoute: ActivatedRoute, private router: Router) { }
 
   ngOnInit(): void {
-    this.appointmentId = this.activatedRoute.snapshot.params['idAppointment'];
-    console.log("APO: ", this.appointmentId);
     this.userId = this.activatedRoute.snapshot.params['idUser'];
+    this.interventionId = this.activatedRoute.snapshot.params['idIntervention'];
     console.log("USE:", this.userId);
+    console.log("INT:", this.interventionId);
+    this.interventionService.getIntervention(this.interventionId).subscribe(intervention =>{
+      this.intervention = intervention;
+    })
     this.userService.getUser(this.userId).subscribe(user => {
       this.user = user;
     })
+  }
 
-
+  update(){
 
   }
 
-  submit() {
-    if (this.type != null) {
-      console.log(this.type);
-      this.interventionService.addIntervention(this.appointmentId, this.userId, this.type).subscribe(
-        (_) => {
-          alert('Intervención añadida');
-          window.history.back();
-        },
-        (error) => {
-          console.error(error);
-          this.router.navigate(['/error-page'])
-        }
-      );
-    }
-  }
-
-  back() {
+  back(){
     window.history.back();
   }
 }

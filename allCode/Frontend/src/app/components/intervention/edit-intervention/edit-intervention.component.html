@@ -8,7 +8,7 @@
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a routerLink="/appointment-list">Lista de citas </a></li>
                         <li class="breadcrumb-item"><i class="feather icon-chevron-right"></i></li>
-                        <li class="breadcrumb-item active">Añadir intervención</li>
+                        <li class="breadcrumb-item active">Editar intervención</li>
                     </ul>
                 </div>
             </div>
@@ -73,7 +73,7 @@
                                     <div class="form-group local-forms">
                                         <label>Tipo de intervención<span class="login-danger">*</span></label>
                                         <input class="form-control" type="text" [(ngModel)]="type"
-                                            name="type">
+                                            name="type" placeholder={{intervention.type}}>
                                     </div>
                                 </div>
                                 
@@ -90,7 +90,7 @@
                                 <div class="col-12">
                                     <div class="doctor-submit text-end">
                                         <button type="submit" class="btn btn-primary submit-form me-2"
-                                            (click)="submit()" >Guardar</button>
+                                            (click)="update()" >Guardar cambios</button>
                                         <button type="submit" class="btn btn-primary cancel-form"
                                             (click)="back()" >Cancelar</button>
                                     </div>

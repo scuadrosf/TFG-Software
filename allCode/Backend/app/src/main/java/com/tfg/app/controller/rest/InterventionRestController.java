@@ -14,10 +14,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.tfg.app.model.Appointment;
 import com.tfg.app.model.Intervention;
 import com.tfg.app.model.User;
+import com.tfg.app.repository.InterventionRepository;
 import com.tfg.app.service.AppointmentService;
 import com.tfg.app.service.InterventionService;
 import com.tfg.app.service.UserService;
@@ -34,6 +37,8 @@ import com.tfg.app.service.UserService;
 public class InterventionRestController {
     @Autowired
     private InterventionService interventionService;
+    @Autowired
+    private InterventionRepository interventionRepository;
 
     @Autowired
     private UserService userService;
@@ -61,17 +66,6 @@ public class InterventionRestController {
         return ResponseEntity.ok().body(interventionList);
     }
 
-    // @GetMapping("/{id}")
-    // public ResponseEntity<Intervention> getInterventionById(@PathVariable Long id) {
-    //     Optional<Intervention> intervention = interventionService.findById(id);
-    //     if (intervention.isPresent()) {
-    //         Intervention interventionAux = intervention.get();
-    //         return new ResponseEntity<>(interventionAux, HttpStatus.OK);
-    //     } else {
-    //         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    //     }
-    // }
-
     @GetMapping("/{userId}")
     public ResponseEntity<List<Intervention>> getUserIntervention(@PathVariable("userId") Long id) {
         Optional<User> user = userService.findById(id);
@@ -83,8 +77,9 @@ public class InterventionRestController {
     }
 
     @PostMapping("/{appointmentId}/user={userId}")
-    public ResponseEntity<Object> addIntervention(@PathVariable("appointmentId") Long appointmentId, @PathVariable("userId") Long userId,
-            @RequestParam (value="type", required = true) String type) {
+    public ResponseEntity<Object> addIntervention(@PathVariable("appointmentId") Long appointmentId,
+            @PathVariable("userId") Long userId,
+            @RequestParam(value = "type", required = true) String type) {
         Optional<Appointment> currentApointment = appointmentService.findById(appointmentId);
         LocalDate date = LocalDate.now();
         if (currentApointment.isPresent()) {
@@ -93,8 +88,9 @@ public class InterventionRestController {
             intervention.setAppointment(currentApointment.get());
             intervention.setDocuments(new ArrayList<>());
             intervention.setType(type);
-            User user = userService.findById(userId).orElseThrow(() -> new IllegalArgumentException("Invalid User Id: " + userId));
-            if(user != null)
+            User user = userService.findById(userId)
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid User Id: " + userId));
+            if (user != null)
                 intervention.setUser(user);
             currentApointment.get().getInterventions().add(intervention);
             interventionService.save(intervention);
@@ -104,6 +100,41 @@ public class InterventionRestController {
         } else {
             String errorMessage = "Primero debe pedir cita";
             return ResponseEntity.badRequest().body(errorMessage);
+        }
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?> updateIntevention(@PathVariable Long id,
+            @RequestParam(value = "type", required = true) String type) {
+        Intervention intervention = interventionService.findById(id).orElseThrow();
+        if (type != null) {
+            intervention.setType(type);
+        }
+        Intervention updatedIntervention = interventionRepository.save(intervention);
+        return ResponseEntity.ok(updatedIntervention);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteIntervention(@PathVariable Long id) {
+        Optional<Intervention> interventionOptional = interventionService.findById(id);
+        try {
+            if (interventionOptional.isPresent()) {
+                interventionService.delete(id);
+            }
+            return ResponseEntity.ok("Intervention eliminado con éxito.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al eliminar la intervention: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("each/{id}")
+    public ResponseEntity<Intervention> getIntervention(@PathVariable Long id) {
+        Optional<Intervention> interventionData = interventionService.findById(id);
+        if (!interventionData.isEmpty()) {
+            return ResponseEntity.ok(interventionData.get());
+        } else {
+            return ResponseEntity.notFound().build();
         }
     }
 

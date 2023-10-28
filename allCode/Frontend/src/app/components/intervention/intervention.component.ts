@@ -7,8 +7,7 @@ import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-intervention',
-  templateUrl: './intervention.component.html',
-  styleUrls: ['./intervention.component.scss']
+  templateUrl: './intervention.component.html'
 })
 export class InterventionComponent implements OnInit {
 

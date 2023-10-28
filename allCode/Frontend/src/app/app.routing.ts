@@ -17,6 +17,7 @@ import { AddAppointmentMainComponent } from "./components/appointment/add-appoin
 import { EditAppointmentComponent } from "./components/appointment/edit-appointment/edit-appointment.component"
 import { InterventionComponent } from "./components/intervention/intervention.component"
 import { AddInterventionComponent } from "./components/intervention/add-intervention/add-intervention.component"
+import { EditInterventionComponent } from "./components/intervention/edit-intervention/edit-intervention.component"
 
 const appRoutes = [
     {path: 'dashboard', component: DashboardsComponent},
@@ -39,6 +40,7 @@ const appRoutes = [
     {path: 'edit-appointment/:id', component: EditAppointmentComponent},
     {path: 'appointment-list/:id', component: InterventionComponent},
     {path: 'appointment-list/:idUser/add-intervention/:idAppointment', component: AddInterventionComponent},
+    {path: 'user/:idUser/edit-intervention/:idIntervention', component: EditInterventionComponent},
 
 
     {path: '', component: LoginComponent},

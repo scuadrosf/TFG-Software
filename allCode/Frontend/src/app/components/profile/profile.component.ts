@@ -46,5 +46,19 @@ export class ProfileComponent implements OnInit {
     });
 
   }  
+
+  deleteIntervention(intervention: Intervention){
+    const confirmation = window.confirm('Esta seguro de eliminar la intervención');
+    if (confirmation) {
+      this.interventionService.deleteIntervention(intervention);
+      console.log("Intervention eliminado")
+      this.ngOnInit();
+      // window.location.reload();
+    }
+    else {
+      console.log("Confirmación de eliminado cancelada")
+    }
+    this.ngOnInit();
+  }
   
 }
