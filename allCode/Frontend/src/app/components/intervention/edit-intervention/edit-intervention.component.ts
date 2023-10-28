@@ -26,7 +26,7 @@ export class EditInterventionComponent {
     this.interventionId = this.activatedRoute.snapshot.params['idIntervention'];
     console.log("USE:", this.userId);
     console.log("INT:", this.interventionId);
-    this.interventionService.getIntervention(this.interventionId).subscribe(intervention =>{
+    this.interventionService.getIntervention(this.interventionId).subscribe(intervention => {
       this.intervention = intervention;
     })
     this.userService.getUser(this.userId).subscribe(user => {
@@ -34,11 +34,26 @@ export class EditInterventionComponent {
     })
   }
 
-  update(){
+  update() {
+    if (confirm('Esta seguro de guardar los cambios')) {
+      if (this.intervention) {
+        if (this.type)
+          this.intervention.type = this.type;
+      }
 
+      this.interventionService.updateIntervention(this.intervention).subscribe(
+        (_) => {
+          console.log(this.intervention);
+          this.ngOnInit();
+          this.back();
+        },
+      );
+    } else {
+      console.log("Cancelado por el usuario");
+    }
   }
 
-  back(){
+  back() {
     window.history.back();
   }
 }
