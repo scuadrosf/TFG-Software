@@ -136,13 +136,26 @@ public class UserRestController {
         if (postalCode != null) {
             user.setPostalCode(postalCode);
         }
-        if(phone != null){
+        if (phone != null) {
             user.setPhone(phone);
         }
         if (profileAvatarFile != null) {
             byte[] imageBytes = profileAvatarFile.getBytes();
             Blob imageBlob = new SerialBlob(imageBytes);
             user.setProfileAvatarFile(imageBlob);
+        }
+        User updatedUser = userRepository.save(user);
+        return ResponseEntity.ok(updatedUser);
+    }
+
+    @PutMapping("/pass/{id}")
+    public ResponseEntity<?> updateUserPassword(@PathVariable Long id,
+            @RequestParam(value = "password") String password)
+            throws IOException, SerialException, SQLException {
+
+        User user = userService.findById(id).orElseThrow();
+        if (password != null) {
+            user.setPasswordEncoded(passwordEncoder.encode(password));
         }
         User updatedUser = userRepository.save(user);
         return ResponseEntity.ok(updatedUser);
@@ -157,6 +170,16 @@ public class UserRestController {
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
         Optional<User> user = userService.findById(id);
+        if (user.isPresent()) {
+            return ResponseEntity.ok(user.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/email/{email}")
+    public ResponseEntity<User> getUserByEmail(@PathVariable String email) {
+        Optional<User> user = userService.findByEmail(email);
         if (user.isPresent()) {
             return ResponseEntity.ok(user.get());
         } else {

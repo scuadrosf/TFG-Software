@@ -30,6 +30,10 @@ export class UserService {
     return this.httpClient.get<User>(baseUrl+ id);
   }
 
+  getUserByEmail(email: string): Observable<User>{
+    return this.httpClient.get<User>(baseUrl+"email/"+ email);
+  }
+
   updateUser(updatedUser: User, profileAvatarFile?: File): Observable<any>{
     const formData = new FormData();
     formData.append('address', updatedUser.address || '');
@@ -42,6 +46,17 @@ export class UserService {
     }
 
     return this.httpClient.put(baseUrl + updatedUser.id, formData).pipe(
+      catchError((error) => {
+        return throwError(error);
+      })
+    );
+  }
+
+  updatePassword(updatedUser: User): Observable<any>{
+    const formData = new FormData();
+    formData.append('password', updatedUser.encodedPassword || '');
+    console.log(formData.get("password"))
+    return this.httpClient.put(baseUrl+"pass/"+updatedUser.id, formData).pipe(
       catchError((error) => {
         return throwError(error);
       })

@@ -30,6 +30,7 @@ import { EditAppointmentComponent } from './components/appointment/edit-appointm
 import { InterventionComponent } from './components/intervention/intervention.component';
 import { AddInterventionComponent } from './components/intervention/add-intervention/add-intervention.component';
 import { EditInterventionComponent } from './components/intervention/edit-intervention/edit-intervention.component';
+import { ForgotPasswordComponent } from './components/login/forgot-password/forgot-password.component';
 
 @NgModule({
   declarations: [
@@ -54,7 +55,8 @@ import { EditInterventionComponent } from './components/intervention/edit-interv
     EditAppointmentComponent,
     InterventionComponent,
     AddInterventionComponent,
-    EditInterventionComponent
+    EditInterventionComponent,
+    ForgotPasswordComponent
   ],
   imports: [
     BrowserModule,

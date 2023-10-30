@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
+import { EmailService } from 'src/app/services/email.service';
 
 @Component({
   selector: 'app-add-patient',
@@ -11,8 +12,8 @@ export class AddPatientComponent {
   name: string = '';
   lastName: string = '';
   email: string = '';
-  passwordEncoded: string = 'pass';
   username: string = '';
+  passwordEncoded: string = 'pass';
   gender: string = '';
   phone: string = '';
   birth: string = '';
@@ -22,7 +23,7 @@ export class AddPatientComponent {
   postalCode: string = '';
 
 
-  constructor(public authService: AuthService, private router: Router) { }
+  constructor(public authService: AuthService, private router: Router, private emailService: EmailService) { }
 
 
   addPatient() {
@@ -31,8 +32,8 @@ export class AddPatientComponent {
         name: this.name,
         lastName: this.lastName,
         email: this.email,
-        passwordEncoded: this.passwordEncoded,
         username: this.username,
+        passwordEncoded: this.username,
         gender: this.gender,
         phone: this.phone,
         birth: this.birth,
@@ -45,6 +46,7 @@ export class AddPatientComponent {
       this.authService.register(userData).subscribe(
         (_) => {
           alert('Paciente creado');
+          this.emailService.sendEmail(this.email, userData.passwordEncoded);
           window.history.back();
         },
         (_) => {
