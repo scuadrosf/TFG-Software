@@ -8,8 +8,13 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class SidebarComponent implements OnInit {
   isSidebarOpen: boolean = true;
+  userId!: number;
 
-  constructor(public authService: AuthService) { }
+  constructor(public authService: AuthService) {
+
+    
+
+  }
 
   ngOnInit(): void {
     // this.sidebarService.getSidebarState().subscribe(isOpen => {
