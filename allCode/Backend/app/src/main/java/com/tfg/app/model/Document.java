@@ -16,22 +16,27 @@ public class Document {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    private String fileName;
     private LocalDate creationDate;
     private String link;
 
     @Lob
-    private Blob file;
+    private byte[] file;
 
     @ManyToOne
     private Intervention intervention;
 
 
-    public Document(Long id, LocalDate creationDate, String link, Blob file, Intervention intervention) {
+    public Document(Long id, LocalDate creationDate, String link, byte[] file, Intervention intervention, String fileName) {
         this.id = id;
         this.creationDate = creationDate;
         this.link = link;
         this.file = file;
         this.intervention = intervention;
+        this.fileName = fileName;
+    }
+
+    public Document() {
     }
 
     public Long getId() {
@@ -58,12 +63,10 @@ public class Document {
         this.link = link;
     }
 
-    public Blob getFile() {
-        return file;
-    }
+   
 
-    public void setFile(Blob file) {
-        this.file = file;
+    public void setFile(byte[] content) {
+        this.file = content;
     }
 
     public Intervention getIntervention() {
@@ -72,6 +75,18 @@ public class Document {
 
     public void setIntervention(Intervention intervention) {
         this.intervention = intervention;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public byte[] getFile() {
+        return file;
     }
 
     
