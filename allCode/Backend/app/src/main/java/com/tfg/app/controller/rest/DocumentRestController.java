@@ -1,6 +1,8 @@
 package com.tfg.app.controller.rest;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
@@ -16,8 +18,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.tfg.app.model.Document;
+import com.tfg.app.model.Intervention;
 import com.tfg.app.repository.DocumentRepository;
 import com.tfg.app.service.DocumentService;
+import com.tfg.app.service.InterventionService;
 
 @RestController
 @RequestMapping("/api/documents")
@@ -27,19 +32,24 @@ public class DocumentRestController {
     private DocumentService documentService;
     @Autowired
     private DocumentRepository documentRepository;
+    @Autowired
+    private InterventionService interventionService;
 
-    @PostMapping("/upload")
-    public ResponseEntity<String> uploadDocument(@RequestParam("file") MultipartFile file) throws IOException {
+    @PostMapping("/upload/{idIntervention}")
+    public ResponseEntity<String> uploadDocument(@PathVariable("idIntervention")Long id, @RequestParam("file") MultipartFile file) throws IOException {
         try {
             // Verificar si el archivo está vacío
             if (file.isEmpty()) {
                 return ResponseEntity.badRequest().body("Por favor, seleccione un archivo.");
             }
-
-            // Guardar el documento en el repositorio
-            documentService.saveDocument(file);
-
-            return ResponseEntity.ok("Documento subido exitosamente");
+            Optional<Intervention> intervention = interventionService.findById(id);
+            if (intervention.isPresent()){
+                // Guardar el documento en el repositorio
+                documentService.saveDocument(file, id);
+                return ResponseEntity.ok("Documento subido exitosamente");
+            }else{
+                return ResponseEntity.notFound().build();
+            }
         } catch (IOException e) {
             // Manejar errores de IO, por ejemplo, si no se puede leer/escribir el archivo
             return ResponseEntity.status(500).body("Error al subir el documento: " + e.getMessage());
@@ -59,4 +69,20 @@ public class DocumentRestController {
         // Devuelve el contenido del documento en la respuesta
         return new ResponseEntity<>(documentContent, headers, HttpStatus.OK);
     }
+
+    @GetMapping("/full/{id}")
+    public ResponseEntity<Document> getEntityDocument(@PathVariable Long id){
+        Optional<Document> optionalDoc= documentRepository.findById(id);
+        if (optionalDoc.isPresent()){
+            return ResponseEntity.ok(optionalDoc.get());
+        }else{
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<Document>> getAllDocuments() {
+        return ResponseEntity.ok().body(documentService.findAll());
+    }
+
 }

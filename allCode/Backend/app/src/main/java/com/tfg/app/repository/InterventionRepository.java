@@ -12,5 +12,4 @@ public interface InterventionRepository extends JpaRepository<Intervention, Long
     void save(InterventionDTO responseDTO);
 
     List<Intervention> findByUserId(Long userId);
-    
 }

@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tfg.app.model.Appointment;
+import com.tfg.app.model.Document;
 import com.tfg.app.model.Intervention;
 import com.tfg.app.model.User;
 import com.tfg.app.repository.InterventionRepository;
@@ -136,6 +137,11 @@ public class InterventionRestController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping("{id}/documents")
+    public ResponseEntity<List<Document>> getDocuments (@PathVariable Long id){
+        return ResponseEntity.ok().body(interventionService.getDocumentsByInterventionId(id));
     }
 
 }

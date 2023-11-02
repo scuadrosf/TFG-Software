@@ -27,6 +27,7 @@ public class Intervention {
     private LocalDate interventionDate;
     private String type;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "intervention", cascade = CascadeType.ALL)
     private List<Document> documents;
 

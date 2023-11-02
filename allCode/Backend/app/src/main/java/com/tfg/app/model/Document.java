@@ -1,6 +1,5 @@
 package com.tfg.app.model;
 
-import java.sql.Blob;
 import java.time.LocalDate;
 
 import javax.persistence.Entity;

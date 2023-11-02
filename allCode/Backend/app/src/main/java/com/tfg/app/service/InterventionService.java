@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.tfg.app.controller.DTOS.InterventionDTO;
+import com.tfg.app.model.Document;
 import com.tfg.app.model.Intervention;
+import com.tfg.app.repository.DocumentRepository;
 import com.tfg.app.repository.InterventionRepository;
 
 @Service
@@ -15,6 +17,8 @@ public class InterventionService {
     
     @Autowired
     private InterventionRepository interventions;
+    @Autowired
+    private DocumentRepository documentRepository;
 
     public void delete(Long id) {
         interventions.deleteById(id);
@@ -38,6 +42,10 @@ public class InterventionService {
 
     public List<Intervention> findByUserId(Long id) {
         return interventions.findByUserId(id);
+    }
+
+    public List<Document> getDocumentsByInterventionId(Long id){
+        return documentRepository.findByInterventionId(id);
     }
 
 }
