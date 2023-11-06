@@ -1,9 +1,11 @@
 package com.tfg.app.controller.rest;
 
+import java.io.IOException;
 import java.net.URI;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentRequest;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.tfg.app.model.Appointment;
 import com.tfg.app.model.Document;
@@ -80,20 +83,36 @@ public class InterventionRestController {
     @PostMapping("/{appointmentId}/user={userId}")
     public ResponseEntity<Object> addIntervention(@PathVariable("appointmentId") Long appointmentId,
             @PathVariable("userId") Long userId,
-            @RequestParam(value = "type", required = true) String type) {
+            @RequestParam(value = "type", required = true) String type,
+            @RequestParam(value = "file", required = false) MultipartFile file) {
+
         Optional<Appointment> currentApointment = appointmentService.findById(appointmentId);
         LocalDate date = LocalDate.now();
         if (currentApointment.isPresent()) {
+            Document document = new Document();
+            document.setFileName(file.getOriginalFilename());
+            document.setCreationDate(date);
+            try {
+                document.setFile(file.getBytes());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
             Intervention intervention = new Intervention();
             intervention.setInterventionDate(date);
             intervention.setAppointment(currentApointment.get());
-            intervention.setDocuments(new ArrayList<>());
+
             intervention.setType(type);
             User user = userService.findById(userId)
                     .orElseThrow(() -> new IllegalArgumentException("Invalid User Id: " + userId));
             if (user != null)
                 intervention.setUser(user);
+
+            intervention.setDocuments(Arrays.asList(document));
             currentApointment.get().getInterventions().add(intervention);
+
+            document.setIntervention(intervention);
+
             interventionService.save(intervention);
             appointmentService.save(currentApointment.get());
             URI location = fromCurrentRequest().path("/{id}").buildAndExpand(intervention.getId()).toUri();
@@ -140,7 +159,7 @@ public class InterventionRestController {
     }
 
     @GetMapping("{id}/documents")
-    public ResponseEntity<List<Document>> getDocuments (@PathVariable Long id){
+    public ResponseEntity<List<Document>> getDocuments(@PathVariable Long id) {
         return ResponseEntity.ok().body(interventionService.getDocumentsByInterventionId(id));
     }
 

@@ -19,7 +19,7 @@
 
                 <div class="card">
                     <div class="card-body">
-                        <form>
+                        <form (ngSubmit)="submit()" enctype="multipart/form-data">
 
                             <div class="row">
                                 <div class="col-12">
@@ -72,27 +72,28 @@
                                 <div class="col-12 col-md-6 col-xl-6">
                                     <div class="form-group local-forms">
                                         <label>Tipo de intervención<span class="login-danger">*</span></label>
-                                        <input class="form-control" type="text" [(ngModel)]="type"
-                                            name="type">
+                                        <input class="form-control" type="text" [(ngModel)]="type" name="type">
                                     </div>
                                 </div>
-                                
-                                <!-- <div class="col-12 col-md-6 col-xl-6">
+
+                                <div class="col-12 col-md-6 col-xl-6">
                                     <div class="form-group local-top-form">
-                                        <label class="local-top">Fichero adjunto <span class="login-danger">*</span></label>
+                                        <label class="local-top">Fichero adjunto <span
+                                                class="login-danger">*</span></label>
                                         <div class="settings-btn upload-files-avator">
-                                            <input type="file" accept="image/*" name="image" id="file"
-                                                onchange="loadFile(event)" class="hide-input">
+                                            <div *ngIf="selectedFileName">{{ selectedFileName }}</div>
+                                            <input type="file" name="file" id="file" (change)="onFileSelected($event)"
+                                                class="hide-input">
                                             <label for="file" class="upload">Elegir fichero</label>
+
                                         </div>
                                     </div>
-                                </div> -->
+                                </div>
                                 <div class="col-12">
                                     <div class="doctor-submit text-end">
-                                        <button type="submit" class="btn btn-primary submit-form me-2"
-                                            (click)="submit()" >Guardar</button>
+                                        <button type="submit" class="btn btn-primary submit-form me-2">Guardar</button>
                                         <button type="submit" class="btn btn-primary cancel-form"
-                                            (click)="back()" >Cancelar</button>
+                                            (click)="back()">Cancelar</button>
                                     </div>
                                 </div>
                             </div>

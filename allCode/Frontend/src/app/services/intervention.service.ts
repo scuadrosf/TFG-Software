@@ -14,8 +14,8 @@ export class InterventionService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getIntervention(id: number): Observable<Intervention>{
-    return this.httpClient.get<Intervention>(baseUrl+'each/'+id)
+  getIntervention(id: number): Observable<Intervention> {
+    return this.httpClient.get<Intervention>(baseUrl + 'each/' + id)
   }
 
   getUserInterventions(id: number): Observable<Intervention[]> {
@@ -30,19 +30,19 @@ export class InterventionService {
     return this.httpClient.get<Appointment[]>("/api/appointments/all/" + id);
   }
 
-  addIntervention(idAppointment: number, idUser: number, type: string): Observable<any> {
-    const formData = new FormData();
-    formData.append('type', type || '');
+  addIntervention(idAppointment: number, idUser: number, formData: FormData): Observable<any> {
+    // const formData = new FormData();
+    // formData.append('type', type || '');
     return this.httpClient.post(baseUrl + idAppointment + "/user=" + idUser, formData);
   }
 
-  updateIntervention(intervention: Intervention): Observable<any>{
+  updateIntervention(intervention: Intervention): Observable<any> {
     const formData = new FormData();
     formData.append('type', intervention.type || '');
-    return this.httpClient.put(baseUrl+'update/'+ intervention.id, formData);
+    return this.httpClient.put(baseUrl + 'update/' + intervention.id, formData);
   }
 
   deleteIntervention(intervention: Intervention) {
-    return this.httpClient.delete(baseUrl+'delete/'+ intervention.id).subscribe();
+    return this.httpClient.delete(baseUrl + 'delete/' + intervention.id).subscribe();
   }
 }

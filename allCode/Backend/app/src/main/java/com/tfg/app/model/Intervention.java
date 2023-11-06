@@ -1,5 +1,6 @@
 package com.tfg.app.model;
 
+import java.io.File;
 import java.time.LocalDate;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -9,6 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -96,13 +99,7 @@ public class Intervention {
         this.type = type;
     }
 
-    public List<Document> getDocuments() {
-        return documents;
-    }
-
-    public void setDocuments(List<Document> documents) {
-        this.documents = documents;
-    }
+    
 
     public User getUser() {
         return user;
@@ -118,6 +115,14 @@ public class Intervention {
 
     public void setAppointment(Appointment currentApointment) {
         this.appointment = currentApointment;
+    }
+
+    public List<Document> getDocuments() {
+        return documents;
+    }
+
+    public void setDocuments(List<Document> documents) {
+        this.documents = documents;
     }
 
 }

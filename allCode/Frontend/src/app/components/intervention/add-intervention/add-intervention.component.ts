@@ -11,6 +11,10 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class AddInterventionComponent implements OnInit {
 
+  selectedFile: File | null = null;
+  selectedFileName: string = '';
+
+
   appointmentId!: number;
   userId!: number;
   user!: User;
@@ -31,10 +35,18 @@ export class AddInterventionComponent implements OnInit {
 
   }
 
+  onFileSelected(event: any) {
+    this.selectedFile = event.target.files[0];
+    this.selectedFileName = this.selectedFile?.name || '';
+  }
+
   submit() {
-    if (this.type != null) {
+    if (this.type != null && this.selectedFile) {
       console.log(this.type);
-      this.interventionService.addIntervention(this.appointmentId, this.userId, this.type).subscribe(
+      const formData = new FormData();
+      formData.append('file', this.selectedFile);
+      formData.append('type', this.type);
+      this.interventionService.addIntervention(this.appointmentId, this.userId, formData).subscribe(
         (_) => {
           alert('Intervención añadida');
           window.history.back();
@@ -44,6 +56,8 @@ export class AddInterventionComponent implements OnInit {
           this.router.navigate(['/error-page'])
         }
       );
+    }else{
+      console.error("Ningun archivo seleccionado")
     }
   }
 
