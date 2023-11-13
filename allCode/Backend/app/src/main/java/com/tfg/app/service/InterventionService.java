@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.tfg.app.controller.DTOS.InterventionDTO;
+import com.tfg.app.model.Appointment;
 import com.tfg.app.model.Document;
 import com.tfg.app.model.Intervention;
 import com.tfg.app.repository.DocumentRepository;
@@ -47,5 +48,7 @@ public class InterventionService {
     public Optional<Document> getDocumentByInterventionId(Long id){
         return documentRepository.findByInterventionId(id);
     }
+
+    
 
 }

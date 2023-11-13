@@ -162,4 +162,9 @@ public class AppointmentRestController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @GetMapping("byAppointment/{idIntervention}")
+    public ResponseEntity<Appointment> getAppointmentByInterventionId(@PathVariable("idIntervention") Long idIntervention){
+        return ResponseEntity.ok().body(appointmentService.getAppointmentByInterventionId(idIntervention));
+    }
 }

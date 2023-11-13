@@ -2,8 +2,12 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
+import { Appointment } from 'src/app/models/appointment.model';
 import { Document } from 'src/app/models/document.model';
+import { Intervention } from 'src/app/models/intervention.model';
 import { InterventionService } from 'src/app/services/intervention.service';
+import { AddAppointmentMainComponent } from '../../appointment/add-appointment-main/add-appointment-main.component';
+import { AppointmentService } from 'src/app/services/appointment.service';
 
 
 @Component({
@@ -12,26 +16,31 @@ import { InterventionService } from 'src/app/services/intervention.service';
 })
 export class DocumentsOfInterventionComponent implements OnInit {
 
-  // pdfSrc = "https://vadimdez.github.io/ng2-pdf-viewer/assets/pdf-test.pdf";
-  // pdfSrc = "https://www.turnerlibros.com/wp-content/uploads/2021/02/ejemplo.pdf";
   pdfSrc: any;
 
   document: Document | undefined;
+  intervention!: Intervention;
+  appointment!: Appointment;
 
   interventionId!: number;
 
-  // Show all documents of THAT intervention
+  // Show document of THAT intervention
 
-  constructor(private interventionService: InterventionService, private activatedRoute: ActivatedRoute) {
-    // (window as any)["pdfWorkerSrc2.14.305"] = 'Frontend/src/app/components/documents/documents-of-intervention/pdf.worker.min.js';
+  constructor(private interventionService: InterventionService, private activatedRoute: ActivatedRoute, private appointmentService: AppointmentService) {
 
-   }
+  }
 
   ngOnInit(): void {
     this.interventionId = this.activatedRoute.snapshot.params['idIntervention'];
+    this.interventionService.getIntervention(this.interventionId).subscribe(intervention =>
+      this.intervention = intervention);
+
+    this.appointmentService.getAppointmentByInterventionId(this.interventionId).subscribe(appointment =>
+      this.appointment = appointment);
+
     this.interventionService.getDocumentsByIntervention(this.interventionId).subscribe(
-      
-      (document: Document) =>{
+
+      (document: Document) => {
         this.document = document;
         console.log(document);
         if (document.file instanceof Uint8Array) {
@@ -44,16 +53,16 @@ export class DocumentsOfInterventionComponent implements OnInit {
           for (let i = 0; i < byteCharacters.length; i++) {
             byteArray[i] = byteCharacters.charCodeAt(i);
           }
-  
+
           // Asigna el Uint8Array al pdfSrc
           this.pdfSrc = byteArray;
-        }else{
+        } else {
           console.error('El campo "file" no es un array de bytes o una cadena Base64')
         }
       },
       error => {
         console.error("Error al obtener el documento PDF", error);
-      });    
+      });
   }
 
   back() {

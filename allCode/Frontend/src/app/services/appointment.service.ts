@@ -56,4 +56,8 @@ export class AppointmentService {
     formData.append('additionalNote', appointment.additionalNote || '');
     return this.httpClient.put(baseUrl + "fullupdate/" + appointment.id, formData);
   }
+
+  getAppointmentByInterventionId(idIntervention: number): Observable<Appointment>{
+    return this.httpClient.get<Appointment>(baseUrl+"byAppointment/"+idIntervention);
+  }
 }

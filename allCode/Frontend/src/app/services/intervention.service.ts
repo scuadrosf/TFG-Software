@@ -50,4 +50,5 @@ export class InterventionService {
   deleteIntervention(intervention: Intervention) {
     return this.httpClient.delete(baseUrl + 'delete/' + intervention.id).subscribe();
   }
+
 }
