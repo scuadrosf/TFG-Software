@@ -8,6 +8,7 @@ import { Intervention } from 'src/app/models/intervention.model';
 import { InterventionService } from 'src/app/services/intervention.service';
 import { AddAppointmentMainComponent } from '../../appointment/add-appointment-main/add-appointment-main.component';
 import { AppointmentService } from 'src/app/services/appointment.service';
+import { DocumentService } from 'src/app/services/document.service';
 
 
 @Component({
@@ -18,7 +19,7 @@ export class DocumentsOfInterventionComponent implements OnInit {
 
   pdfSrc: any;
 
-  document: Document | undefined;
+  document!: Document;
   intervention!: Intervention;
   appointment!: Appointment;
 
@@ -26,7 +27,7 @@ export class DocumentsOfInterventionComponent implements OnInit {
 
   // Show document of THAT intervention
 
-  constructor(private interventionService: InterventionService, private activatedRoute: ActivatedRoute, private appointmentService: AppointmentService) {
+  constructor(private documentService: DocumentService, private interventionService: InterventionService, private activatedRoute: ActivatedRoute, private appointmentService: AppointmentService) {
 
   }
 
@@ -38,7 +39,7 @@ export class DocumentsOfInterventionComponent implements OnInit {
     this.appointmentService.getAppointmentByInterventionId(this.interventionId).subscribe(appointment =>
       this.appointment = appointment);
 
-    this.interventionService.getDocumentsByIntervention(this.interventionId).subscribe(
+    this.interventionService.getDocumentByIntervention(this.interventionId).subscribe(
 
       (document: Document) => {
         this.document = document;
@@ -67,5 +68,14 @@ export class DocumentsOfInterventionComponent implements OnInit {
 
   back() {
     window.history.back();
+  }
+
+  download(){
+    this.documentService.downloadDocument(this.document.id).subscribe(blob =>{
+      const link = document.createElement('a');
+      link.href = window.URL.createObjectURL(blob);
+      link.download = this.document.fileName;
+      link.click();
+    });
   }
 }

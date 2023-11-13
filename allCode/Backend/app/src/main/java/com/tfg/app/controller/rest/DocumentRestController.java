@@ -85,7 +85,15 @@ public class DocumentRestController {
         return ResponseEntity.ok().body(documentService.findAll());
     }
 
-    // @GetMapping("/user/{id}")
-    // public ResponseEntity<List<Doc
+    @GetMapping("/{id}/document")
+    public ResponseEntity<Document> getDocumentsByInterventionId(@PathVariable Long id) {
+        Optional<Document> document = interventionService.getDocumentByInterventionId(id);
+
+        if (document.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return ResponseEntity.ok(document.get());
+    }
 
 }
