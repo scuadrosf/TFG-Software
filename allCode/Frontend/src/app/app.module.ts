@@ -31,6 +31,7 @@ import { InterventionComponent } from './components/intervention/intervention.co
 import { AddInterventionComponent } from './components/intervention/add-intervention/add-intervention.component';
 import { EditInterventionComponent } from './components/intervention/edit-intervention/edit-intervention.component';
 import { ForgotPasswordComponent } from './components/login/forgot-password/forgot-password.component';
+import { MatListModule } from '@angular/material/list';
 
 @NgModule({
   declarations: [
@@ -65,7 +66,8 @@ import { ForgotPasswordComponent } from './components/login/forgot-password/forg
     HttpClientModule,
     routing,
     BrowserAnimationsModule,
-    NgbModule
+    NgbModule,
+    MatListModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

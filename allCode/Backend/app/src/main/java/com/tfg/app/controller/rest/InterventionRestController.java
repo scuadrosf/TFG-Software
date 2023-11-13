@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.security.Principal;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -92,6 +91,7 @@ public class InterventionRestController {
             Document document = new Document();
             document.setFileName(file.getOriginalFilename());
             document.setCreationDate(date);
+            document.setUser(userService.findById(userId).get());
             try {
                 document.setFile(file.getBytes());
             } catch (IOException e) {

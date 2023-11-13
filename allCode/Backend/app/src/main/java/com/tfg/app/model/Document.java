@@ -25,6 +25,9 @@ public class Document {
     @ManyToOne
     private Intervention intervention;
 
+    @ManyToOne
+    private User user;
+
 
     public Document(Long id, LocalDate creationDate, String link, byte[] file, Intervention intervention, String fileName) {
         this.id = id;
@@ -86,6 +89,14 @@ public class Document {
 
     public byte[] getFile() {
         return file;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     

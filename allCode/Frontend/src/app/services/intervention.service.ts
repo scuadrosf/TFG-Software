@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Intervention } from '../models/intervention.model';
 import { Observable, catchError, throwError } from 'rxjs';
 import { Appointment } from '../models/appointment.model';
+import { Document } from '../models/document.model';
 
 const baseUrl = '/api/interventions/';
 
@@ -20,6 +21,10 @@ export class InterventionService {
 
   getUserInterventions(id: number): Observable<Intervention[]> {
     return this.httpClient.get<Intervention[]>(baseUrl + id)
+  }
+
+  getDocumentsByIntervention(interventionId: number): Observable<Document[]> {
+    return this.httpClient.get<Document[]>(baseUrl + interventionId + '/documents')
   }
 
   getAppointmentList(): Observable<Appointment[]> {

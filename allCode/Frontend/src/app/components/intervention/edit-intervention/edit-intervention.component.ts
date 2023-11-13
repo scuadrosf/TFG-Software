@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Intervention } from 'src/app/models/intervention.model';
 import { User } from 'src/app/models/user.model';
@@ -10,7 +10,10 @@ import { UserService } from 'src/app/services/user.service';
   selector: 'app-edit-intervention',
   templateUrl: './edit-intervention.component.html',
 })
-export class EditInterventionComponent {
+export class EditInterventionComponent implements OnInit {
+
+  selectedFile: File | null = null;
+  selectedFileName: string = '';
 
   appointmentId!: number;
   interventionId!: number;
@@ -34,11 +37,20 @@ export class EditInterventionComponent {
     })
   }
 
+
+  onFileSelected(event: any) {
+    this.selectedFile = event.target.files[0];
+    this.selectedFileName = this.selectedFile?.name || '';
+  }
+
   update() {
     if (confirm('Esta seguro de guardar los cambios')) {
       if (this.intervention) {
         if (this.type)
           this.intervention.type = this.type;
+        // if (this.selectedFile)
+        //   this.documentService.
+        //   this.intervention.
       }
 
       this.interventionService.updateIntervention(this.intervention).subscribe(

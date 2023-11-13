@@ -85,4 +85,7 @@ public class DocumentRestController {
         return ResponseEntity.ok().body(documentService.findAll());
     }
 
+    // @GetMapping("/user/{id}")
+    // public ResponseEntity<List<Doc
+
 }

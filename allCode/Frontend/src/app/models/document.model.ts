@@ -4,6 +4,7 @@ export interface Document {
 
 
     id: number;
+    fileName: string;
     creationDate: Date;
     link: string;
     file: Blob;

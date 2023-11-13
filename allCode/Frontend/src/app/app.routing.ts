@@ -32,9 +32,9 @@ const appRoutes = [
     {path: 'add-patient', component: AddPatientComponent},
     {path: 'edit-patient/:id', component: EditPatientComponent},
     // Show all documents of ONE patient
-    {path: 'documents/:id', component: DocumentsComponent},
+    {path: 'documents/user/:idUser', component: DocumentsComponent},
     // Show all documents of THAT intervention
-    {path: 'documents/:idUser/:idIntervention', component: DocumentsOfInterventionComponent},
+    {path: 'documents/:idIntervention', component: DocumentsOfInterventionComponent},
     {path: 'add-appointment/:id', component: AddAppointmentComponent},
     {path: 'appointment-list', component: AppointmentComponent},
     {path: 'add-appointment', component: AddAppointmentMainComponent},
