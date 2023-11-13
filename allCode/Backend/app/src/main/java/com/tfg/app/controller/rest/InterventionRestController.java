@@ -158,9 +158,9 @@ public class InterventionRestController {
         }
     }
 
-    @GetMapping("{id}/documents")
-    public ResponseEntity<List<Document>> getDocuments(@PathVariable Long id) {
-        return ResponseEntity.ok().body(interventionService.getDocumentsByInterventionId(id));
+    @GetMapping("{id}/document")
+    public ResponseEntity<Document> getDocument(@PathVariable Long id) {
+        return ResponseEntity.ok().body(interventionService.getDocumentByInterventionId(id).get());
     }
 
 }

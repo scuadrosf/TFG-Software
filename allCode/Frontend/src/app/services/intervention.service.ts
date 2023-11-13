@@ -23,8 +23,8 @@ export class InterventionService {
     return this.httpClient.get<Intervention[]>(baseUrl + id)
   }
 
-  getDocumentsByIntervention(interventionId: number): Observable<Document[]> {
-    return this.httpClient.get<Document[]>(baseUrl + interventionId + '/documents')
+  getDocumentsByIntervention(interventionId: number): Observable<Document> {
+    return this.httpClient.get<Document>(baseUrl + interventionId + '/document')
   }
 
   getAppointmentList(): Observable<Appointment[]> {

@@ -7,7 +7,7 @@ export interface Document {
     fileName: string;
     creationDate: Date;
     link: string;
-    file: Blob;
+    file: number[];
     intervention: Intervention;
 
 

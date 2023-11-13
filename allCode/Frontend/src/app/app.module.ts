@@ -32,6 +32,8 @@ import { AddInterventionComponent } from './components/intervention/add-interven
 import { EditInterventionComponent } from './components/intervention/edit-intervention/edit-intervention.component';
 import { ForgotPasswordComponent } from './components/login/forgot-password/forgot-password.component';
 import { MatListModule } from '@angular/material/list';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
+
 
 @NgModule({
   declarations: [
@@ -68,6 +70,7 @@ import { MatListModule } from '@angular/material/list';
     BrowserAnimationsModule,
     NgbModule,
     MatListModule,
+    PdfViewerModule
   ],
   providers: [],
   bootstrap: [AppComponent]
