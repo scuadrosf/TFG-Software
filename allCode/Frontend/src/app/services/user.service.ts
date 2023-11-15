@@ -70,4 +70,8 @@ export class UserService {
   checkAdmin(id: number): Observable<boolean> {
     return this.httpClient.get<boolean>('/api/users/rol/' + id);
   }
+
+  exportPDF(): Observable<Blob>{
+    return this.httpClient.get('/api/util/exportPDF', {responseType:'blob'});
+  }
 }

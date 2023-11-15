@@ -3,6 +3,7 @@ import { User } from 'src/app/models/user.model';
 import { Sort } from '@angular/material/sort';
 import { UserService } from 'src/app/services/user.service';
 import { Router } from '@angular/router';
+import { format } from 'date-fns';
 
 @Component({
   selector: 'app-patient',
@@ -15,7 +16,7 @@ export class PatientComponent implements OnInit {
   profileAvatarUrls: string[] = [];
 
 
-  constructor(private patientService: UserService, private router: Router) { }
+  constructor(public patientService: UserService, private router: Router) { }
 
   ngOnInit(): void {
     this.patientService.getUserList().subscribe((list) => {
@@ -62,5 +63,19 @@ export class PatientComponent implements OnInit {
       console.log("Confirmación de eliminado cancelada")
     }
     this.ngOnInit();
+  }
+
+  exportPDF() {
+    this.patientService.exportPDF().subscribe((data) => {
+      const blob = new Blob([data], { type: 'application/pdf' });
+      const link = document.createElement("a");
+      link.href = window.URL.createObjectURL(blob);
+      link.download ="Pacientes_"+format(Date.now(), "yyyy-MM-dd")+".pdf";
+      link.click();
+    });
+  }
+
+  reload(){
+    window.location.reload();
   }
 }

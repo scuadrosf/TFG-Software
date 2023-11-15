@@ -23,6 +23,7 @@
     "@ng-bootstrap/ng-bootstrap": "^15.1.1",
     "@popperjs/core": "^2.11.6",
     "bootstrap": "^5.3.2",
+    "date-fns": "^2.30.0",
     "igniteui-theming": "^3.2.0",
     "jquery": "^3.7.1",
     "mdb-ui-kit": "^6.4.2",

@@ -1,6 +1,7 @@
 package com.tfg.app.service;
 
 import java.io.IOException;
+import java.time.LocalDate;
 
 import javax.annotation.PostConstruct;
 
@@ -26,10 +27,14 @@ public class InitDatabase {
         User user = new User();
 
         user.setName("Admin");
+        user.setLastName("Doctor");
         user.setUsername("33W");
+        user.setPhone("444444444");
         user.setEmail("admin@gmail.com");
         user.setPasswordEncoded(passwordEncoder.encode("12345"));
         user.setRoles("USER", "ADMIN");
+        user.setBirth(LocalDate.now());
+        user.setGender("Masculino");
         String avatarUrlAdmin = "/static/assets/predAdminAvatar.png";
         try {
             setProfileAvatarContent(user, avatarUrlAdmin);

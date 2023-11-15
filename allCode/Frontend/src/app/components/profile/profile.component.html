@@ -125,7 +125,7 @@
                                                             <a class="dropdown-item" (click)="deleteIntervention(intervention)" data-bs-toggle="modal"><i class="fa fa-trash-alt m-r-5"></i> Eliminar intervención</a>
                                                         </div>
                                                     </div>
-                                                    <a routerLink="/documents/{{idUser}}/{{intervention.id}}">{{intervention.type}}</a>
+                                                    <a routerLink="/documents/{{intervention.id}}">{{intervention.type}}</a>
                                                     <!-- Esto llevará justamente los documentos de esa intervención -->
                                                     <span class="time" >{{intervention.interventionDate | date:'dd-MM-yyyy'}}</span>
                                                     
