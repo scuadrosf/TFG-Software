@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -76,8 +77,8 @@ public class UtilRestController {
         
     }
 
-    @GetMapping("/exportInterventionsPDF")
-    public void exportInterventionsPDF(HttpServletResponse repsonse) throws DocumentException, IOException{
+    @GetMapping("/exportInterventionsPDF/{id}")
+    public void exportInterventionsPDF(HttpServletResponse repsonse, @PathVariable Long id) throws DocumentException, IOException{
         repsonse.setContentType("application/pdf");
 
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
@@ -88,7 +89,7 @@ public class UtilRestController {
 
         repsonse.setHeader(header, value);
 
-        List<Intervention> interventions = interventionService.findAll();
+        List<Intervention> interventions = interventionService.findByUserId(id);
 
         ExporterPDF exporter = new ExporterPDF();
         exporter.setInterventionList(interventions);

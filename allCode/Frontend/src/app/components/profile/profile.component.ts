@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { format } from 'date-fns';
 import { Appointment } from 'src/app/models/appointment.model';
 import { Intervention } from 'src/app/models/intervention.model';
 import { User } from 'src/app/models/user.model';
 import { AuthService } from 'src/app/services/auth.service';
 import { InterventionService } from 'src/app/services/intervention.service';
 import { UserService } from 'src/app/services/user.service';
+import { UtilService } from 'src/app/services/util.service';
 
 @Component({
   selector: 'app-profile',
@@ -21,7 +23,7 @@ export class ProfileComponent implements OnInit {
   apointment!: Appointment | null;
   interventions: Intervention[] = [];
 
-  constructor(public authService: AuthService, private interventionService: InterventionService, private userService: UserService, private activatedRoute: ActivatedRoute) {
+  constructor(private utilService: UtilService, public authService: AuthService, private interventionService: InterventionService, private userService: UserService, private activatedRoute: ActivatedRoute) {
     this.idUser = this.activatedRoute.snapshot.params['id'];
 
   }
@@ -61,4 +63,13 @@ export class ProfileComponent implements OnInit {
     this.ngOnInit();
   }
   
+  exportPDF() {
+    this.utilService.exportInterventionsPDF(this.user.id).subscribe((data) => {
+      const blob = new Blob([data], { type: 'application/pdf' });
+      const link = document.createElement("a");
+      link.href = window.URL.createObjectURL(blob);
+      link.download ="Intervenciones_"+format(Date.now(), "yyyy-MM-dd")+".pdf";
+      link.click();
+    });
+  }
 }

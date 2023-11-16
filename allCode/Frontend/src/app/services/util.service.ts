@@ -19,7 +19,7 @@ export class UtilService {
   exportAppointmentsPDF(): Observable<Blob> {
     return this.httpClient.get(baseUrl + 'exportAppointmentsPDF', { responseType: 'blob' });
   }
-  exportInterventionsPDF(): Observable<Blob> {
-    return this.httpClient.get(baseUrl + 'exportInterventionsPDF', { responseType: 'blob' });
+  exportInterventionsPDF(id: number): Observable<Blob> {
+    return this.httpClient.get(baseUrl + 'exportInterventionsPDF/'+id, { responseType: 'blob' });
   }
 }

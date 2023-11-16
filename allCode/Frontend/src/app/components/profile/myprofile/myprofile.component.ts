@@ -44,7 +44,7 @@ export class MyprofileComponent {
   }
 
   exportPDF() {
-    this.utilService.exportInterventionsPDF().subscribe((data) => {
+    this.utilService.exportInterventionsPDF(this.user.id).subscribe((data) => {
       const blob = new Blob([data], { type: 'application/pdf' });
       const link = document.createElement("a");
       link.href = window.URL.createObjectURL(blob);
