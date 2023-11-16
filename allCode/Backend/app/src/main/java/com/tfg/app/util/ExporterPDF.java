@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.lowagie.text.Anchor;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.Font;
@@ -235,6 +236,7 @@ public class ExporterPDF {
     }
 
     private void writeInterventionData(PdfPTable table) {
+
         for (Intervention intervention : interventionList) {
             table.addCell(intervention.getUser().getName());
             table.addCell(intervention.getUser().getLastName());
@@ -243,8 +245,19 @@ public class ExporterPDF {
             table.addCell(intervention.getUser().getUsername());
             table.addCell(intervention.getInterventionDate().format(formatter).toString());
             table.addCell(intervention.getType());
-            table.addCell(intervention.getDocument().toString());
+            Anchor enlace = new Anchor(intervention.getDocument().getFileName(), createFontWithLink());
+            enlace.setReference("https://www.google.es");
+            // table.addCell(intervention.getDocument().getLink());
+            table.addCell(enlace);
         }
+    }
+
+    private static Font createFontWithLink() {
+        Font font = new Font(Font.HELVETICA);
+        font.setColor(Color.BLUE);
+        font.setSize(11);
+        font.setStyle(Font.UNDERLINE);
+        return font;
     }
 
     public void exportIntervention(HttpServletResponse response) throws DocumentException, IOException {
@@ -262,10 +275,10 @@ public class ExporterPDF {
         document.add(title);
 
         PdfPTable table = new PdfPTable(7);
-        table.setWidthPercentage(90);
-        table.setSpacingBefore(25);
-        table.setWidths(new float[] { 2f, 2f, 2.1f, 2f, 4.5f, 2f, 2f});
         table.setWidthPercentage(100);
+        table.setSpacingBefore(25);
+        table.setWidths(new float[] { 2f, 2f, 2.2f, 2f, 2.3f, 3.4f, 2.2f });
+        table.setWidthPercentage(110);
 
         headerInterventionTable(table);
         writeInterventionData(table);
