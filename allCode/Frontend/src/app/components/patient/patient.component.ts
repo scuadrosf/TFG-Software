@@ -4,6 +4,7 @@ import { Sort } from '@angular/material/sort';
 import { UserService } from 'src/app/services/user.service';
 import { Router } from '@angular/router';
 import { format } from 'date-fns';
+import { UtilService } from 'src/app/services/util.service';
 
 @Component({
   selector: 'app-patient',
@@ -16,7 +17,7 @@ export class PatientComponent implements OnInit {
   profileAvatarUrls: string[] = [];
 
 
-  constructor(public patientService: UserService, private router: Router) { }
+  constructor(public patientService: UserService, private router: Router, private utilService: UtilService) { }
 
   ngOnInit(): void {
     this.patientService.getUserList().subscribe((list) => {
@@ -66,7 +67,7 @@ export class PatientComponent implements OnInit {
   }
 
   exportPDF() {
-    this.patientService.exportPDF().subscribe((data) => {
+    this.utilService.exportPatientsPDF().subscribe((data) => {
       const blob = new Blob([data], { type: 'application/pdf' });
       const link = document.createElement("a");
       link.href = window.URL.createObjectURL(blob);

@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { format } from 'date-fns';
 import { Appointment } from 'src/app/models/appointment.model';
 import { AppointmentService } from 'src/app/services/appointment.service';
 import { InterventionService } from 'src/app/services/intervention.service';
 import { UserService } from 'src/app/services/user.service';
+import { UtilService } from 'src/app/services/util.service';
 
 @Component({
   selector: 'app-appointment',
@@ -18,7 +20,7 @@ export class AppointmentComponent implements OnInit {
   fechaBaseDatos!: Date;
   isCompleted: boolean = false;
 
-  constructor(private router: Router, private appointmentService: AppointmentService, private userService: UserService, private interventionService: InterventionService) { }
+  constructor(private router: Router, private appointmentService: AppointmentService, private userService: UserService, private utilService: UtilService) { }
 
 
   ngOnInit(): void {
@@ -68,5 +70,19 @@ export class AppointmentComponent implements OnInit {
       this.router.navigate(['appointment-list/'+appointment.user.id+'/add-intervention/'+idAppointment])
 
     })
+  }
+
+  reload(){
+    window.location.reload();
+  }
+
+  exportPDF() {
+    this.utilService.exportAppointmentsPDF().subscribe((data) => {
+      const blob = new Blob([data], { type: 'application/pdf' });
+      const link = document.createElement("a");
+      link.href = window.URL.createObjectURL(blob);
+      link.download ="Citas_"+format(Date.now(), "yyyy-MM-dd")+".pdf";
+      link.click();
+    });
   }
 }

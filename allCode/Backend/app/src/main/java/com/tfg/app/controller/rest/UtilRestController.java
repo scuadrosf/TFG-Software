@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lowagie.text.DocumentException;
+import com.tfg.app.model.Appointment;
 import com.tfg.app.model.User;
+import com.tfg.app.service.AppointmentService;
 import com.tfg.app.service.UserService;
 import com.tfg.app.util.ExporterPDF;
 
@@ -24,9 +26,11 @@ public class UtilRestController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private AppointmentService appointmentService;
 
     
-    @GetMapping("/exportPDF")
+    @GetMapping("/exportPatientsPDF")
     public void exportPatientListPDF(HttpServletResponse repsonse) throws DocumentException, IOException{
         repsonse.setContentType("application/pdf");
 
@@ -40,8 +44,30 @@ public class UtilRestController {
 
         List<User> patients = userService.findAll();
 
-        ExporterPDF exporter = new ExporterPDF(patients);
-        exporter.export(repsonse);
+        ExporterPDF exporter = new ExporterPDF();
+        exporter.setPatientList(patients);
+        exporter.exportPatients(repsonse);
+
+        
+    }
+
+    @GetMapping("/exportAppointmentsPDF")
+    public void exportAppointmentListPDF(HttpServletResponse repsonse) throws DocumentException, IOException{
+        repsonse.setContentType("application/pdf");
+
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        String currentDateTime = dateFormat.format(new Date());
+
+        String header = "Content-Disposition";
+        String value = "attachment; filename=Citas_" + currentDateTime + ".pdf";
+
+        repsonse.setHeader(header, value);
+
+        List<Appointment> appointments = appointmentService.findAll();
+
+        ExporterPDF exporter = new ExporterPDF();
+        exporter.setAppointmentList(appointments);
+        exporter.exportAppointments(repsonse);
 
         
     }

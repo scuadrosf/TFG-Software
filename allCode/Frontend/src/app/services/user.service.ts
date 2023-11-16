@@ -71,7 +71,5 @@ export class UserService {
     return this.httpClient.get<boolean>('/api/users/rol/' + id);
   }
 
-  exportPDF(): Observable<Blob>{
-    return this.httpClient.get('/api/util/exportPDF', {responseType:'blob'});
-  }
+  
 }
