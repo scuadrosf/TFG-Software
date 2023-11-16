@@ -108,7 +108,8 @@ public class InterventionRestController {
             if (user != null)
                 intervention.setUser(user);
 
-            intervention.setDocuments(Arrays.asList(document));
+            // intervention.setDocuments(Arrays.asList(document));
+            intervention.setDocument(document);
             currentApointment.get().getInterventions().add(intervention);
 
             document.setIntervention(intervention);

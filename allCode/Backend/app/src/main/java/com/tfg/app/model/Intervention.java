@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,8 +32,8 @@ public class Intervention {
     private String type;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "intervention", cascade = CascadeType.ALL)
-    private List<Document> documents;
+    @OneToOne(mappedBy = "intervention", cascade = CascadeType.ALL)
+    private Document document;
 
     @JsonIgnore
     @ManyToOne
@@ -43,27 +44,19 @@ public class Intervention {
         this.interventionDate = interventionDate;
     }
 
-    public Intervention(User user, LocalDate interventionDate, String type, List<Document> documents,
+    public Intervention(User user, LocalDate interventionDate, String type, Document document,
             Appointment appointment) {
         this.user = user;
         this.interventionDate = interventionDate;
         this.type = type;
-        this.documents = documents;
+        this.document = document;
         this.appointment = appointment;
     }
 
-    // public Intervention(InterventionDTO interventionDTO) {
-    //     super();
-    //     this.interventionDate = interventionDTO.getInterventionDate();
-    //     this.type = interventionDTO.getType();
-    //     this.user = interventionDTO.getUser();
-    //     this.appointment = interventionDTO.getAppointment();
-    // }
-
-    public Intervention(User currentUser, Appointment appointment2, List<Document> documents, LocalDate date) {
+    public Intervention(User currentUser, Appointment appointment2, Document document, LocalDate date) {
         this.user = currentUser;
         this.appointment = appointment2;
-        this.documents = documents;
+        this.document = document;
         this.interventionDate = date;
     }
 
@@ -117,12 +110,14 @@ public class Intervention {
         this.appointment = currentApointment;
     }
 
-    public List<Document> getDocuments() {
-        return documents;
+    public Document getDocument() {
+        return document;
     }
 
-    public void setDocuments(List<Document> documents) {
-        this.documents = documents;
+    public void setDocument(Document document) {
+        this.document = document;
     }
+
+    
 
 }

@@ -18,12 +18,14 @@ import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 import com.tfg.app.model.Appointment;
+import com.tfg.app.model.Intervention;
 import com.tfg.app.model.User;
 
 public class ExporterPDF {
 
     private List<User> patientList;
     private List<Appointment> appointmentList;
+    private List<Intervention> interventionList;
 
     // public ExporterPDF(List<User> patientList) {
     // super();
@@ -31,6 +33,10 @@ public class ExporterPDF {
     // }
 
     public ExporterPDF() {
+    }
+
+    public void setInterventionList(List<Intervention> interventionList) {
+        this.interventionList = interventionList;
     }
 
     public void setPatientList(List<User> patientList) {
@@ -41,6 +47,7 @@ public class ExporterPDF {
         this.appointmentList = appointmentList;
     }
 
+    // Export PDF Patients
     private void headerPatientsTable(PdfPTable table) {
         PdfPCell cell = new PdfPCell();
 
@@ -112,6 +119,8 @@ public class ExporterPDF {
         document.close();
     }
 
+    //////////////////////////////////////////////////////////////////////////////////
+    // Export PDF Appointments
     private void headerAppointmentsTable(PdfPTable table) {
         PdfPCell cell = new PdfPCell();
 
@@ -190,4 +199,78 @@ public class ExporterPDF {
         document.close();
     }
 
+    ///////////////////////////////////////////////////////////////////////
+    // Export PDF Interventions of Patient
+
+    private void headerInterventionTable(PdfPTable table) {
+        PdfPCell cell = new PdfPCell();
+
+        cell.setBackgroundColor(Color.blue);
+        cell.setPadding(5);
+
+        Font font = FontFactory.getFont(FontFactory.HELVETICA);
+        font.setColor(Color.WHITE);
+
+        cell.setPhrase(new Phrase("Nombre", font));
+        table.addCell(cell);
+
+        cell.setPhrase(new Phrase("Apellidos", font));
+        table.addCell(cell);
+
+        cell.setPhrase(new Phrase("Fecha de nacimiento", font));
+        table.addCell(cell);
+
+        cell.setPhrase(new Phrase("DNI", font));
+        table.addCell(cell);
+
+        cell.setPhrase(new Phrase("Fecha de intervención", font));
+        table.addCell(cell);
+
+        cell.setPhrase(new Phrase("Tipo de intervención", font));
+        table.addCell(cell);
+
+        cell.setPhrase(new Phrase("Documento", font));
+        table.addCell(cell);
+
+    }
+
+    private void writeInterventionData(PdfPTable table) {
+        for (Intervention intervention : interventionList) {
+            table.addCell(intervention.getUser().getName());
+            table.addCell(intervention.getUser().getLastName());
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            table.addCell(intervention.getUser().getBirth().format(formatter).toString());
+            table.addCell(intervention.getUser().getUsername());
+            table.addCell(intervention.getInterventionDate().format(formatter).toString());
+            table.addCell(intervention.getType());
+            table.addCell(intervention.getDocument().toString());
+        }
+    }
+
+    public void exportIntervention(HttpServletResponse response) throws DocumentException, IOException {
+        Document document = new Document(PageSize.A4);
+        PdfWriter.getInstance(document, response.getOutputStream());
+
+        document.open();
+
+        Font font = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
+        font.setColor(Color.BLACK);
+        font.setSize(14);
+
+        Paragraph title = new Paragraph("Intervenciones", font);
+        title.setAlignment(Paragraph.ALIGN_CENTER);
+        document.add(title);
+
+        PdfPTable table = new PdfPTable(7);
+        table.setWidthPercentage(90);
+        table.setSpacingBefore(25);
+        table.setWidths(new float[] { 2f, 2f, 2.1f, 2f, 4.5f, 2f, 2f});
+        table.setWidthPercentage(100);
+
+        headerInterventionTable(table);
+        writeInterventionData(table);
+
+        document.add(table);
+        document.close();
+    }
 }

@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { format } from 'date-fns';
 import { Intervention } from 'src/app/models/intervention.model';
 import { User } from 'src/app/models/user.model';
 import { AuthService } from 'src/app/services/auth.service';
 import { InterventionService } from 'src/app/services/intervention.service';
 import { UserService } from 'src/app/services/user.service';
+import { UtilService } from 'src/app/services/util.service';
 
 @Component({
   selector: 'app-myprofile',
@@ -18,7 +20,7 @@ export class MyprofileComponent {
 
   interventions: Intervention[] = [];
 
-  constructor(public authService: AuthService, private interventionService: InterventionService, private userService: UserService) {
+  constructor(public authService: AuthService, private interventionService: InterventionService, private userService: UserService, private utilService: UtilService) {
 
   }
 
@@ -38,6 +40,16 @@ export class MyprofileComponent {
       this.interventionService.getUserInterventions(this.user.id).subscribe((list: Intervention[]) => {
         this.interventions = list;
       });
+    });
+  }
+
+  exportPDF() {
+    this.utilService.exportInterventionsPDF().subscribe((data) => {
+      const blob = new Blob([data], { type: 'application/pdf' });
+      const link = document.createElement("a");
+      link.href = window.URL.createObjectURL(blob);
+      link.download ="Intervenciones_"+format(Date.now(), "yyyy-MM-dd")+".pdf";
+      link.click();
     });
   }
 }

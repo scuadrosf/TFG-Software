@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lowagie.text.DocumentException;
 import com.tfg.app.model.Appointment;
+import com.tfg.app.model.Intervention;
 import com.tfg.app.model.User;
 import com.tfg.app.service.AppointmentService;
+import com.tfg.app.service.InterventionService;
 import com.tfg.app.service.UserService;
 import com.tfg.app.util.ExporterPDF;
 
@@ -28,6 +30,8 @@ public class UtilRestController {
     private UserService userService;
     @Autowired
     private AppointmentService appointmentService;
+    @Autowired
+    private InterventionService interventionService;
 
     
     @GetMapping("/exportPatientsPDF")
@@ -68,6 +72,27 @@ public class UtilRestController {
         ExporterPDF exporter = new ExporterPDF();
         exporter.setAppointmentList(appointments);
         exporter.exportAppointments(repsonse);
+
+        
+    }
+
+    @GetMapping("/exportInterventionsPDF")
+    public void exportInterventionsPDF(HttpServletResponse repsonse) throws DocumentException, IOException{
+        repsonse.setContentType("application/pdf");
+
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        String currentDateTime = dateFormat.format(new Date());
+
+        String header = "Content-Disposition";
+        String value = "attachment; filename=Intervenciones_" + currentDateTime + ".pdf";
+
+        repsonse.setHeader(header, value);
+
+        List<Intervention> interventions = interventionService.findAll();
+
+        ExporterPDF exporter = new ExporterPDF();
+        exporter.setInterventionList(interventions);
+        exporter.exportIntervention(repsonse);
 
         
     }

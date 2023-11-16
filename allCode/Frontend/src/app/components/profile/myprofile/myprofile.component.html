@@ -11,7 +11,8 @@
             </div>
 
             <div class="col-sm-5 col-6 text-end m-b-30">
-                <a routerLink="/editprofile" class="btn btn-outline-primary btn-rounded"><i class="fa fa-plus"></i> Editar
+                <a routerLink="/editprofile" class="btn btn-outline-primary btn-rounded"><i class="fa fa-plus"></i>
+                    Editar
                     perfil</a>
             </div>
         </div>
@@ -96,8 +97,7 @@
             <ul class="nav nav-tabs nav-tabs-bottom">
                 <li class="nav-item"><a class="nav-link active" href="#history" data-bs-toggle="tab">Historial
                         médico</a></li>
-                <li class="nav-item"><a class="nav-link" routerLink="/documents/{{user.id}}"
-                        data-bs-toggle="tab">Documentos</a></li>
+                <li class="nav-item"><a class="nav-link" href="#documents" data-bs-toggle="tab">Documentos</a></li>
             </ul>
 
             <div class="tab-content">
@@ -118,7 +118,8 @@
                                             <div class="experience-content">
                                                 <div class="timeline-content">
                                                     <!-- <a href="#/" class="name">{{intervention.appointment.description}}</a> -->
-                                                    <a routerLink="/documents/{{intervention.id}}">{{intervention.type}}</a>
+                                                    <a
+                                                        routerLink="/documents/{{intervention.id}}">{{intervention.type}}</a>
                                                     <!-- Esto llevará justamente los documentos de esa intervención -->
                                                     <span class="time">{{intervention.interventionDate |
                                                         date:'dd-MM-yyyy'}}</span>
@@ -129,6 +130,8 @@
                                     </ul>
                                 </div>
                             </div>
+                            <p> ** Para visualizar más detalles sobre la intervención haga click en la intervención
+                                deseada </p>
                         </div>
                     </div>
                 </div>
@@ -138,4 +141,6 @@
             </div>
         </div>
     </div>
+    <button class="btn btn-success" style="position: fixed; bottom: 20px; right: 20px" (click)="exportPDF()">
+        Descargar intervenciones</button>
 </div>
