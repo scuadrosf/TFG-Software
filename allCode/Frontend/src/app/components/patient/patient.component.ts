@@ -76,6 +76,16 @@ export class PatientComponent implements OnInit {
     });
   }
 
+  exportExcel(){
+    this.utilService.exportPatientsExcel().subscribe((data) => {
+      const blob = new Blob([data], { type: 'application/octet-stream' });
+      const link = document.createElement("a");
+      link.href = window.URL.createObjectURL(blob);
+      link.download ="Pacientes_"+format(Date.now(), "yyyy-MM-dd")+".xlsx";
+      link.click();
+    });
+  }
+
   reload(){
     window.location.reload();
   }

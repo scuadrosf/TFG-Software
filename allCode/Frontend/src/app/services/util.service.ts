@@ -22,4 +22,8 @@ export class UtilService {
   exportInterventionsPDF(id: number): Observable<Blob> {
     return this.httpClient.get(baseUrl + 'exportInterventionsPDF/'+id, { responseType: 'blob' });
   }
+
+  exportPatientsExcel(): Observable<Blob> {
+    return this.httpClient.get(baseUrl + 'exportPatientsExcel', { responseType: 'blob' });
+  }
 }

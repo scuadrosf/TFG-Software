@@ -21,6 +21,7 @@ import com.tfg.app.model.User;
 import com.tfg.app.service.AppointmentService;
 import com.tfg.app.service.InterventionService;
 import com.tfg.app.service.UserService;
+import com.tfg.app.util.ExporterExcel;
 import com.tfg.app.util.ExporterPDF;
 
 @RestController
@@ -36,8 +37,8 @@ public class UtilRestController {
 
     
     @GetMapping("/exportPatientsPDF")
-    public void exportPatientListPDF(HttpServletResponse repsonse) throws DocumentException, IOException{
-        repsonse.setContentType("application/pdf");
+    public void exportPatientListPDF(HttpServletResponse response) throws DocumentException, IOException{
+        response.setContentType("application/pdf");
 
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
         String currentDateTime = dateFormat.format(new Date());
@@ -45,13 +46,13 @@ public class UtilRestController {
         String header = "Content-Disposition";
         String value = "attachment; filename=Pacientes_" + currentDateTime + ".pdf";
 
-        repsonse.setHeader(header, value);
+        response.setHeader(header, value);
 
         List<User> patients = userService.findAll();
 
         ExporterPDF exporter = new ExporterPDF();
         exporter.setPatientList(patients);
-        exporter.exportPatients(repsonse);
+        exporter.exportPatients(response);
 
         
     }
@@ -94,6 +95,31 @@ public class UtilRestController {
         ExporterPDF exporter = new ExporterPDF();
         exporter.setInterventionList(interventions);
         exporter.exportIntervention(repsonse);
+
+        
+    }
+
+    /////////////////////////////////////////////////////////////
+
+    @GetMapping("/exportPatientsExcel")
+    public void exportPatientListExcel(HttpServletResponse response) throws DocumentException, IOException{
+        response.setContentType("application/octet-stream");
+
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        String currentDateTime = dateFormat.format(new Date());
+
+        String header = "Content-Disposition";
+        String value = "attachment; filename=Pacientes_" + currentDateTime + ".xlsx";
+
+        response.setHeader(header, value);
+
+        List<User> patients = userService.findAll();
+
+        ExporterExcel exporter = new ExporterExcel(patients);
+
+        exporter.exportPatients(response);
+        // exporter.setPatientList(patients);
+        // exporter.exportPatients(repsonse);
 
         
     }
