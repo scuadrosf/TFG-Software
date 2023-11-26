@@ -13,7 +13,7 @@
             </div>
         </div>
         <!-- /Page Header -->
-        <div class="row">
+        <div class="row" *ngIf="document != null">
             <div class="col-lg-8">
                 <!-- <div class="col" > -->
                 <div class="blog grid-blog">
@@ -49,6 +49,13 @@
                 </div>
             </div>
         </div>
+        <div class="row" *ngIf="!document">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <h3> La intervención {{intervention.type}} no tiene documentos adjuntos</h3>
+                    </div>
+                </div>
 
     </div>
 </div>
