@@ -41,24 +41,27 @@ export class AddInterventionComponent implements OnInit {
   }
 
   submit() {
+    const formData = new FormData();
     if (this.type != null && this.selectedFile) {
       console.log(this.type);
-      const formData = new FormData();
       formData.append('file', this.selectedFile);
       formData.append('type', this.type);
-      this.interventionService.addIntervention(this.appointmentId, this.userId, formData).subscribe(
-        (_) => {
-          alert('Intervención añadida');
-          window.history.back();
-        },
-        (error) => {
-          console.error(error);
-          this.router.navigate(['/error-page'])
-        }
-      );
+    }else if (this.type && !this.selectedFile) {
+      formData.append('file', "");
+      formData.append('type', this.type);
     }else{
       console.error("Ningun archivo seleccionado")
     }
+    this.interventionService.addIntervention(this.appointmentId, this.userId, formData).subscribe(
+      (_) => {
+        alert('Intervención añadida');
+        this.back();
+      },
+      (error) => {
+        console.error(error);
+        this.router.navigate(['/error-page'])
+      }
+    );
   }
 
   back() {

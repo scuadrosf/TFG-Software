@@ -44,16 +44,15 @@ export class EditInterventionComponent implements OnInit {
   }
 
   update() {
+    const formData = new FormData();
     if (confirm('Esta seguro de guardar los cambios')) {
       if (this.intervention) {
         if (this.type)
-          this.intervention.type = this.type;
-        // if (this.selectedFile)
-        //   this.documentService.
-        //   this.intervention.
+          formData.append('type', this.type);
+        if (this.selectedFile)
+          formData.append('file', this.selectedFile);
       }
-
-      this.interventionService.updateIntervention(this.intervention).subscribe(
+      this.interventionService.updateIntervention(this.interventionId, this.user.id, formData).subscribe(
         (_) => {
           console.log(this.intervention);
           this.ngOnInit();

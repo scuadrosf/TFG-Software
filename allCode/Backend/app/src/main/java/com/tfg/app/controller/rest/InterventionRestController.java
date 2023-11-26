@@ -87,17 +87,22 @@ public class InterventionRestController {
         Optional<Appointment> currentApointment = appointmentService.findById(appointmentId);
         LocalDate date = LocalDate.now();
         if (currentApointment.isPresent()) {
-            Document document = new Document();
-            document.setFileName(file.getOriginalFilename());
-            document.setCreationDate(date);
-            document.setUser(userService.findById(userId).get());
-            try {
-                document.setFile(file.getBytes());
-            } catch (IOException e) {
-                e.printStackTrace();
+            Intervention intervention = new Intervention();
+            if (file != null) {
+                Document document = new Document();
+                document.setFileName(file.getOriginalFilename());
+                document.setCreationDate(date);
+                document.setUser(userService.findById(userId).get());
+                try {
+                    document.setFile(file.getBytes());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                intervention.setDocument(document);
+                document.setIntervention(intervention);
+
             }
 
-            Intervention intervention = new Intervention();
             intervention.setInterventionDate(date);
             intervention.setAppointment(currentApointment.get());
 
@@ -107,14 +112,11 @@ public class InterventionRestController {
             if (user != null)
                 intervention.setUser(user);
 
-            // intervention.setDocuments(Arrays.asList(document));
-            intervention.setDocument(document);
             currentApointment.get().getInterventions().add(intervention);
-
-            document.setIntervention(intervention);
 
             interventionService.save(intervention);
             appointmentService.save(currentApointment.get());
+
             URI location = fromCurrentRequest().path("/{id}").buildAndExpand(intervention.getId()).toUri();
             return ResponseEntity.created(location).body(intervention);
         } else {
@@ -123,12 +125,53 @@ public class InterventionRestController {
         }
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/update/{id}/user={userId}")
     public ResponseEntity<?> updateIntevention(@PathVariable Long id,
-            @RequestParam(value = "type", required = true) String type) {
+            @PathVariable("userId") Long userId,
+            @RequestParam(value = "type", required = false) String type,
+            @RequestParam(value = "file", required = false) MultipartFile file)
+    {
         Intervention intervention = interventionService.findById(id).orElseThrow();
         if (type != null) {
             intervention.setType(type);
+        }
+        if (file != null) {
+            Optional<Document> document = interventionService.getDocumentByInterventionId(id);
+            if (document.isPresent()) {
+                try {
+                    document.get().setFile(file.getBytes());
+                    document.get().setFileName(file.getOriginalFilename());
+                    document.get().setCreationDate(LocalDate.now());
+                    intervention.setDocument(document.get());
+                    document.get().setIntervention(intervention);
+                    User user = userService.findById(userId)
+                            .orElseThrow(() -> new IllegalArgumentException("Invalid User Id: " + userId));
+                    if (user != null)
+                        intervention.setUser(user);
+                    document.get().setUser(user);
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            } else {
+                Document doc = new Document();
+                try {
+                    doc.setFile(file.getBytes());
+                    doc.setFileName(file.getOriginalFilename());
+                    doc.setCreationDate(LocalDate.now());
+                    intervention.setDocument(doc);
+                    doc.setIntervention(intervention);
+                    User user = userService.findById(userId)
+                            .orElseThrow(() -> new IllegalArgumentException("Invalid User Id: " + userId));
+                    if (user != null)
+                        intervention.setUser(user);
+                    doc.setUser(user);
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+
         }
         Intervention updatedIntervention = interventionRepository.save(intervention);
         return ResponseEntity.ok(updatedIntervention);

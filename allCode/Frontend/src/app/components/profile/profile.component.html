@@ -139,9 +139,9 @@
                                                                 intervención</a>
                                                         </div>
                                                     </div>
-                                                    <a *ngIf="intervention.documents"
+                                                    <a *ngIf="intervention.document"
                                                         routerLink="/documents/{{intervention.id}}">{{intervention.type}}</a>
-                                                    <p *ngIf="!intervention.documents" style="color: black;"> {{intervention.type}}</p>
+                                                    <p *ngIf="!intervention.document" style="color: black;"> {{intervention.type}}</p>
                                                     <!-- Esto llevará justamente los documentos de esa intervención -->
                                                     <span class="time">{{intervention.interventionDate |
                                                         date:'dd-MM-yyyy'}}</span>

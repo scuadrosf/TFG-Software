@@ -36,15 +36,11 @@ export class InterventionService {
   }
 
   addIntervention(idAppointment: number, idUser: number, formData: FormData): Observable<any> {
-    // const formData = new FormData();
-    // formData.append('type', type || '');
     return this.httpClient.post(baseUrl + idAppointment + "/user=" + idUser, formData);
   }
 
-  updateIntervention(intervention: Intervention): Observable<any> {
-    const formData = new FormData();
-    formData.append('type', intervention.type || '');
-    return this.httpClient.put(baseUrl + 'update/' + intervention.id, formData);
+  updateIntervention(interventionId: number, userId: number, formData: FormData): Observable<any> {
+    return this.httpClient.put(baseUrl + 'update/' + interventionId+"/user="+userId, formData);
   }
 
   deleteIntervention(intervention: Intervention) {

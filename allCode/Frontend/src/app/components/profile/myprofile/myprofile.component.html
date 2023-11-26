@@ -117,9 +117,9 @@
                                             </div>
                                             <div class="experience-content">
                                                 <div class="timeline-content">
-                                                    <a *ngIf="intervention.documents"
+                                                    <a *ngIf="intervention.document"
                                                         routerLink="/documents/{{intervention.id}}">{{intervention.type}}</a>
-                                                    <p *ngIf="!intervention.documents" style="color: black;">
+                                                    <p *ngIf="!intervention.document" style="color: black;">
                                                         {{intervention.type}}</p>
                                                     <!-- Esto llevará justamente los documentos de esa intervención -->
                                                     <span class="time">{{intervention.interventionDate |

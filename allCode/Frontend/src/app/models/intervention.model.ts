@@ -8,7 +8,7 @@ export interface Intervention {
     user: User;
     interventionDate: Date;
     type: string;
-    documents: Document[];
+    document: Document;
     appointment: Appointment;
 
 
