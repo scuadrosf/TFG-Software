@@ -12,10 +12,13 @@
 
             <div class="col-sm-5 col-6 text-end m-b-30 btn-group mb-3" role="group">
                 <!-- <a routerLink="/editprofile/{{user.id}}" class="btn btn-primary btn-rounded"><i class="fa fa-plus"></i> Editar -->
-                <a routerLink="/edit-patient/{{idUser}}" class="btn btn-outline-primary btn-rounded mr-2"><i class="fa fa-pen-to-square"></i> Editar
+                <a routerLink="/edit-patient/{{idUser}}" class="btn btn-outline-primary btn-rounded mr-2"><i
+                        class="fa fa-pen-to-square"></i> Editar
                     perfil</a>
-                <a routerLink="/add-appointment/{{idUser}}" class="btn btn-outline-primary btn-rounded mr-3"><i class="fa fa-plus"></i> Dar cita</a>
-                <a routerLink="/appointment-list/{{idUser}}" class="btn btn-outline-primary btn-rounded"><i class="fa fa-plus"></i> Añadir intervención</a>
+                <a routerLink="/add-appointment/{{idUser}}" class="btn btn-outline-primary btn-rounded mr-3"><i
+                        class="fa fa-plus"></i> Dar cita</a>
+                <a routerLink="/appointment-list/{{idUser}}" class="btn btn-outline-primary btn-rounded"><i
+                        class="fa fa-plus"></i> Añadir intervención</a>
             </div>
         </div>
         <div class="card-box profile-header">
@@ -99,7 +102,7 @@
             <ul class="nav nav-tabs nav-tabs-bottom">
                 <li class="nav-item"><a class="nav-link active" href="#history" data-bs-toggle="tab">Historial
                         médico</a></li>
-                <li class="nav-item"><a class="nav-link" routerLink="/documents/{{idUser}}" data-bs-toggle="tab">Documentos</a></li>
+                <li class="nav-item"><a class="nav-link" href="#documents" data-bs-toggle="tab">Documentos</a></li>
             </ul>
 
             <div class="tab-content">
@@ -109,7 +112,8 @@
                             <div class="card-box">
                                 <h3 class="card-title">Registro de intervenciones</h3>
                                 <div *ngIf="(interventions.length === 0)">
-                                    <p>{{user.name}} {{user.lastName}} no ha tenido intervenciones</p> </div>
+                                    <p>{{user.name}} {{user.lastName}} no ha tenido intervenciones</p>
+                                </div>
                                 <div class="experience-box" *ngFor="let intervention of interventions">
                                     <ul class="experience-list">
                                         <li>
@@ -119,18 +123,30 @@
                                             <div class="experience-content">
                                                 <div class="timeline-content">
                                                     <div class="dropdown dropdown-action">
-                                                        <a href="javascript:void(0);" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                                                        <a href="javascript:void(0);"
+                                                            class="action-icon dropdown-toggle"
+                                                            data-bs-toggle="dropdown" aria-expanded="false"><i
+                                                                class="fa fa-ellipsis-v"></i></a>
                                                         <div class="dropdown-menu dropdown-menu-end">
-                                                            <a class="dropdown-item" routerLink="/user/{{user.id}}/edit-intervention/{{intervention.id}}"><i class="fa-solid fa-pen-to-square m-r-5"></i> Editar intervención</a>
-                                                            <a class="dropdown-item" (click)="deleteIntervention(intervention)" data-bs-toggle="modal"><i class="fa fa-trash-alt m-r-5"></i> Eliminar intervención</a>
+                                                            <a class="dropdown-item"
+                                                                routerLink="/user/{{user.id}}/edit-intervention/{{intervention.id}}"><i
+                                                                    class="fa-solid fa-pen-to-square m-r-5"></i> Editar
+                                                                intervención</a>
+                                                            <a class="dropdown-item"
+                                                                (click)="deleteIntervention(intervention)"
+                                                                data-bs-toggle="modal"><i
+                                                                    class="fa fa-trash-alt m-r-5"></i> Eliminar
+                                                                intervención</a>
                                                         </div>
                                                     </div>
-                                                    <a routerLink="/documents/{{intervention.id}}">{{intervention.type}}</a>
+                                                    <a
+                                                        routerLink="/documents/{{intervention.id}}">{{intervention.type}}</a>
                                                     <!-- Esto llevará justamente los documentos de esa intervención -->
-                                                    <span class="time" >{{intervention.interventionDate | date:'dd-MM-yyyy'}}</span>
-                                                    
-                                                    
-                                                    
+                                                    <span class="time">{{intervention.interventionDate |
+                                                        date:'dd-MM-yyyy'}}</span>
+
+
+
                                                 </div>
                                             </div>
                                         </li>
@@ -141,7 +157,54 @@
                     </div>
                 </div>
                 <div class="tab-pane" id="documents">
-                    Hacer como una especie de explorador de archivos, o mostrar todos los archivos por días
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card-box">
+                                <h3 class="card-title">Documentos</h3>
+                                <div *ngIf="(documents.length === 0)">
+                                    <p>{{user.name}} {{user.lastName}} no tiene documentos</p>
+                                </div>
+                                <div class="experience-box" *ngFor="let document of documents">
+                                    <ul class="experience-list">
+                                        <li>
+                                            <div class="experience-user">
+                                                <div class="before-circle"></div>
+                                            </div>
+                                            <div class="experience-content">
+                                                <div class="timeline-content">
+                                                    <div class="dropdown dropdown-action">
+                                                        <a href="javascript:void(0);"
+                                                            class="action-icon dropdown-toggle"
+                                                            data-bs-toggle="dropdown" aria-expanded="false"><i
+                                                                class="fa fa-ellipsis-v"></i></a>
+                                                        <div class="dropdown-menu dropdown-menu-end">
+                                                            <a class="dropdown-item"
+                                                                routerLink=""><i
+                                                                    class="fa-solid fa-pen-to-square m-r-5"></i> Cambiar
+                                                                documento</a>
+                                                            <a class="dropdown-item"
+                                                                (click)="deleteDocument(document)"
+                                                                data-bs-toggle="modal"><i
+                                                                    class="fa fa-trash-alt m-r-5"></i> Eliminar
+                                                                documento</a>
+                                                        </div>
+                                                    </div>
+                                                    <span class="">{{document.intervention.type}} - </span>
+                                                    <a style="cursor: pointer;"
+                                                        (click)="download(document.id)">{{document.fileName}}</a>
+                                                    <span class="time">{{document.creationDate|
+                                                        date:'dd-MM-yyyy'}}</span>
+
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <p> ** Para visualizar más detalles sobre la intervención haga click en la intervención
+                                deseada </p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { format } from 'date-fns';
+import { Document } from 'src/app/models/document.model';
 import { Intervention } from 'src/app/models/intervention.model';
 import { User } from 'src/app/models/user.model';
 import { AuthService } from 'src/app/services/auth.service';
+import { DocumentService } from 'src/app/services/document.service';
 import { InterventionService } from 'src/app/services/intervention.service';
 import { UserService } from 'src/app/services/user.service';
 import { UtilService } from 'src/app/services/util.service';
@@ -19,8 +21,10 @@ export class MyprofileComponent {
   isAdmin: boolean = false;
 
   interventions: Intervention[] = [];
+  documents: Document[] = [];
 
-  constructor(public authService: AuthService, private interventionService: InterventionService, private userService: UserService, private utilService: UtilService) {
+
+  constructor(private documentService: DocumentService, public authService: AuthService, private interventionService: InterventionService, private userService: UserService, private utilService: UtilService) {
 
   }
 
@@ -40,6 +44,10 @@ export class MyprofileComponent {
       this.interventionService.getUserInterventions(this.user.id).subscribe((list: Intervention[]) => {
         this.interventions = list;
       });
+
+      this.documentService.getAllDocumentsByUserId(this.user.id).subscribe((list: Document[]) => {
+        this.documents = list;
+      })
     });
   }
 
@@ -49,6 +57,15 @@ export class MyprofileComponent {
       const link = document.createElement("a");
       link.href = window.URL.createObjectURL(blob);
       link.download ="Intervenciones_"+format(Date.now(), "yyyy-MM-dd")+".pdf";
+      link.click();
+    });
+  }
+
+  download(documentId: number){
+    this.documentService.downloadDocument(documentId).subscribe(blob =>{
+      const link = document.createElement('a');
+      link.href = window.URL.createObjectURL(blob);
+      link.target = '_blank';
       link.click();
     });
   }

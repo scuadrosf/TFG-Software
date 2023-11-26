@@ -117,13 +117,11 @@
                                             </div>
                                             <div class="experience-content">
                                                 <div class="timeline-content">
-                                                    <!-- <a href="#/" class="name">{{intervention.appointment.description}}</a> -->
                                                     <a
                                                         routerLink="/documents/{{intervention.id}}">{{intervention.type}}</a>
                                                     <!-- Esto llevará justamente los documentos de esa intervención -->
                                                     <span class="time">{{intervention.interventionDate |
                                                         date:'dd-MM-yyyy'}}</span>
-
                                                 </div>
                                             </div>
                                         </li>
@@ -136,7 +134,37 @@
                     </div>
                 </div>
                 <div class="tab-pane" id="documents">
-                    Hacer como una especie de explorador de archivos, o mostrar todos los archivos por días
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card-box">
+                                <h3 class="card-title">Documentos</h3>
+                                <div *ngIf="(documents.length === 0)">
+                                    <p>{{user.name}} {{user.lastName}} no tiene documentos</p>
+                                </div>
+                                <div class="experience-box" *ngFor="let document of documents">
+                                    <ul class="experience-list">
+                                        <li>
+                                            <div class="experience-user">
+                                                <div class="before-circle"></div>
+                                            </div>
+                                            <div class="experience-content">
+                                                <div class="timeline-content">
+                                                    <span class="">{{document.intervention.type}} - </span>
+                                                    <a style="cursor: pointer;"
+                                                        (click)="download(document.id)">{{document.fileName}}</a>
+                                                    <span class="time">{{document.creationDate|
+                                                        date:'dd-MM-yyyy'}}</span>
+
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <p> ** Para visualizar más detalles sobre la intervención haga click en la intervención
+                                deseada </p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

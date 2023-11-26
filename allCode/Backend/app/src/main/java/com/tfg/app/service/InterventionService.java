@@ -49,6 +49,9 @@ public class InterventionService {
         return documentRepository.findByInterventionId(id);
     }
 
+    public Optional<Intervention> getInterventionByDocumentId(Long id){
+        return interventions.getInterventionByDocumentId(id);
+    }
     
 
 }

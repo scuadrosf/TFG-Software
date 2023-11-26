@@ -118,9 +118,5 @@ public class UtilRestController {
         ExporterExcel exporter = new ExporterExcel(patients);
 
         exporter.exportPatients(response);
-        // exporter.setPatientList(patients);
-        // exporter.exportPatients(repsonse);
-
-        
     }
 }

@@ -17,7 +17,7 @@ import com.tfg.app.model.User;
 
 public class ExporterExcel {
 
-    private XSSFWorkbook book, book2;
+    private XSSFWorkbook book;
     private XSSFSheet sheet;
 
     private List<User> patientList;

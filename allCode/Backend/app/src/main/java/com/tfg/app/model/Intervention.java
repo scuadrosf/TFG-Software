@@ -87,8 +87,6 @@ public class Intervention {
         this.type = type;
     }
 
-    
-
     public User getUser() {
         return user;
     }
@@ -112,7 +110,5 @@ public class Intervention {
     public void setDocument(Document document) {
         this.document = document;
     }
-
-    
 
 }

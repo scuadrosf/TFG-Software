@@ -10,6 +10,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,6 +24,7 @@ import com.tfg.app.model.Intervention;
 import com.tfg.app.repository.DocumentRepository;
 import com.tfg.app.service.DocumentService;
 import com.tfg.app.service.InterventionService;
+import com.tfg.app.service.UserService;
 
 @RestController
 @RequestMapping("/api/documents")
@@ -30,6 +32,8 @@ public class DocumentRestController {
     
     @Autowired
     private DocumentService documentService;
+    @Autowired
+    private UserService userService;
     @Autowired
     private DocumentRepository documentRepository;
     @Autowired
@@ -94,6 +98,44 @@ public class DocumentRestController {
         }
 
         return ResponseEntity.ok(document.get());
+    }
+
+    @GetMapping("/all/{id}")
+    public ResponseEntity<List<Document>> getAllDocumentByUserId(@PathVariable Long id){
+        if (userService.findById(id).isPresent()){
+            List<Document> documents = documentService.getAllDocumentByUserId(id);
+            return ResponseEntity.ok(documents);
+        }else{
+            return ResponseEntity.notFound().build();
+        }
+        
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteDocument(@PathVariable Long id) {
+        Optional<Document> documentOptional = documentService.findById(id);
+        try {
+            if (documentOptional.isPresent()) {
+                Intervention interventionOfThisDocument = interventionService.getInterventionByDocumentId(id).get();
+                interventionOfThisDocument.setDocument(null);
+                interventionService.save(interventionOfThisDocument);
+                documentService.delete(id);
+            }
+            return ResponseEntity.ok("Document eliminado con éxito.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al eliminar la intervention: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/{id}/intervention")
+    public ResponseEntity<Intervention> getInterventionByDocumentId(@PathVariable Long id){
+        Optional<Intervention> optionalIntervention = interventionService.getInterventionByDocumentId(id);
+        if (optionalIntervention.isPresent()){
+            return ResponseEntity.ok().body(optionalIntervention.get());
+        }else{
+            return ResponseEntity.notFound().build();
+        }
     }
 
 }

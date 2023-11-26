@@ -65,5 +65,11 @@ public class DocumentService {
             throw new NotFoundException();
         }
     }
+
+    public List<Document> getAllDocumentByUserId(Long id) {
+        return documents.getAllDocumentsByUserId(id);
+    }
+
+    
     
 }

@@ -2,9 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { format } from 'date-fns';
 import { Appointment } from 'src/app/models/appointment.model';
+import { Document } from 'src/app/models/document.model';
 import { Intervention } from 'src/app/models/intervention.model';
 import { User } from 'src/app/models/user.model';
 import { AuthService } from 'src/app/services/auth.service';
+import { DocumentService } from 'src/app/services/document.service';
 import { InterventionService } from 'src/app/services/intervention.service';
 import { UserService } from 'src/app/services/user.service';
 import { UtilService } from 'src/app/services/util.service';
@@ -22,8 +24,10 @@ export class ProfileComponent implements OnInit {
   
   apointment!: Appointment | null;
   interventions: Intervention[] = [];
+  documents: Document[] = [];
 
-  constructor(private utilService: UtilService, public authService: AuthService, private interventionService: InterventionService, private userService: UserService, private activatedRoute: ActivatedRoute) {
+
+  constructor(private documentService: DocumentService, private utilService: UtilService, public authService: AuthService, private interventionService: InterventionService, private userService: UserService, private activatedRoute: ActivatedRoute) {
     this.idUser = this.activatedRoute.snapshot.params['id'];
 
   }
@@ -45,6 +49,10 @@ export class ProfileComponent implements OnInit {
       this.interventionService.getUserInterventions(this.idUser).subscribe((list: Intervention[]) => {
         this.interventions = list;
       });
+
+      this.documentService.getAllDocumentsByUserId(this.user.id).subscribe((list: Document[]) => {
+        this.documents = list;
+      })
     });
 
   }  
@@ -71,5 +79,28 @@ export class ProfileComponent implements OnInit {
       link.download ="Intervenciones_"+format(Date.now(), "yyyy-MM-dd")+".pdf";
       link.click();
     });
+  }
+
+  download(documentId: number){
+    this.documentService.downloadDocument(documentId).subscribe(blob =>{
+      const link = document.createElement('a');
+      link.href = window.URL.createObjectURL(blob);
+      link.target = '_blank';
+      link.click();
+    });
+  }
+
+  deleteDocument(document: Document){
+    const confirmation = window.confirm('Esta seguro de eliminar el documento');
+    if (confirmation) {
+      this.documentService.deleteDocument(document);
+      console.log("Document eliminado")
+      this.ngOnInit();
+      // window.location.reload();
+    }
+    else {
+      console.log("Confirmación de eliminado cancelada")
+    }
+    this.ngOnInit();
   }
 }
