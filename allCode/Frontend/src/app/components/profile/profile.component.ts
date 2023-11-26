@@ -17,14 +17,19 @@ import { UtilService } from 'src/app/services/util.service';
 })
 export class ProfileComponent implements OnInit {
 
+  selectedFile: File | null = null;
+  selectedFileName: string = '';
+
   user!: User;
   idUser!: number;
   profileAvatarUrls!: string;
   isAdmin: boolean = false;
-  
+
   apointment!: Appointment | null;
   interventions: Intervention[] = [];
   documents: Document[] = [];
+
+  selectedDocumentId!: number;
 
 
   constructor(private documentService: DocumentService, private utilService: UtilService, public authService: AuthService, private interventionService: InterventionService, private userService: UserService, private activatedRoute: ActivatedRoute) {
@@ -32,8 +37,11 @@ export class ProfileComponent implements OnInit {
 
   }
 
+  showChangeDocumentModalById(documentId: any): void {
+    this.selectedDocumentId = documentId;
+  }
+
   ngOnInit(): void {
-    // console.log(this.authService.isUser())
     this.userService.getUser(this.idUser).subscribe((response) => {
       this.user = response;
 
@@ -55,34 +63,38 @@ export class ProfileComponent implements OnInit {
       })
     });
 
-  }  
+  }
 
-  deleteIntervention(intervention: Intervention){
+  onFileSelected(event: any) {
+    this.selectedFile = event.target.files[0];
+    this.selectedFileName = this.selectedFile?.name || '';
+  }
+
+  deleteIntervention(intervention: Intervention) {
     const confirmation = window.confirm('Esta seguro de eliminar la intervención');
     if (confirmation) {
       this.interventionService.deleteIntervention(intervention);
       console.log("Intervention eliminado")
       this.ngOnInit();
-      // window.location.reload();
     }
     else {
       console.log("Confirmación de eliminado cancelada")
     }
     this.ngOnInit();
   }
-  
+
   exportPDF() {
     this.utilService.exportInterventionsPDF(this.user.id).subscribe((data) => {
       const blob = new Blob([data], { type: 'application/pdf' });
       const link = document.createElement("a");
       link.href = window.URL.createObjectURL(blob);
-      link.download ="Intervenciones_"+format(Date.now(), "yyyy-MM-dd")+".pdf";
+      link.download = "Intervenciones_" + format(Date.now(), "yyyy-MM-dd") + ".pdf";
       link.click();
     });
   }
 
-  download(documentId: number){
-    this.documentService.downloadDocument(documentId).subscribe(blob =>{
+  download(documentId: number) {
+    this.documentService.downloadDocument(documentId).subscribe(blob => {
       const link = document.createElement('a');
       link.href = window.URL.createObjectURL(blob);
       link.target = '_blank';
@@ -90,17 +102,31 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  deleteDocument(document: Document){
+  deleteDocument(document: Document) {
     const confirmation = window.confirm('Esta seguro de eliminar el documento');
     if (confirmation) {
       this.documentService.deleteDocument(document);
       console.log("Document eliminado")
       this.ngOnInit();
-      // window.location.reload();
     }
     else {
       console.log("Confirmación de eliminado cancelada")
     }
     this.ngOnInit();
+  }
+
+  submit() {
+    const formData = new FormData();
+    if (this.selectedFile) {
+      formData.append('file', this.selectedFile);
+      this.documentService.updateDocument(this.selectedDocumentId, this.idUser, formData).subscribe(
+        (_) => {
+          window.location.reload();
+        }
+      )
+    }
+    else
+      window.history.back();
+    window.location.reload();
   }
 }

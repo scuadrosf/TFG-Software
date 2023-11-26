@@ -29,4 +29,7 @@ export class DocumentService {
   getInterventionByDocumentId(documentId: number): Observable<Intervention>{
     return this.httpClient.get<Intervention>(baseUrl+documentId+"/intervention")
   }
+  updateDocument(documentId: number, userId: number, formData: FormData): Observable<any>{
+    return this.httpClient.put(baseUrl+'upload/'+documentId+'/user='+userId, formData);
+  } 
 }

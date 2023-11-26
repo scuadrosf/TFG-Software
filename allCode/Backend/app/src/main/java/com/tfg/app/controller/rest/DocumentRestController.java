@@ -1,6 +1,7 @@
 package com.tfg.app.controller.rest;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,7 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.tfg.app.model.Document;
 import com.tfg.app.model.Intervention;
+import com.tfg.app.model.User;
 import com.tfg.app.repository.DocumentRepository;
 import com.tfg.app.service.DocumentService;
 import com.tfg.app.service.InterventionService;
@@ -29,7 +31,7 @@ import com.tfg.app.service.UserService;
 @RestController
 @RequestMapping("/api/documents")
 public class DocumentRestController {
-    
+
     @Autowired
     private DocumentService documentService;
     @Autowired
@@ -39,19 +41,32 @@ public class DocumentRestController {
     @Autowired
     private InterventionService interventionService;
 
-    @PostMapping("/upload/{idIntervention}")
-    public ResponseEntity<String> uploadDocument(@PathVariable("idIntervention")Long id, @RequestParam("file") MultipartFile file) throws IOException {
+    @PutMapping("/upload/{documentId}/user={userId}")
+    public ResponseEntity<String> uploadDocument(@PathVariable("documentId") Long id,
+            @PathVariable("userId") Long userId,
+            @RequestParam("file") MultipartFile file) throws IOException {
         try {
             // Verificar si el archivo está vacío
             if (file.isEmpty()) {
                 return ResponseEntity.badRequest().body("Por favor, seleccione un archivo.");
             }
-            Optional<Intervention> intervention = interventionService.findById(id);
-            if (intervention.isPresent()){
-                // Guardar el documento en el repositorio
-                documentService.saveDocument(file, id);
+            Optional<Intervention> intervention = interventionService.getInterventionByDocumentId(id);
+            if (intervention.isPresent()) {
+                Document document = documentService.findById(id).get();
+                document.setFile(file.getBytes());
+                document.setFileName(file.getOriginalFilename());
+                document.setCreationDate(LocalDate.now());
+                document.setIntervention(intervention.get());
+                User user = userService.findById(userId)
+                        .orElseThrow(() -> new IllegalArgumentException("Invalid User Id: " + userId));
+                document.setUser(user);
+                intervention.get().setDocument(document);
+
+                documentService.save(document);
+                interventionService.save(intervention.get());
+
                 return ResponseEntity.ok("Documento subido exitosamente");
-            }else{
+            } else {
                 return ResponseEntity.notFound().build();
             }
         } catch (IOException e) {
@@ -60,12 +75,11 @@ public class DocumentRestController {
         }
     }
 
-   @GetMapping("/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<byte[]> getDocument(@PathVariable Long id) throws IOException, NotFoundException {
         // Recupera el documento por su ID desde el servicio
         byte[] documentContent = documentService.getDocumentContentById(id);
 
-        // Configura los encabezados de la respuesta para el tipo de contenido y el tamaño del documento
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
         headers.setContentLength(documentContent.length);
@@ -75,11 +89,11 @@ public class DocumentRestController {
     }
 
     @GetMapping("/full/{id}")
-    public ResponseEntity<Document> getEntityDocument(@PathVariable Long id){
-        Optional<Document> optionalDoc= documentRepository.findById(id);
-        if (optionalDoc.isPresent()){
+    public ResponseEntity<Document> getEntityDocument(@PathVariable Long id) {
+        Optional<Document> optionalDoc = documentRepository.findById(id);
+        if (optionalDoc.isPresent()) {
             return ResponseEntity.ok(optionalDoc.get());
-        }else{
+        } else {
             return ResponseEntity.notFound().build();
         }
     }
@@ -101,14 +115,14 @@ public class DocumentRestController {
     }
 
     @GetMapping("/all/{id}")
-    public ResponseEntity<List<Document>> getAllDocumentByUserId(@PathVariable Long id){
-        if (userService.findById(id).isPresent()){
+    public ResponseEntity<List<Document>> getAllDocumentByUserId(@PathVariable Long id) {
+        if (userService.findById(id).isPresent()) {
             List<Document> documents = documentService.getAllDocumentByUserId(id);
             return ResponseEntity.ok(documents);
-        }else{
+        } else {
             return ResponseEntity.notFound().build();
         }
-        
+
     }
 
     @DeleteMapping("/delete/{id}")
@@ -129,11 +143,11 @@ public class DocumentRestController {
     }
 
     @GetMapping("/{id}/intervention")
-    public ResponseEntity<Intervention> getInterventionByDocumentId(@PathVariable Long id){
+    public ResponseEntity<Intervention> getInterventionByDocumentId(@PathVariable Long id) {
         Optional<Intervention> optionalIntervention = interventionService.getInterventionByDocumentId(id);
-        if (optionalIntervention.isPresent()){
+        if (optionalIntervention.isPresent()) {
             return ResponseEntity.ok().body(optionalIntervention.get());
-        }else{
+        } else {
             return ResponseEntity.notFound().build();
         }
     }

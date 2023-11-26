@@ -83,7 +83,7 @@
                                         <div class="settings-btn upload-files-avator">
                                             <div *ngIf="selectedFileName">{{ selectedFileName }}</div>
                                             <input type="file" name="file" id="file" (change)="onFileSelected($event)"
-                                                class="hide-input">
+                                                class="hide-input" accept="application/pdf">
                                             <label for="file" class="upload">Elegir fichero</label>
 
                                         </div>
