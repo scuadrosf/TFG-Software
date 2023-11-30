@@ -15,11 +15,12 @@ import { Observable, debounceTime, filter, forkJoin, map, of, startWith, switchM
 })
 export class PatientComponent implements OnInit {
 
-  loading = false;
+  loading: boolean = false;
   patientsList: User[] = [];
   profileAvatarUrls: string[] = [];
 
   control = new FormControl();
+  noResults: boolean = false
 
 
   constructor(public patientService: UserService, private router: Router, private utilService: UtilService) { }
@@ -138,16 +139,22 @@ export class PatientComponent implements OnInit {
         switchMap(query => {
           this.loading = true;
           if (query.trim().length === 0) {
+            this.noResults = false;
             return this.patientService.getUserList();
           } else {
+            this.noResults = false;
             return this.patientService.getUsersByNameOrLastNameOrUsername(query);
           }
         })
       )
       .subscribe(result => {
+        if (result.length === 0){
+          this.noResults = true;
+        }
         this.patientsList = result;
         this.loading = false;
       });
+      
   }
   
   

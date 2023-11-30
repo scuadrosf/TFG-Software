@@ -81,7 +81,9 @@
                 </thead>
 
                 <tbody>
-
+                  <div *ngIf="noResults">
+                    <p>No hay resultados coincidentes</p>
+                  </div>
                   <tr *ngFor="let patient of patientsList">
                     <!-- <div -->
                     <td>
