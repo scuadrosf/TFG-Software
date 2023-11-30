@@ -5,6 +5,8 @@ import { UserService } from 'src/app/services/user.service';
 import { Router } from '@angular/router';
 import { format } from 'date-fns';
 import { UtilService } from 'src/app/services/util.service';
+import { FormControl } from '@angular/forms';
+import { Observable, debounceTime, filter, forkJoin, map, of, startWith, switchMap, tap } from 'rxjs';
 
 @Component({
   selector: 'app-patient',
@@ -13,23 +15,61 @@ import { UtilService } from 'src/app/services/util.service';
 })
 export class PatientComponent implements OnInit {
 
+  loading = false;
   patientsList: User[] = [];
   profileAvatarUrls: string[] = [];
+
+  control = new FormControl();
 
 
   constructor(public patientService: UserService, private router: Router, private utilService: UtilService) { }
 
   ngOnInit(): void {
+    
+    this.getAllUsers();
+
+    this.observerChangeSearch();
+
+  }
+
+  getAllUsers(): void {
+
+    this.loading = true;
+
     this.patientService.getUserList().subscribe((list) => {
       this.patientsList = list;
-      this.patientsList.forEach(patient => {
-        this.patientService.getProfileAvatar(patient.id).subscribe(blob => {
-          const objectUrl = URL.createObjectURL(blob);
-          this.profileAvatarUrls[patient.id] = objectUrl;
-        });
-      });
-    });
 
+      // Usar forkJoin para esperar todas las llamadas a getProfileAvatar
+      forkJoin(
+        this.patientsList.map(patient =>
+          this.patientService.getProfileAvatar(patient.id).pipe(
+            switchMap(blob => {
+              const objectUrl = URL.createObjectURL(blob);
+              this.profileAvatarUrls[patient.id] = objectUrl;
+              return of(patient); // Devuelve el usuario después de manejar el avatar
+            })
+          )
+        )
+      ).subscribe(
+        () => {
+          this.loading = false;
+        },
+        (error) => {
+          console.error('Error:', error);
+          this.loading = false;
+        }
+      );
+    });
+    // this.patientService.getUserList().subscribe((list) => {
+    //   this.patientsList = list;
+    //   this.patientsList.forEach(patient => {
+    //     this.patientService.getProfileAvatar(patient.id).subscribe(blob => {
+    //       const objectUrl = URL.createObjectURL(blob);
+    //       this.profileAvatarUrls[patient.id] = objectUrl;
+    //     });
+    //     this.loading = false;
+    //   });
+    // });
   }
 
   public sortData(sort: Sort) {
@@ -71,22 +111,52 @@ export class PatientComponent implements OnInit {
       const blob = new Blob([data], { type: 'application/pdf' });
       const link = document.createElement("a");
       link.href = window.URL.createObjectURL(blob);
-      link.download ="Pacientes_"+format(Date.now(), "yyyy-MM-dd")+".pdf";
+      link.download = "Pacientes_" + format(Date.now(), "yyyy-MM-dd") + ".pdf";
       link.click();
     });
   }
 
-  exportExcel(){
+  exportExcel() {
     this.utilService.exportPatientsExcel().subscribe((data) => {
       const blob = new Blob([data], { type: 'application/octet-stream' });
       const link = document.createElement("a");
       link.href = window.URL.createObjectURL(blob);
-      link.download ="Pacientes_"+format(Date.now(), "yyyy-MM-dd")+".xlsx";
+      link.download = "Pacientes_" + format(Date.now(), "yyyy-MM-dd") + ".xlsx";
       link.click();
     });
   }
 
-  reload(){
+  reload() {
     window.location.reload();
   }
+
+  observerChangeSearch() {
+    this.control.valueChanges
+      .pipe(
+        // startWith(''),
+        debounceTime(500),
+        switchMap(query => {
+          this.loading = true;
+          if (query.trim().length === 0) {
+            return this.patientService.getUserList();
+          } else {
+            return this.patientService.getUsersByNameOrLastNameOrUsername(query);
+          }
+        })
+      )
+      .subscribe(result => {
+        this.patientsList = result;
+        this.loading = false;
+      });
+  }
+  
+  
+
+  // getUsersByQueryName(name: string) {
+  //   this.loading = true
+  //   this.patientService.getUsersByName(name).subscribe(result => {
+  //     this.patientsList = result;
+  //     this.loading = false
+  //   })
+  // }
 }

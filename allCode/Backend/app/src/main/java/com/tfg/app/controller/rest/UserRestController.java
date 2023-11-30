@@ -268,4 +268,16 @@ public class UserRestController {
         }
 
     }
+
+    @GetMapping("/search/{name}")
+    public ResponseEntity<List<User>> getUserByNameOrLastName(@PathVariable("name") String name) {
+        List<User> users = userService.findByNameContaining(name);
+        return new ResponseEntity<>(users, HttpStatus.OK);
+    }
+
+    @GetMapping("/search")
+    public List<User> searchUsersByNameOrLastName(@RequestParam String query) {
+        return userRepository.findByNameContainingOrLastNameContainingOrUsernameContaining(query, query, query);
+    }
+
 }

@@ -5,7 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { routing } from './app.routing';
 import { LoginComponent } from './components/login/login.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -33,6 +33,7 @@ import { EditInterventionComponent } from './components/intervention/edit-interv
 import { ForgotPasswordComponent } from './components/login/forgot-password/forgot-password.component';
 import { MatListModule } from '@angular/material/list';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 
 @NgModule({
@@ -65,12 +66,14 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
     BrowserModule,
     AppRoutingModule,
     FormsModule,
+    ReactiveFormsModule,
     HttpClientModule,
     routing,
     BrowserAnimationsModule,
     NgbModule,
     MatListModule,
-    PdfViewerModule
+    PdfViewerModule,
+    FlexLayoutModule
   ],
   providers: [],
   bootstrap: [AppComponent]

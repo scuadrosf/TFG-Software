@@ -46,6 +46,10 @@ public class UserService {
         return users.findByName(name);
     }
 
+    public List<User> findByNameContaining(String name) {
+        return users.findByNameContaining(name);
+    }
+
 
 
 }

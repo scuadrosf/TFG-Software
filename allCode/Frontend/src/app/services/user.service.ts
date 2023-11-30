@@ -70,6 +70,14 @@ export class UserService {
   checkAdmin(id: number): Observable<boolean> {
     return this.httpClient.get<boolean>('/api/users/rol/' + id);
   }
+  
+  // getUsersByName(name: String): Observable<User[]>{
+  //   return this.httpClient.get<User[]>(baseUrl+"search/"+name);
+  // }
+
+  getUsersByNameOrLastNameOrUsername(query: string): Observable<User[]> {
+    return this.httpClient.get<User[]>(baseUrl+"/search?query="+query);
+  }
 
   
 }
