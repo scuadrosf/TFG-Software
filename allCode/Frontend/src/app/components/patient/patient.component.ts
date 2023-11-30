@@ -156,14 +156,4 @@ export class PatientComponent implements OnInit {
       });
       
   }
-  
-  
-
-  // getUsersByQueryName(name: string) {
-  //   this.loading = true
-  //   this.patientService.getUsersByName(name).subscribe(result => {
-  //     this.patientsList = result;
-  //     this.loading = false
-  //   })
-  // }
 }

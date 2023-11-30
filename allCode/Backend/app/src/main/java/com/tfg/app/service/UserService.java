@@ -50,6 +50,10 @@ public class UserService {
         return users.findByNameContaining(name);
     }
 
+    public List<User> findUsersByNameOrLastNameOrUsername(String name, String lastName, String username) {
+        return users.findByNameContainingOrLastNameContainingOrUsernameContaining(name, lastName, username);
+    }
+
 
 
 }

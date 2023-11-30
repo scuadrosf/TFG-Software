@@ -277,7 +277,7 @@ public class UserRestController {
 
     @GetMapping("/search")
     public List<User> searchUsersByNameOrLastName(@RequestParam String query) {
-        return userRepository.findByNameContainingOrLastNameContainingOrUsernameContaining(query, query, query);
+        return userService.findUsersByNameOrLastNameOrUsername(query, query, query);
     }
 
 }
