@@ -1,9 +1,6 @@
 package com.tfg.app.controller.DTOS;
 
-import java.io.File;
 import java.sql.Blob;
-
-import org.springframework.web.multipart.MultipartFile;
 
 public class UserEditDTO {
     private String email;

@@ -150,7 +150,6 @@ public class InterventionRestController {
                         intervention.setUser(user);
                     document.get().setUser(user);
                 } catch (IOException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
             } else {
@@ -167,7 +166,6 @@ public class InterventionRestController {
                         intervention.setUser(user);
                     doc.setUser(user);
                 } catch (IOException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
             }
