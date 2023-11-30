@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { format } from 'date-fns';
+import { debounceTime, switchMap } from 'rxjs';
 import { Appointment } from 'src/app/models/appointment.model';
 import { AppointmentService } from 'src/app/services/appointment.service';
 import { InterventionService } from 'src/app/services/intervention.service';
@@ -13,6 +15,9 @@ import { UtilService } from 'src/app/services/util.service';
 })
 export class AppointmentComponent implements OnInit {
 
+  loading: boolean = false;
+  control = new FormControl();
+  noResults: boolean = false;
 
   appointmentList: Appointment[] = [];
   profileAvatarUrls: string[] = [];
@@ -24,6 +29,16 @@ export class AppointmentComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.getAllAppointments();
+    this.observerChangeSearch();
+
+
+    console.log(this.isCompleted)
+  }
+
+  getAllAppointments(): void {
+    this.loading = true;
+
     this.appointmentService.getAllAppointments().subscribe(list => {
       this.appointmentList = list;
       this.appointmentList.forEach(appointment => {
@@ -32,10 +47,37 @@ export class AppointmentComponent implements OnInit {
           this.profileAvatarUrls[appointment.user.id] = objectUrl;
         });
       });
+      this.loading = false;
     })
 
-    console.log(this.isCompleted)
   }
+
+  observerChangeSearch() {
+    this.control.valueChanges
+      .pipe(
+        // startWith(''),
+        debounceTime(500),
+        switchMap(query => {
+          this.loading = true;
+          if (query.trim().length === 0) {
+            this.noResults = false;
+            return this.appointmentService.getAllAppointments();
+          } else {
+            this.noResults = false;
+            return this.appointmentService.findAppointmentsByUserDetails(query);
+          }
+        })
+      )
+      .subscribe(result => {
+        if (result.length === 0){
+          this.noResults = true;
+        }
+        this.appointmentList = result;
+        this.loading = false;
+      });
+      
+  }
+
 
   changeStatus(id: number) {
     const confirmed = window.confirm("¿Estas seguro que ha sido completado este evento?");

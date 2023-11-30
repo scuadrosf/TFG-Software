@@ -60,4 +60,9 @@ export class AppointmentService {
   getAppointmentByInterventionId(idIntervention: number): Observable<Appointment>{
     return this.httpClient.get<Appointment>(baseUrl+"byAppointment/"+idIntervention);
   }
+
+  findAppointmentsByUserDetails(query: string): Observable<Appointment[]> {
+    return this.httpClient.get<Appointment[]>(baseUrl+"/search?query="+query);
+
+  }
 }

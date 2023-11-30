@@ -29,26 +29,27 @@
                     <h3>Lista de citas</h3>
                     <div class="doctor-search-blk">
                       <div class="top-nav-search table-search-blk">
-                        <input type="text" class="form-control" placeholder="Buscar paciente">
-                        <!-- <input type="text" class="form-control" placeholder="Search here" [(ngModel)]="searchDataValue"
-                                                    (ngModelChange)="searchData(searchDataValue)"> -->
+                        <input type="text" class="form-control" [formControl]="control" placeholder="Buscar paciente">
+
                         <a class="btn"><img src="assets/img/icons/search-normal.svg" alt=""></a>
                       </div>
                       <div class="add-group">
-                        <a (click)="reload()" class="btn btn-primary doctor-refresh ms-2"><img src="assets/img/icons/re-fresh.svg" alt=""></a>
-                    </div>
+                        <a (click)="reload()" class="btn btn-primary doctor-refresh ms-2"><img
+                            src="assets/img/icons/re-fresh.svg" alt=""></a>
+                      </div>
                     </div>
                   </div>
                 </div>
                 <div class="col-auto text-end float-end ms-auto download-grp">
-                  <a style="cursor: pointer;" (click)="exportPDF()" class=" me-2"><img src="assets/img/icons/pdf-icon-01.svg" alt=""></a>
+                  <a style="cursor: pointer;" (click)="exportPDF()" class=" me-2"><img
+                      src="assets/img/icons/pdf-icon-01.svg" alt=""></a>
 
                 </div>
               </div>
             </div>
             <!-- /Table Header -->
 
-            <div class="table-responsive">
+            <div class="table-responsive" *ngIf="!loading">
               <table class="table border-0 custom-table comman-table datatable mb-0">
                 <!-- <table matSort (matSortChange)="sortData($event)" class="table border-0 custom-table comman-table datatable mb-0"> -->
                 <thead>
@@ -69,39 +70,42 @@
                   </tr>
                 </thead>
                 <tbody>
+                  <div *ngIf="noResults">
+                    <p>No hay resultados coincidentes</p>
+                  </div>
                   <tr *ngFor="let appointment of appointmentList ">
-                    <!-- <div *ngIf="appointment.completed"> -->
-                      <td *ngIf="!appointment.completed">
-                        <div class="form-check check-tables">
-                          <input class="form-check-input" type="checkbox" (click)="changeStatus(appointment.id)" [(ngModel)]="appointment.completed" value="true">
+                    <td *ngIf="!appointment.completed">
+                      <div class="form-check check-tables">
+                        <input class="form-check-input" type="checkbox" (click)="changeStatus(appointment.id)"
+                          [(ngModel)]="appointment.completed" value="true">
+                      </div>
+                    </td>
+                    <td *ngIf="!appointment.completed" class="profile-image"><a
+                        routerLink="/profile/{{appointment.user.id}}"><img width="28" height="28"
+                          [src]="profileAvatarUrls[appointment.user.id]" class="rounded-circle m-r-5" alt="">
+                        {{appointment.user.name}}</a></td>
+                    <td *ngIf="!appointment.completed">{{appointment.user.lastName}}</td>
+                    <td *ngIf="!appointment.completed">{{appointment.user.username}}</td>
+                    <td *ngIf="!appointment.completed">{{appointment.user.birth}}</td>
+                    <td *ngIf="!appointment.completed">{{appointment.description}}</td>
+                    <td *ngIf="!appointment.completed">{{appointment.fromDate | date:'dd-MM-yyyy HH:mm'}}</td>
+                    <td *ngIf="!appointment.completed">{{appointment.toDate | date:'dd-MM-yyyy HH:mm'}}</td>
+                    <td *ngIf="!appointment.completed" class="text-end">
+                      <div class="dropdown dropdown-action">
+                        <a href="javascript:void(0);" class="action-icon dropdown-toggle" data-bs-toggle="dropdown"
+                          aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                        <div class="dropdown-menu dropdown-menu-end">
+                          <a class="dropdown-item" routerLink="/edit-appointment/{{appointment.id}}"><i
+                              class="fa-solid fa-pen-to-square m-r-5"></i> Editar
+                            cita</a>
+                          <a class="dropdown-item" (click)="deleteAppointment(appointment.id)" data-bs-toggle="modal"
+                            data-bs-target="#delete_patient"><i class="fa fa-trash-alt m-r-5"></i> Eliminar cita</a>
+                          <a class="dropdown-item" (click)="addIntervention(appointment.id)" data-bs-toggle="modal"
+                            data-bs-target="#delete_patient"><i class="fa-solid fa-pen-alt m-r-5"></i> Añadir
+                            intervención</a>
                         </div>
-                      </td>
-                      <td *ngIf="!appointment.completed" class="profile-image"><a routerLink="/profile/{{appointment.user.id}}"><img width="28"
-                            height="28" [src]="profileAvatarUrls[appointment.user.id]" class="rounded-circle m-r-5"
-                            alt="">
-                          {{appointment.user.name}}</a></td>
-                      <!-- <td>{{patient.name}}</td> -->
-                      <td *ngIf="!appointment.completed">{{appointment.user.lastName}}</td>
-                      <td *ngIf="!appointment.completed">{{appointment.user.username}}</td>
-                      <td *ngIf="!appointment.completed">{{appointment.user.birth}}</td>
-                      <td *ngIf="!appointment.completed">{{appointment.description}}</td>
-                      <td *ngIf="!appointment.completed">{{appointment.fromDate | date:'dd-MM-yyyy HH:mm'}}</td>
-                      <td *ngIf="!appointment.completed">{{appointment.toDate | date:'dd-MM-yyyy HH:mm'}}</td>
-                      <td *ngIf="!appointment.completed" class="text-end">
-                        <div class="dropdown dropdown-action">
-                          <a href="javascript:void(0);" class="action-icon dropdown-toggle" data-bs-toggle="dropdown"
-                            aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
-                          <div class="dropdown-menu dropdown-menu-end">
-                            <a class="dropdown-item" routerLink="/edit-appointment/{{appointment.id}}"><i
-                                class="fa-solid fa-pen-to-square m-r-5"></i> Editar
-                              cita</a>
-                            <a class="dropdown-item" (click)="deleteAppointment(appointment.id)" data-bs-toggle="modal"
-                              data-bs-target="#delete_patient"><i class="fa fa-trash-alt m-r-5"></i> Eliminar cita</a>
-                            <a class="dropdown-item" (click)="addIntervention(appointment.id)" data-bs-toggle="modal"
-                              data-bs-target="#delete_patient"><i class="fa-solid fa-pen-alt m-r-5"></i> Añadir intervención</a>
-                          </div>
-                        </div>
-                      </td>
+                      </div>
+                    </td>
                     <!-- </div> -->
                   </tr>
                 </tbody>
@@ -215,8 +219,37 @@
                               </div>
                         </div> -->
             </div>
+            <!-- LOADING -->
+
+            <div *ngIf="loading" fxLayoutAlign="center">
+              <div class="spinner-grow text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+              <div class="spinner-grow text-secondary" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+              <div class="spinner-grow text-success" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+              <div class="spinner-grow text-danger" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+              <div class="spinner-grow text-warning" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+              <div class="spinner-grow text-info" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+              <div class="spinner-grow text-light" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+              <div class="spinner-grow text-dark" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
+</div>

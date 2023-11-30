@@ -167,4 +167,9 @@ public class AppointmentRestController {
     public ResponseEntity<Appointment> getAppointmentByInterventionId(@PathVariable("idIntervention") Long idIntervention){
         return ResponseEntity.ok().body(appointmentService.getAppointmentByInterventionId(idIntervention));
     }
+
+    @GetMapping("/search")
+    public List<Appointment> searchUsersByNameOrLastName(@RequestParam String query) {
+        return appointmentService.findAppointmentsByUserDetails(query, query, query);
+    }
 }

@@ -57,4 +57,8 @@ public class AppointmentService {
             return null;
         }
     }
+
+    public List<Appointment> findAppointmentsByUserDetails(String name, String lastName, String username) {
+        return appointments.findByUser_NameContainingOrUser_LastNameContainingOrUser_UsernameContaining(name, lastName, username);
+    }
 }
