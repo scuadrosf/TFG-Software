@@ -34,6 +34,7 @@ import { ForgotPasswordComponent } from './components/login/forgot-password/forg
 import { MatListModule } from '@angular/material/list';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { SidebarMobileComponent } from './components/common-components/sidebar-mobile/sidebar-mobile.component';
 
 
 @NgModule({
@@ -60,7 +61,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     InterventionComponent,
     AddInterventionComponent,
     EditInterventionComponent,
-    ForgotPasswordComponent
+    ForgotPasswordComponent,
+    SidebarMobileComponent
   ],
   imports: [
     BrowserModule,

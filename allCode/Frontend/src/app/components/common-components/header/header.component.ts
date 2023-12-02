@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { User } from 'src/app/models/user.model';
 import { AuthService } from 'src/app/services/auth.service';
@@ -56,7 +56,8 @@ export class HeaderComponent implements OnInit {
     this.router.navigate(['/profile/'])
   }
 
-  // onToggleSideBar(): void {
-  //   this.sidebarService.toggleSidebar();
-  // }
+  @HostListener('click', ['$event'])
+  onClick(event: Event): void {
+    event.stopPropagation();
+  }
 }

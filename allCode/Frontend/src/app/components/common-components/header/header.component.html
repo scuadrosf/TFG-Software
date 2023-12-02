@@ -7,18 +7,19 @@
             </a>
         </div>
 
-        <!-- <a (click)="onToggleSideBar()" id="toggle_btn"> -->
-            <img src="assets/img/icons/bar-icon.svg" alt="">
-        <!-- </a> -->
-
-        <a id="mobile_btn" class="mobile_btn float-start" href="#sidebar"><img src="assets/img/icons/bar-icon.svg"
-                alt=""></a>
-        <div class="top-nav-search mob-view">
-            <form>
-                <input type="text" class="form-control" placeholder="Search here">
-                <a class="btn"><img src="assets/img/icons/search-normal.svg" alt=""></a>
-            </form>
+        <!-- <a (click)="toggleSideBar()" id="toggle_btn" href="javascript:void(0);"><img src="assets/img/icons/bar-icon.svg"  alt=""></a> -->
+        <div class="dropdown mobile-user-menu mobile_btn float-start">
+            <a href="javascript:void(0)" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><img
+                    src="assets/img/icons/bar-icon.svg" alt=""></a>
+            <div class="dropdown-menu dropdown-menu-end">
+                    <app-sidebar-mobile></app-sidebar-mobile>
+            </div>
         </div>
+        <!-- <a (click)="toggleMobileSideBar()" id="mobile_btn" class="mobile_btn float-start">
+            <img src="assets/img/icons/bar-icon.svg" alt="">
+        </a> -->
+
+
         <ul class="nav user-menu float-end">
             <li class="nav-item dropdown d-none d-sm-block">
                 <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown"><img
@@ -64,7 +65,8 @@
                                             <p class="noti-details"><span class="noti-title">Misty Tison</span> added
                                                 <span class="noti-title">Domenic Houston</span> and <span
                                                     class="noti-title">Claire Mapes</span> to project <span
-                                                    class="noti-title">Doctor available module</span></p>
+                                                    class="noti-title">Doctor available module</span>
+                                            </p>
                                             <p class="noti-time"><span class="notification-time">8 mins ago</span></p>
                                         </div>
                                     </div>
@@ -124,7 +126,6 @@
                 </a>
                 <div class="dropdown-menu">
                     <a class="dropdown-item" style="cursor: pointer;" (click)="myProfile()">Mi perfil</a>
-                    <!-- <a class="dropdown-item" href="edit-profile.html">Edit Profile</a> -->
                     <a class="dropdown-item" style="cursor: pointer;" (click)="settings()">Ajustes</a>
                     <a class="dropdown-item" style="cursor: pointer;" (click)="logout()">Cerrar sesión</a>
                 </div>
@@ -134,16 +135,6 @@
                         src="assets/img/icons/setting-icon-01.svg" alt=""> </a>
             </li>
         </ul>
-        <div class="dropdown mobile-user-menu float-end">
-            <a href="javascript:void(0)" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i
-                    class="fa-solid fa-ellipsis-vertical"></i></a>
-            <div class="dropdown-menu dropdown-menu-end">
-                <a class="dropdown-item" (click)="myProfile()">Mi perfil</a>
-                <!-- <a class="dropdown-item" href="edit-profile.html">Edit Profile</a> -->
-                <a class="dropdown-item" (click)="settings()">Ajustes</a>
-                <a class="dropdown-item" (click)="logout()">Cerrar sesión</a>>
-            </div>
-        </div>
     </div>
 
 </div>
