@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,15 +45,19 @@ import com.tfg.app.controller.DTOS.UserDTO;
 import com.tfg.app.controller.DTOS.UserEditDTO;
 import com.tfg.app.model.Appointment;
 import com.tfg.app.model.User;
+import com.tfg.app.model.Util;
 import com.tfg.app.repository.UserRepository;
 import com.tfg.app.service.AppointmentService;
 import com.tfg.app.service.UserService;
+import com.tfg.app.service.UtilService;
 
 @RestController
 @RequestMapping("/api/users")
 public class UserRestController {
     @Autowired
     private UserService userService;
+    @Autowired
+    private UtilService utilService;
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -90,7 +95,7 @@ public class UserRestController {
 
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<User> register(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<User> register(@RequestBody UserDTO userDTO) throws NotFoundException {
         User user = new User(userDTO);
 
         if (!userService.existUsername(user.getUsername())) {
@@ -105,6 +110,10 @@ public class UserRestController {
             user.setRoles(Arrays.asList("USER"));
 
             userService.save(user);
+            int totalAux = utilService.getNumPatientsTotal() + 1;
+            System.out.println("//////////////////////////////////////"+totalAux);
+            Util utilAux = new Util(0,0,totalAux);
+            utilService.partialUpdate(2L, utilAux);
             URI location = fromCurrentRequest().path("/{id}").buildAndExpand(user.getId()).toUri();
 
             return ResponseEntity.created(location).body(user);

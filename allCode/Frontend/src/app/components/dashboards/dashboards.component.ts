@@ -1,9 +1,11 @@
 import { addAriaReferencedId } from '@angular/cdk/a11y';
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs/internal/Observable';
 import { User } from 'src/app/models/user.model';
 import { AppointmentService } from 'src/app/services/appointment.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { InterventionService } from 'src/app/services/intervention.service';
+import { UtilService } from 'src/app/services/util.service';
 
 @Component({
   selector: 'app-dashboards',
@@ -16,10 +18,16 @@ export class DashboardsComponent implements OnInit {
   numAppointmentsCompleted: number = 0;
   totalAppointments: number = 0;
   numInterventions: number = 0;
+  appointmentsComYest: number = 0;
+  numPatientsYesterday: number = 0;
+  numPatientsTotal: number = 0;
+  newPatients: number = 0;
+  incrementRate: number = 0;
+  
   today = new Date();
 
 
-  constructor(public authService: AuthService, private appointmentService: AppointmentService, private interventionService: InterventionService) {
+  constructor(public authService: AuthService, private appointmentService: AppointmentService, private interventionService: InterventionService, private utilService: UtilService) {
     this.currentUser = this.authService.currentUser()
 
   }
@@ -28,8 +36,27 @@ export class DashboardsComponent implements OnInit {
     this.isAdmin = this.authService.isAdmin();
     this.loadAppointment();
     this.loadInterventions();
+    this.utilService.getAppointmentsCompletedYesterday().subscribe(num => {
 
+      this.appointmentsComYest = num
+      console.log(this.appointmentsComYest + "appC");
+    });
+
+    this.utilService.getnumPatientsYesterday().subscribe(num => {
+
+      this.numPatientsYesterday = num
+      console.log(this.numPatientsYesterday + "patY");
+    });
+
+    this.utilService.getnumPatientsTotal().subscribe(num => {
+      this.numPatientsTotal = num
+      console.log(this.numPatientsTotal + "ESTE");
+    });
+
+    this.newPatients = this.numPatientsTotal - this.numPatientsYesterday;
+    this.incrementRate = (this.numPatientsYesterday/this.numPatientsTotal)*100;
   }
+
 
   loadAppointment() {
     this.appointmentService.getAllAppointments().subscribe(
@@ -47,14 +74,14 @@ export class DashboardsComponent implements OnInit {
     );
   }
 
-  loadInterventions(){
+  loadInterventions() {
     this.interventionService.getAllInterventions().subscribe(
       (interventions: any[]) => {
         this.numInterventions = interventions.filter(intervention => this.isSameDate(new Date(intervention.interventionDate), this.today)).length
 
       },
       (error) => {
-        console.error("Error al cargar los interventions:",error)
+        console.error("Error al cargar los interventions:", error)
       }
     );
   }
@@ -71,7 +98,7 @@ export class DashboardsComponent implements OnInit {
     ).length;
   }
 
-  
+
 
   isSameDate(date1: Date, date2: Date): boolean {
     return (

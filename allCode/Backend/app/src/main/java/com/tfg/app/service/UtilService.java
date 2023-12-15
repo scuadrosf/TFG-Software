@@ -55,28 +55,19 @@ public class UtilService {
     //     utilRepository.save(util);
     // }
 
-    public Util partialUpdate(Long id, Util partialUtil) throws NotFoundException {
-        Optional<Util> optionalUtil = utilRepository.findById(id);
-
-        if (optionalUtil.isPresent()) {
-            Util existingUtil = optionalUtil.get();
-
-            // Actualiza solo los campos no nulos proporcionados
-            if (partialUtil.getAppointmentsCompletedYesterday() != 0) {
-                existingUtil.setAppointmentsCompletedYesterday(partialUtil.getAppointmentsCompletedYesterday());
-            }
-            if (partialUtil.getNumPatientsYesterday() != 0){
-                existingUtil.setNumPatientsYesterday(partialUtil.getNumPatientsYesterday());
-            }
-            if (partialUtil.getNumPatientsTotal() != 0) {
-                existingUtil.setNumPatientsTotal(partialUtil.getNumPatientsTotal());
-            }
-
-            // Guarda la entidad actualizada
-            return utilRepository.save(existingUtil);
-        } else {
-            // Manejo de error si el Util no existe
-            throw new NotFoundException();
+    public Util partialUpdate(Long id, Util utilupd) {
+        Util util = findById(2L).get();
+        if (utilupd.getAppointmentsCompletedYesterday() != 0){
+            util.setAppointmentsCompletedYesterday(utilupd.getAppointmentsCompletedYesterday());
         }
+        if (utilupd.getNumPatientsTotal() != 0){
+            util.setNumPatientsTotal(utilupd.getNumPatientsTotal());
+        }
+        if (utilupd.getNumPatientsYesterday() != 0){
+            util.setNumPatientsYesterday(utilupd.getNumPatientsYesterday());
+        }
+
+        Util updatedUtil = utilRepository.save(util);
+        return updatedUtil;
     }
 }

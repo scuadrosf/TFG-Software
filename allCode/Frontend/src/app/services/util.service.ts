@@ -32,7 +32,7 @@ export class UtilService {
     return this.httpClient.get<number>(baseUrl + "aptComplYest");
   }
   getnumPatientsYesterday(): Observable<number> {
-    return this.httpClient.get<number>(baseUrl + "numPatientsYest");
+    return this.httpClient.get<number>(baseUrl + "numPatientsYesterday");
   }
   getnumPatientsTotal(): Observable<number> {
     return this.httpClient.get<number>(baseUrl + "numPatientsTotal");

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lowagie.text.DocumentException;
@@ -23,6 +24,7 @@ import com.tfg.app.model.Appointment;
 import com.tfg.app.model.Intervention;
 import com.tfg.app.model.User;
 import com.tfg.app.model.Util;
+import com.tfg.app.repository.UtilRepository;
 import com.tfg.app.service.AppointmentService;
 import com.tfg.app.service.InterventionService;
 import com.tfg.app.service.UserService;
@@ -37,15 +39,16 @@ public class UtilRestController {
     @Autowired
     private UserService userService;
     @Autowired
+    private UtilRepository utilRepository;
+    @Autowired
     private AppointmentService appointmentService;
     @Autowired
     private InterventionService interventionService;
     @Autowired
     private UtilService utilService;
 
-    
     @GetMapping("/exportPatientsPDF")
-    public void exportPatientListPDF(HttpServletResponse response) throws DocumentException, IOException{
+    public void exportPatientListPDF(HttpServletResponse response) throws DocumentException, IOException {
         response.setContentType("application/pdf");
 
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
@@ -62,11 +65,10 @@ public class UtilRestController {
         exporter.setPatientList(patients);
         exporter.exportPatients(response);
 
-        
     }
 
     @GetMapping("/exportAppointmentsPDF")
-    public void exportAppointmentListPDF(HttpServletResponse repsonse) throws DocumentException, IOException{
+    public void exportAppointmentListPDF(HttpServletResponse repsonse) throws DocumentException, IOException {
         repsonse.setContentType("application/pdf");
 
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
@@ -83,11 +85,11 @@ public class UtilRestController {
         exporter.setAppointmentList(appointments);
         exporter.exportAppointments(repsonse);
 
-        
     }
 
     @GetMapping("/exportInterventionsPDF/{id}")
-    public void exportInterventionsPDF(HttpServletResponse repsonse, @PathVariable Long id) throws DocumentException, IOException{
+    public void exportInterventionsPDF(HttpServletResponse repsonse, @PathVariable Long id)
+            throws DocumentException, IOException {
         repsonse.setContentType("application/pdf");
 
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
@@ -104,13 +106,12 @@ public class UtilRestController {
         exporter.setInterventionList(interventions);
         exporter.exportIntervention(repsonse);
 
-        
     }
 
     /////////////////////////////////////////////////////////////
 
     @GetMapping("/exportPatientsExcel")
-    public void exportPatientListExcel(HttpServletResponse response) throws DocumentException, IOException{
+    public void exportPatientListExcel(HttpServletResponse response) throws DocumentException, IOException {
         response.setContentType("application/octet-stream");
 
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
@@ -128,28 +129,50 @@ public class UtilRestController {
         exporter.exportPatients(response);
     }
 
-
-
     ////////////////////////////////////////////////////////////////////////////////////////
 
     @GetMapping("/aptComplYest")
-    public int appointmentsCompletedYesterday(){
+    public int appointmentsCompletedYesterday() {
         return utilService.getAppointmentsCompletedYesterday();
     }
 
-    @GetMapping("/")
-    public int numPatientsYesterday(){
+    @GetMapping("/numPatientsYesterday")
+    public int numPatientsYesterday() {
         return utilService.getNumPatientsTotal();
     }
 
     @GetMapping("/numPatientsTotal")
-    public int numPatientsTotal(){
+    public int numPatientsTotal() {
         return utilService.getNumPatientsTotal();
     }
 
+    // @PutMapping("/update")
+    // public ResponseEntity<Util> updateUtil(@RequestBody Util partialUtil) throws
+    // NotFoundException {
+    // Util updatedUtil = utilService.partialUpdate(2L, partialUtil);
+    // return ResponseEntity.ok(updatedUtil);
+    // }
+
     @PutMapping("/update")
-    public ResponseEntity<Util> updateUtil(@RequestBody Util partialUtil) throws NotFoundException {
-        Util updatedUtil = utilService.partialUpdate(2L, partialUtil);
+    public ResponseEntity<?> updateUtil(@RequestParam(value = "appointmentsCompletedYesterday") int aptComplYest,
+            @RequestParam(value = "numPatientsYesterday") int numPatientsYesterday,
+            @RequestParam(value = "numPatientsTotal") int numPatientsTotal) {
+
+        // Util util = utilService.findById(2L).get();
+        Util utiltoUpdt = new Util();
+
+        if (aptComplYest != 0) {
+            utiltoUpdt.setAppointmentsCompletedYesterday(aptComplYest);
+        }
+        if (numPatientsTotal != 0) {
+            utiltoUpdt.setNumPatientsTotal(numPatientsTotal);
+        }
+        if (numPatientsYesterday != 0) {
+            utiltoUpdt.setNumPatientsYesterday(numPatientsYesterday);
+        }
+        Util updatedUtil = utilService.partialUpdate(2L, utiltoUpdt);
+
+        // utilRepository.save(updatedUtil);
         return ResponseEntity.ok(updatedUtil);
     }
 
