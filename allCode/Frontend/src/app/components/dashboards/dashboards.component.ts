@@ -1,6 +1,7 @@
 import { addAriaReferencedId } from '@angular/cdk/a11y';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/internal/Observable';
+import { timer } from 'rxjs/internal/observable/timer';
 import { User } from 'src/app/models/user.model';
 import { AppointmentService } from 'src/app/services/appointment.service';
 import { AuthService } from 'src/app/services/auth.service';
@@ -23,7 +24,7 @@ export class DashboardsComponent implements OnInit {
   numPatientsTotal: number = 0;
   newPatients: number = 0;
   incrementRate: number = 0;
-  
+
   today = new Date();
 
 
@@ -37,26 +38,34 @@ export class DashboardsComponent implements OnInit {
     this.loadAppointment();
     this.loadInterventions();
     this.utilService.getAppointmentsCompletedYesterday().subscribe(num => {
-
-      this.appointmentsComYest = num
+      this.appointmentsComYest = num;
       console.log(this.appointmentsComYest + "appC");
     });
 
     this.utilService.getnumPatientsYesterday().subscribe(num => {
-
-      this.numPatientsYesterday = num
+      this.numPatientsYesterday = num;
       console.log(this.numPatientsYesterday + "patY");
     });
 
     this.utilService.getnumPatientsTotal().subscribe(num => {
-      this.numPatientsTotal = num
+      this.numPatientsTotal = num;
+
+      this.newPatients = this.loadRate(this.numPatientsTotal, this.numPatientsYesterday);
+
+      console.log(this.newPatients + "new");
       console.log(this.numPatientsTotal + "ESTE");
     });
 
-    this.newPatients = this.numPatientsTotal - this.numPatientsYesterday;
-    this.incrementRate = (this.numPatientsYesterday/this.numPatientsTotal)*100;
+    // timer(0, 10000).subscribe(() => {
+    //   utilUpdt: Util
+    //   this.utilService.updateUtil()
+    // });
   }
 
+
+  loadRate(numPatientsTotal: number, numPatientsYesterday: number) {
+    return numPatientsTotal - numPatientsYesterday;
+  }
 
   loadAppointment() {
     this.appointmentService.getAllAppointments().subscribe(

@@ -38,7 +38,7 @@ export class UtilService {
     return this.httpClient.get<number>(baseUrl + "numPatientsTotal");
   }
 
-  updateUtil(partialUtil: Partial<Util>): Observable<Util> {
+  updateUtil(partialUtil: Util): Observable<Util> {
     return this.httpClient.put<Util>(baseUrl + "update", partialUtil);
   }
 }
