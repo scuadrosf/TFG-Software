@@ -13,11 +13,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.tfg.app.model.User;
+import com.tfg.app.model.Util;
 
 @Service
 public class InitDatabase {
     @Autowired
     private UserService users;
+    @Autowired
+    private UtilService utilService;
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -42,6 +45,9 @@ public class InitDatabase {
             e.printStackTrace();
         }
         users.save(user);
+
+        Util util = new Util(0,0,0);
+        utilService.save(util);
     }
 
     private void setProfileAvatarContent(User user, String profileAvatarUrl) throws IOException {

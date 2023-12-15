@@ -9,8 +9,12 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,9 +22,11 @@ import com.lowagie.text.DocumentException;
 import com.tfg.app.model.Appointment;
 import com.tfg.app.model.Intervention;
 import com.tfg.app.model.User;
+import com.tfg.app.model.Util;
 import com.tfg.app.service.AppointmentService;
 import com.tfg.app.service.InterventionService;
 import com.tfg.app.service.UserService;
+import com.tfg.app.service.UtilService;
 import com.tfg.app.util.ExporterExcel;
 import com.tfg.app.util.ExporterPDF;
 
@@ -34,6 +40,8 @@ public class UtilRestController {
     private AppointmentService appointmentService;
     @Autowired
     private InterventionService interventionService;
+    @Autowired
+    private UtilService utilService;
 
     
     @GetMapping("/exportPatientsPDF")
@@ -119,4 +127,30 @@ public class UtilRestController {
 
         exporter.exportPatients(response);
     }
+
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////
+
+    @GetMapping("/aptComplYest")
+    public int appointmentsCompletedYesterday(){
+        return utilService.getAppointmentsCompletedYesterday();
+    }
+
+    @GetMapping("/")
+    public int numPatientsYesterday(){
+        return utilService.getNumPatientsTotal();
+    }
+
+    @GetMapping("/numPatientsTotal")
+    public int numPatientsTotal(){
+        return utilService.getNumPatientsTotal();
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<Util> updateUtil(@RequestBody Util partialUtil) throws NotFoundException {
+        Util updatedUtil = utilService.partialUpdate(2L, partialUtil);
+        return ResponseEntity.ok(updatedUtil);
+    }
+
 }

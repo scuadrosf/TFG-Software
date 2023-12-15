@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { Util } from '../models/util.model';
 
 
 const baseUrl = "/api/util/"
@@ -20,10 +21,24 @@ export class UtilService {
     return this.httpClient.get(baseUrl + 'exportAppointmentsPDF', { responseType: 'blob' });
   }
   exportInterventionsPDF(id: number): Observable<Blob> {
-    return this.httpClient.get(baseUrl + 'exportInterventionsPDF/'+id, { responseType: 'blob' });
+    return this.httpClient.get(baseUrl + 'exportInterventionsPDF/' + id, { responseType: 'blob' });
   }
 
   exportPatientsExcel(): Observable<Blob> {
     return this.httpClient.get(baseUrl + 'exportPatientsExcel', { responseType: 'blob' });
+  }
+
+  getAppointmentsCompletedYesterday(): Observable<number> {
+    return this.httpClient.get<number>(baseUrl + "aptComplYest");
+  }
+  getnumPatientsYesterday(): Observable<number> {
+    return this.httpClient.get<number>(baseUrl + "numPatientsYest");
+  }
+  getnumPatientsTotal(): Observable<number> {
+    return this.httpClient.get<number>(baseUrl + "numPatientsTotal");
+  }
+
+  updateUtil(partialUtil: Partial<Util>): Observable<Util> {
+    return this.httpClient.put<Util>(baseUrl + "update", partialUtil);
   }
 }
