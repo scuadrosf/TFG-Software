@@ -47,4 +47,8 @@ export class InterventionService {
     return this.httpClient.delete(baseUrl + 'delete/' + intervention.id).subscribe();
   }
 
+  getAllInterventions(): Observable<Intervention[]> {
+    return this.httpClient.get<Intervention[]>(baseUrl+"all")
+  }
+
 }

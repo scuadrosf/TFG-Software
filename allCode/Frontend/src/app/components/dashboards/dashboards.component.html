@@ -38,53 +38,43 @@
             </div>
         </div>
 
-        <div class="doctor-list-blk">
+        <div class="doctor-list-blk" *ngIf="authService.isAdmin()">
             <div class="row">
-                <div class="col-xl-3 col-md-6">
+                <div class="col-xl-4 col-md-6">
                     <div class="doctor-widget border-right-bg">
                         <div class="doctor-box-icon flex-shrink-0">
                             <img src="assets/img/icons/doctor-dash-01.svg" alt="">
                         </div>
                         <div class="doctor-content dash-count flex-grow-1">
-                            <h4><span class="counter-up">30</span><span>/85</span><span class="status-green">+60%</span>
+                            <h4><span class="counter-up">{{numAppointmentsNoCompleted}}</span><span>/{{totalAppointments}}</span>
+                                <span *ngIf="numAppointmentsNoCompleted <= 4" class="status-green">¡SIGUE ASÍ, NO QUEDA NADA!</span>
+                                <span *ngIf="numAppointmentsNoCompleted > 4" class="status-pink">¡A POR ELLO!</span>
                             </h4>
-                            <h5>Appointments</h5>
+                            <h5>Citas pendientes para hoy</h5>
                         </div>
                     </div>
                 </div>
-                <div class="col-xl-3 col-md-6">
+                <div class="col-xl-4 col-md-6">
                     <div class="doctor-widget border-right-bg">
                         <div class="doctor-box-icon flex-shrink-0">
                             <img src="assets/img/icons/doctor-dash-02.svg" alt="">
                         </div>
                         <div class="doctor-content dash-count flex-grow-1">
-                            <h4><span class="counter-up">20</span><span>/125</span><span class="status-pink">-20%</span>
+                            <h4><span class="counter-up">{{numAppointmentsCompleted}}</span><span ></span>
                             </h4>
-                            <h5>Consultations</h5>
+                            <h5>Consultas realizadas hoy</h5>
                         </div>
                     </div>
                 </div>
-                <div class="col-xl-3 col-md-6">
+                <div class="col-xl-4 col-md-6">
                     <div class="doctor-widget border-right-bg">
                         <div class="doctor-box-icon flex-shrink-0">
                             <img src="assets/img/icons/doctor-dash-03.svg" alt="">
                         </div>
                         <div class="doctor-content dash-count flex-grow-1">
-                            <h4><span class="counter-up">12</span><span>/30</span><span class="status-green">+40%</span>
+                            <h4><span class="counter-up">{{numInterventions}}</span><span>/{{totalAppointments}}</span><span *ngIf="numInterventions>totalAppointments" class="status-green">¡WOW TE SUPERASTE!</span>
                             </h4>
-                            <h5>Operations</h5>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-3 col-md-6">
-                    <div class="doctor-widget">
-                        <div class="doctor-box-icon flex-shrink-0">
-                            <img src="assets/img/icons/doctor-dash-04.svg" alt="">
-                        </div>
-                        <div class="doctor-content dash-count flex-grow-1">
-                            <h4>$<span class="counter-up">530</span><span></span><span class="status-green">+50%</span>
-                            </h4>
-                            <h5>Earnings</h5>
+                            <h5>Intervenciones realizadas hoy</h5>
                         </div>
                     </div>
                 </div>
