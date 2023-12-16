@@ -44,6 +44,16 @@ export class AppointmentService {
   }
 
   deleteAppointment(id: number) {
+    const confirmation = window.confirm('Esta seguro de eliminar la cita');
+    if (confirmation) {
+      return this.httpClient.delete(baseUrl + "delete/" + id);
+      console.log("Cita eliminada")
+      // this.ngOnInit();
+    }
+    else{
+      console.log("Confirmación de eliminado cancelada")
+    }
+    // this.ngOnInit();
     return this.httpClient.delete(baseUrl + "delete/" + id);
   }
 

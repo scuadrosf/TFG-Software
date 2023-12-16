@@ -94,15 +94,18 @@ export class AppointmentComponent implements OnInit {
   }
 
   deleteAppointment(id: number) {
-    const confirmation = window.confirm('Esta seguro de eliminar la cita');
-    if (confirmation) {
+    // const confirmation = window.confirm('Esta seguro de eliminar la cita');
+    // if (confirmation) {
+      // this.appointmentService.deleteAppointment(id).subscribe();
       this.appointmentService.deleteAppointment(id).subscribe();
-      console.log("Cita eliminada")
       this.ngOnInit();
-    }
-    else{
-      console.log("Confirmación de eliminado cancelada")
-    }
+      // this.ngOnInit();
+      console.log("Cita eliminada")
+    //   this.ngOnInit();
+    // }
+    // else{
+      // console.log("Confirmación de eliminado cancelada")
+    // }
     this.ngOnInit();
   }
 
