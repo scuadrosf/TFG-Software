@@ -22,7 +22,6 @@ import com.tfg.app.model.Appointment;
 import com.tfg.app.model.Intervention;
 import com.tfg.app.model.User;
 import com.tfg.app.model.Util;
-import com.tfg.app.repository.UtilRepository;
 import com.tfg.app.service.AppointmentService;
 import com.tfg.app.service.InterventionService;
 import com.tfg.app.service.UserService;
@@ -36,8 +35,6 @@ public class UtilRestController {
 
     @Autowired
     private UserService userService;
-    @Autowired
-    private UtilRepository utilRepository;
     @Autowired
     private AppointmentService appointmentService;
     @Autowired

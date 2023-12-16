@@ -1,7 +1,7 @@
 package com.tfg.app.model;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -24,10 +24,10 @@ public class Appointment {
 
     @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDate bookDate;
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime fromDate;
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime toDate;
+    @JsonFormat(pattern="HH:mm:ss")
+    private LocalTime fromDate;
+    @JsonFormat(pattern="HH:mm:ss")
+    private LocalTime toDate;
     private String description;
     private String additionalNote;
 
@@ -39,7 +39,7 @@ public class Appointment {
 
     private boolean completed;
 
-    public Appointment(Long id, LocalDate bookDate, LocalDateTime from, LocalDateTime to, String description, List<Intervention> interventions,
+    public Appointment(Long id, LocalDate bookDate, LocalTime from, LocalTime to, String description, List<Intervention> interventions,
             User user, boolean completed) {
         this.id = id;
         this.bookDate = bookDate;
@@ -82,19 +82,19 @@ public class Appointment {
         this.bookDate = bookDate;
     }
 
-    public LocalDateTime getFromDate() {
+    public LocalTime getFromDate() {
         return fromDate;
     }
 
-    public void setFromDate(LocalDateTime fromDate) {
+    public void setFromDate(LocalTime fromDate) {
         this.fromDate = fromDate;
     }
 
-    public LocalDateTime getToDate() {
+    public LocalTime getToDate() {
         return toDate;
     }
 
-    public void setToDate(LocalDateTime toDate) {
+    public void setToDate(LocalTime toDate) {
         this.toDate = toDate;
     }
 

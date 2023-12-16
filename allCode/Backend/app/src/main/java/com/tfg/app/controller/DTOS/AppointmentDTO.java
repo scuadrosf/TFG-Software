@@ -1,18 +1,24 @@
 package com.tfg.app.controller.DTOS;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.LocalTime;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class AppointmentDTO {
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate bookDate;
-    private LocalDateTime fromDate;
-    private LocalDateTime toDate;
+    @JsonFormat(pattern="HH:mm")
+    private LocalTime fromDate;
+    @JsonFormat(pattern="HH:mm")
+    private LocalTime toDate;
     private String description;
     private String additionalNote;
     private boolean completed;
-    
-    public AppointmentDTO(LocalDate bookDate, LocalDateTime fromDate, LocalDateTime toDate, String description, String additionalNote, boolean completed) {
+
+    public AppointmentDTO(LocalDate bookDate, LocalTime fromDate, LocalTime toDate, String description,
+            String additionalNote, boolean completed) {
         this.bookDate = bookDate;
         this.fromDate = fromDate;
         this.toDate = toDate;
@@ -29,19 +35,19 @@ public class AppointmentDTO {
         this.bookDate = bookDate;
     }
 
-    public LocalDateTime getFromDate() {
+    public LocalTime getFromDate() {
         return fromDate;
     }
 
-    public void setFromDate(LocalDateTime fromDate) {
+    public void setFromDate(LocalTime fromDate) {
         this.fromDate = fromDate;
     }
 
-    public LocalDateTime getToDate() {
+    public LocalTime getToDate() {
         return toDate;
     }
 
-    public void setToDate(LocalDateTime toDate) {
+    public void setToDate(LocalTime toDate) {
         this.toDate = toDate;
     }
 
@@ -68,5 +74,5 @@ public class AppointmentDTO {
     public void setCompleted(boolean completed) {
         this.completed = completed;
     }
-    
+
 }

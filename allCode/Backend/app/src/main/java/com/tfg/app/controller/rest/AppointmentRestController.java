@@ -5,7 +5,7 @@ import static org.springframework.web.servlet.support.ServletUriComponentsBuilde
 import java.net.URI;
 import java.security.Principal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -124,10 +124,10 @@ public class AppointmentRestController {
             appointment.setBookDate(LocalDate.parse(bookDate));
         }
         if (fromDate != null){
-            appointment.setFromDate(LocalDateTime.parse(fromDate));
+            appointment.setFromDate(LocalTime.parse(fromDate));
         }
         if (toDate != null){
-            appointment.setToDate(LocalDateTime.parse(toDate));
+            appointment.setToDate(LocalTime.parse(toDate));
         }
         if (description != null){
             appointment.setDescription(description);

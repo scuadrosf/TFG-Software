@@ -39,21 +39,15 @@ export class DashboardsComponent implements OnInit {
     this.loadInterventions();
     this.utilService.getAppointmentsCompletedYesterday().subscribe(num => {
       this.appointmentsComYest = num;
-      console.log(this.appointmentsComYest + "appC");
     });
 
     this.utilService.getnumPatientsYesterday().subscribe(num => {
       this.numPatientsYesterday = num;
-      console.log(this.numPatientsYesterday + "patY");
     });
 
     this.utilService.getnumPatientsTotal().subscribe(num => {
       this.numPatientsTotal = num;
-
       this.newPatients = this.loadRate(this.numPatientsTotal, this.numPatientsYesterday);
-
-      console.log(this.newPatients + "new");
-      console.log(this.numPatientsTotal + "ESTE");
     });
 
     // timer(0, 10000).subscribe(() => {
@@ -73,9 +67,7 @@ export class DashboardsComponent implements OnInit {
         this.numAppointmentsNoCompleted = this.countAppointmentsNoCompleted(appointments, this.today);
         this.numAppointmentsCompleted = this.countAppointmentsCompleted(appointments, this.today);
         this.totalAppointments = appointments.filter(appointment => this.isSameDate(new Date(appointment.bookDate), this.today)).length;
-
-        console.log("Citas pendientes: " + this.numAppointmentsNoCompleted + "/" + this.totalAppointments);
-
+        // console.log("Citas pendientes: " + this.numAppointmentsNoCompleted + "/" + this.totalAppointments);
       },
       (error) => {
         console.error("Error al cargar los appointments:", error)
@@ -87,7 +79,6 @@ export class DashboardsComponent implements OnInit {
     this.interventionService.getAllInterventions().subscribe(
       (interventions: any[]) => {
         this.numInterventions = interventions.filter(intervention => this.isSameDate(new Date(intervention.interventionDate), this.today)).length
-
       },
       (error) => {
         console.error("Error al cargar los interventions:", error)

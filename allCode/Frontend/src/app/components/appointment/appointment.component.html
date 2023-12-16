@@ -88,8 +88,8 @@
                     <td *ngIf="!appointment.completed">{{appointment.user.username}}</td>
                     <td *ngIf="!appointment.completed">{{appointment.user.birth}}</td>
                     <td *ngIf="!appointment.completed">{{appointment.description}}</td>
-                    <td *ngIf="!appointment.completed">{{appointment.fromDate | date:'dd-MM-yyyy HH:mm'}}</td>
-                    <td *ngIf="!appointment.completed">{{appointment.toDate | date:'dd-MM-yyyy HH:mm'}}</td>
+                    <td *ngIf="!appointment.completed">{{appointment.fromDate}}</td>
+                    <td *ngIf="!appointment.completed">{{appointment.toDate}}</td>
                     <td *ngIf="!appointment.completed" class="text-end">
                       <div class="dropdown dropdown-action">
                         <a href="javascript:void(0);" class="action-icon dropdown-toggle" data-bs-toggle="dropdown"
