@@ -1,5 +1,5 @@
 import { addAriaReferencedId } from '@angular/cdk/a11y';
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/internal/Observable';
 import { timer } from 'rxjs/internal/observable/timer';
 import { Appointment } from 'src/app/models/appointment.model';
