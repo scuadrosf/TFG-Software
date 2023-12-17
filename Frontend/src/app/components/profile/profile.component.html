@@ -1,0 +1,243 @@
+<div class="page-wrapper">
+    <div class="content">
+
+        <div class="row">
+            <div class="col-sm-7 col-6">
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a routerLink="/dashboard">Inicio </a></li>
+                    <li class="breadcrumb-item"><i class="feather icon-chevron-right"></i></li>
+                    <li class="breadcrumb-item active">Perfil de {{user.name}}</li>
+                </ul>
+            </div>
+
+            <div class="col-sm-5 col-6 text-end m-b-30 btn-group mb-3" role="group">
+                <!-- <a routerLink="/editprofile/{{user.id}}" class="btn btn-primary btn-rounded"><i class="fa fa-plus"></i> Editar -->
+                <a routerLink="/edit-patient/{{idUser}}" class="btn btn-outline-primary btn-rounded mr-2"><i
+                        class="fa fa-pen-to-square"></i> Editar
+                    perfil</a>
+                <a routerLink="/add-appointment/{{idUser}}" class="btn btn-outline-primary btn-rounded mr-3"><i
+                        class="fa fa-plus"></i> Dar cita</a>
+                <a routerLink="/appointment-list/{{idUser}}" class="btn btn-outline-primary btn-rounded"><i
+                        class="fa fa-plus"></i> Añadir intervención</a>
+            </div>
+        </div>
+        <div class="card-box profile-header">
+            <div class="row">
+                <div class="col-md-12">
+                    <div *ngIf="!isAdmin" class="profile-view">
+                        <div class="profile-img-wrap">
+                            <div class="profile-img">
+                                <a href="javascript:void(0);"><img class="avatar" [src]="profileAvatarUrls" alt=""></a>
+                            </div>
+                        </div>
+                        <div class="profile-basic">
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <div class="profile-info-left">
+                                        <h3 class="user-name m-t-0 mb-0">{{user.name}}
+                                            {{user.lastName}}</h3>
+                                        <div>DNI: {{user.username}}</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-7">
+                                    <ul class="personal-info">
+                                        <li>
+                                            <span class="title">Teléfono:</span>
+                                            <span class="text">{{user.phone}}</span>
+                                        </li>
+                                        <li>
+                                            <span class="title">Correo electrónico:</span>
+                                            <span class="text">{{user.email}}</span>
+                                        </li>
+                                        <li>
+                                            <span class="title">Fecha de nacimiento:</span>
+                                            <span class="text">{{user.birth}}</span>
+                                        </li>
+                                        <li>
+                                            <span class="title">Dirección:</span>
+                                            <span class="text">{{user.address}},
+                                                {{user.city}},
+                                                {{user.postalCode}},
+                                                {{user.country}}</span>
+                                        </li>
+                                        <li>
+                                            <span class="title">Género:</span>
+                                            <span class="text">{{user.gender}}</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="isAdmin" class="profile-view">
+                        <div class="user-img">
+                            <div class="profile-img">
+                                <a href="javascript:void(0);"><img class="avatar" [src]="profileAvatarUrls" alt=""></a>
+                            </div>
+                        </div>
+                        <div class="profile-basic">
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <div class="profile-info-left">
+                                        <h3 class="user-name m-t-0 mb-0">{{user.name}}
+                                            {{user.lastName}}</h3>
+                                        <div>DNI: {{user.username}}</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-7">
+                                    <ul class="personal-info">
+                                        <li>
+                                            <span class="title">Correo electrónico:</span>
+                                            <span class="text">{{user.email}}</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="profile-tabs">
+            <ul class="nav nav-tabs nav-tabs-bottom">
+                <li class="nav-item"><a class="nav-link active" href="#history" data-bs-toggle="tab">Historial
+                        médico</a></li>
+                <li class="nav-item"><a class="nav-link" href="#documents" data-bs-toggle="tab">Documentos</a></li>
+            </ul>
+
+            <div class="tab-content">
+                <div class="tab-pane show active" id="history">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card-box">
+                                <h3 class="card-title">Registro de intervenciones</h3>
+                                <div *ngIf="(interventions.length === 0)">
+                                    <p>{{user.name}} {{user.lastName}} no ha tenido intervenciones</p>
+                                </div>
+                                <div class="experience-box" *ngFor="let intervention of interventions">
+                                    <ul class="experience-list">
+                                        <li>
+                                            <div class="experience-user">
+                                                <div class="before-circle"></div>
+                                            </div>
+                                            <div class="experience-content">
+                                                <div class="timeline-content">
+                                                    <div class="dropdown dropdown-action">
+                                                        <a href="javascript:void(0);"
+                                                            class="action-icon dropdown-toggle"
+                                                            data-bs-toggle="dropdown" aria-expanded="false"><i
+                                                                class="fa fa-ellipsis-v"></i></a>
+                                                        <div class="dropdown-menu dropdown-menu-end">
+                                                            <a class="dropdown-item"
+                                                                routerLink="/user/{{user.id}}/edit-intervention/{{intervention.id}}"><i
+                                                                    class="fa-solid fa-pen-to-square m-r-5"></i> Editar
+                                                                intervención</a>
+                                                            <a class="dropdown-item" style="cursor: pointer;"
+                                                                (click)="deleteIntervention(intervention)"
+                                                                data-bs-toggle="modal"><i
+                                                                    class="fa fa-trash-alt m-r-5"></i> Eliminar
+                                                                intervención</a>
+                                                        </div>
+                                                    </div>
+                                                    <a routerLink="/documents/{{intervention.id}}">{{intervention.type}}</a>
+                                                    <!-- Esto llevará justamente los documentos de esa intervención -->
+                                                    <span class="time">{{intervention.interventionDate |
+                                                        date:'dd-MM-yyyy'}}</span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="documents">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card-box">
+                                <h3 class="card-title">Documentos</h3>
+                                <div *ngIf="(documents.length === 0)">
+                                    <p>{{user.name}} {{user.lastName}} no tiene documentos</p>
+                                </div>
+                                <div class="experience-box" *ngFor="let document of documents">
+                                    <ul class="experience-list">
+                                        <li>
+                                            <div class="experience-user">
+                                                <div class="before-circle"></div>
+                                            </div>
+                                            <div class="experience-content">
+                                                <div class="timeline-content">
+                                                    <div class="dropdown dropdown-action">
+                                                        <a href="javascript:void(0);"
+                                                            class="action-icon dropdown-toggle"
+                                                            data-bs-toggle="dropdown" aria-expanded="false"><i
+                                                                class="fa fa-ellipsis-v"></i></a>
+                                                        <div class="dropdown-menu dropdown-menu-end">
+                                                            <a class="dropdown-item" style="cursor: pointer;"
+                                                                data-bs-toggle="modal" data-bs-target="#ventanaForm"
+                                                                (click)="showChangeDocumentModalById(document?.id)">
+                                                                <i class="fa-solid fa-pen-to-square m-r-5"></i> Cambiar
+                                                                documento
+                                                            </a>
+                                                            <a class="dropdown-item" style="cursor: pointer;"
+                                                                (click)="deleteDocument(document)"
+                                                                data-bs-toggle="modal"><i
+                                                                    class="fa fa-trash-alt m-r-5"></i> Eliminar
+                                                                documento</a>
+                                                        </div>
+                                                    </div>
+                                                    <span class="">{{document.intervention.type}} - </span>
+                                                    <a style="cursor: pointer;"
+                                                        (click)="download(document.id)">{{document.fileName}}</a>
+                                                    <span class="time">{{document.creationDate|
+                                                        date:'dd-MM-yyyy'}}</span>
+
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <p> ** Para visualizar más detalles sobre la intervención haga click en la intervención
+                                deseada </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button class="btn btn-success" style="position: fixed; bottom: 20px; right: 20px" (click)="exportPDF()">
+        Descargar intervenciones</button>
+
+
+
+    <!-- Change document  -->
+    <div class="modal fade" id="ventanaForm" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Cambiar fichero</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group local-top-form">
+                        <label class="local-top">Fichero adjunto <span class="login-danger">*</span></label>
+                        <div class="settings-btn upload-files-avator">
+                            <div *ngIf="selectedFileName">{{ selectedFileName }}</div>
+                            <input type="file" name="file" id="file"  (change)="onFileSelected($event)"
+                                class="hide-input" accept="application/pdf">
+                            <label for="file" class="upload">Elegir fichero</label>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="submit()">Guardar
+                        cambios</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,29 @@
+<!-- sidebar.component.html -->
+
+<div *ngIf="authService.isLogged()">
+    <h2 class="sidebarNew"> Menú</h2>
+    <div ngbDropdown class="sidebarNew"><a type="button" class="btn btn-outline-primary bto" routerLink="/dashboard">Inicio </a></div>
+  
+    <div *ngIf="!authService.isAdmin()" ngbDropdown class="sidebarNew"><a type="button" class="btn btn-outline-primary bto" routerLink="/add-appointment/{{this.authService.currentUser().id}}">Pedir cita </a></div>
+  
+    <div ngbDropdown class="sidebarNew">
+      <button *ngIf="authService.isAdmin()" type="button" class="btn btn-outline-primary bto" id="dropdownBasic1" ngbDropdownToggle>
+        Pacientes
+      </button>
+      <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+        <a routerLink="/patient-list" ngbDropdownItem>Lista de pacientes</a>
+        <a routerLink="/add-patient" ngbDropdownItem>Dar de alta paciente</a>
+      </div>
+    </div>
+  
+    <div ngbDropdown class="sidebarNew">
+      <button *ngIf="authService.isAdmin()" type="button" class="btn btn-outline-primary bto" id="dropdownBasic1" ngbDropdownToggle>
+        Citas
+      </button>
+      <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+        <a routerLink="/appointment-list" ngbDropdownItem>Lista de citas</a>
+        <a routerLink="/add-appointment" ngbDropdownItem>Dar cita</a>
+      </div>
+    </div>
+    
+  </div>  
