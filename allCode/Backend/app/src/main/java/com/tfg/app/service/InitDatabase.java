@@ -46,8 +46,32 @@ public class InitDatabase {
         }
         users.save(user);
 
-        Util util = new Util(0,0,0);
+        Util util = new Util(0, 0, 0);
         utilService.save(util);
+
+        User user2 = new User();
+
+        user2.setName("Sergio");
+        user2.setLastName("Cuadros Flores");
+        user2.setUsername("54362066W");
+        user2.setPhone("444444444");
+        user2.setEmail("sercua.flores@gmail.com");
+        user2.setPasswordEncoded(passwordEncoder.encode("pass"));
+        user2.setRoles("USER");
+        user2.setBirth(LocalDate.of(2002, 12, 24));
+        user2.setGender("Masculino");
+        user2.setAddress("Calle Benito Perez");
+        user2.setCity("Madrid");
+        user2.setCountry("España");
+        user2.setPostalCode("28220");
+        String avatarUrlUser = "/static/assets/predAvatar.png";
+        try {
+            setProfileAvatarContent(user2, avatarUrlUser);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        users.save(user2);
     }
 
     private void setProfileAvatarContent(User user, String profileAvatarUrl) throws IOException {
