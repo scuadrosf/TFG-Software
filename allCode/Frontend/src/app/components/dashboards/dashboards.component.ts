@@ -3,20 +3,25 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/internal/Observable';
 import { timer } from 'rxjs/internal/observable/timer';
 import { Appointment } from 'src/app/models/appointment.model';
+import { Intervention } from 'src/app/models/intervention.model';
 import { User } from 'src/app/models/user.model';
 import { AppointmentService } from 'src/app/services/appointment.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { InterventionService } from 'src/app/services/intervention.service';
+import { UserService } from 'src/app/services/user.service';
 import { UtilService } from 'src/app/services/util.service';
 
 @Component({
   selector: 'app-dashboards',
-  templateUrl: './dashboards.component.html'
+  templateUrl: './dashboards.component.html',
+  styleUrls: ['./dashboards.component.scss']
 })
 export class DashboardsComponent implements OnInit {
   isAdmin: boolean = false
   currentUser!: User
+  appointmentsUser: Appointment[] = [];
   appointmentsToday: Appointment[] = [];
+  interventionsUser: Intervention[] = [];
   numAppointmentsNoCompleted: number = 0;
   numAppointmentsCompleted: number = 0;
   totalAppointmentsToday: number = 0;
@@ -31,12 +36,18 @@ export class DashboardsComponent implements OnInit {
   today = new Date();
 
 
-  constructor(public authService: AuthService, private appointmentService: AppointmentService, private interventionService: InterventionService, private utilService: UtilService) {
-    this.currentUser = this.authService.currentUser()
-
+  constructor(private userService: UserService, public authService: AuthService, private appointmentService: AppointmentService, private interventionService: InterventionService, private utilService: UtilService) {
   }
 
   ngOnInit(): void {
+    this.userService.getMe().subscribe((response) => {
+      this.currentUser = response;
+
+      this.loadInterventionsUser(this.currentUser.id);
+      this.loadAppointmentsUser(this.currentUser.id);
+      
+    })
+
     this.isAdmin = this.authService.isAdmin();
     this.loadAppointment();
     this.loadInterventions();
@@ -59,19 +70,22 @@ export class DashboardsComponent implements OnInit {
     // });
   }
 
+  loadAppointmentsUser(id: number){
+    this.appointmentService.getAllAppointmentsByUser(id).subscribe(list => 
+      this.appointmentsUser = list)
+  }
+
+  loadInterventionsUser(id: number) {
+    this.interventionService.getUserInterventions(id).subscribe(list =>
+      this.interventionsUser = list
+
+    )
+  }
+
   deleteAppointment(id: number) {
-    // const confirmation = window.confirm('Esta seguro de eliminar la cita');
-    // if (confirmation) {
-    // this.appointmentService.deleteAppointment(id).subscribe();
     this.appointmentService.deleteAppointment(id).subscribe();
     this.ngOnInit();
-    // this.ngOnInit();
     console.log("Cita eliminada")
-    //   this.ngOnInit();
-    // }
-    // else{
-    // console.log("Confirmación de eliminado cancelada")
-    // }
     this.ngOnInit();
   }
 
@@ -87,8 +101,6 @@ export class DashboardsComponent implements OnInit {
         this.numAppointmentsCompleted = this.countAppointmentsCompleted(appointments, this.today);
         this.totalAppointmentsToday = appointments.filter(appointment => this.isSameDate(new Date(appointment.bookDate), this.today)).length;
         this.appointmentsToday = appointments.filter(appointment => this.isSameDate(new Date(appointment.bookDate), this.today));
-        // console.log("Appoitnments today: "+ this.appointmentsToday);
-        // console.log("Citas pendientes: " + this.numAppointmentsNoCompleted + "/" + this.totalAppointments);
       },
       (error) => {
         console.error("Error al cargar los appointments:", error)
@@ -159,21 +171,16 @@ export class DashboardsComponent implements OnInit {
     const fromDateTime = new Date();
     fromDateTime.setHours(parseInt(fromTimeParts[0], 10));
     fromDateTime.setMinutes(parseInt(fromTimeParts[1], 10));
-    // fromDateTime.setSeconds(parseInt(fromTimeParts[2], 10));
 
     const toDateTime = new Date();
     toDateTime.setHours(parseInt(toTimeParts[0], 10));
     toDateTime.setMinutes(parseInt(toTimeParts[1], 10));
-    // toDateTime.setSeconds(parseInt(toTimeParts[2], 10));
 
     const timeDifferenceInMilliseconds = toDateTime.getTime() - fromDateTime.getTime();
 
     // Convierte la diferencia de tiempo a horas y minutos
     const hoursDifference = Math.floor(timeDifferenceInMilliseconds / (1000 * 60 * 60));
     const minutesDifference = Math.floor((timeDifferenceInMilliseconds % (1000 * 60 * 60)) / (1000 * 60));
-
-    // Ahora, hoursDifference y minutesDifference contienen la diferencia de tiempo en horas y minutos
-    console.log(`Diferencia de tiempo: ${hoursDifference} horas y ${minutesDifference} minutos`);
 
     return minutesDifference.toString();
 

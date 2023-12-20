@@ -62,8 +62,9 @@
                     <th mat-sort-header="name">Nombre</th>
                     <th mat-sort-header="lastName">Apellidos</th>
                     <th mat-sort-header="dni">DNI</th>
-                    <th mat-sort-header="birth">Fecha de nacimiento</th>
+                    <!-- <th mat-sort-header="birth">Fecha de nacimiento</th> -->
                     <th mat-sort-header="reason">Motivo</th>
+                    <th mat-sort-header="bookDate">Día</th>
                     <th mat-sort-header="fromDate">Hora inicio</th>
                     <th mat-sort-header="toDate">Hora fin</th>
                     <th></th>
@@ -86,10 +87,11 @@
                         {{appointment.user.name}}</a></td>
                     <td *ngIf="!appointment.completed">{{appointment.user.lastName}}</td>
                     <td *ngIf="!appointment.completed">{{appointment.user.username}}</td>
-                    <td *ngIf="!appointment.completed">{{appointment.user.birth}}</td>
+                    <!-- <td *ngIf="!appointment.completed">{{appointment.user.birth}}</td> -->
                     <td *ngIf="!appointment.completed">{{appointment.description}}</td>
-                    <td *ngIf="!appointment.completed">{{appointment.fromDate}}</td>
-                    <td *ngIf="!appointment.completed">{{appointment.toDate}}</td>
+                    <td *ngIf="!appointment.completed">{{appointment.bookDate | date:"dd/MM/YYYY"}}</td>
+                    <td *ngIf="!appointment.completed">{{appointment.fromDate | slice:0:5}}</td>
+                    <td *ngIf="!appointment.completed">{{appointment.toDate | slice:0:5}}</td>
                     <td *ngIf="!appointment.completed" class="text-end">
                       <div class="dropdown dropdown-action">
                         <a href="javascript:void(0);" class="action-icon dropdown-toggle" data-bs-toggle="dropdown"
