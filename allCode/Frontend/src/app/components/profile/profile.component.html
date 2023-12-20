@@ -100,13 +100,16 @@
         </div>
         <div class="profile-tabs">
             <ul class="nav nav-tabs nav-tabs-bottom">
-                <li class="nav-item"><a class="nav-link active" href="#history" data-bs-toggle="tab">Historial
-                        médico</a></li>
+                <li class="nav-item"><a class="nav-link active" href="#historyIntervention"
+                    data-bs-toggle="tab">Historial
+                    médico</a></li>
                 <li class="nav-item"><a class="nav-link" href="#documents" data-bs-toggle="tab">Documentos</a></li>
+                <li class="nav-item"><a class="nav-link" href="#historyAppointment" data-bs-toggle="tab">Historial de
+                    citas</a></li>
             </ul>
 
             <div class="tab-content">
-                <div class="tab-pane show active" id="history">
+                <div class="tab-pane show active" id="historyIntervention">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card-box">
@@ -118,7 +121,7 @@
                                     <ul class="experience-list">
                                         <li>
                                             <div class="experience-user">
-                                                <div class="before-circle"></div>
+                                                <div class="before-circle int"></div>
                                             </div>
                                             <div class="experience-content">
                                                 <div class="timeline-content">
@@ -164,7 +167,7 @@
                                     <ul class="experience-list">
                                         <li>
                                             <div class="experience-user">
-                                                <div class="before-circle"></div>
+                                                <div class="before-circle doc"></div>
                                             </div>
                                             <div class="experience-content">
                                                 <div class="timeline-content">
@@ -192,6 +195,57 @@
                                                         (click)="download(document.id)">{{document.fileName}}</a>
                                                     <span class="time">{{document.creationDate|
                                                         date:'dd-MM-yyyy'}}</span>
+
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <p> ** Para visualizar más detalles sobre la intervención haga click en la intervención
+                                deseada </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="historyAppointment">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card-box">
+                                <h3 class="card-title">Registro de citas</h3>
+                                <div class="experience-box" *ngFor="let appointment of appointmentsUser">
+                                    <ul class="experience-list">
+                                        <li>
+                                            <div class="experience-user">
+                                                <div class="before-circle doc"></div>
+                                            </div>
+                                            <div class="experience-content">
+                                                <div class="timeline-content">
+                                                    <div class="dropdown dropdown-action">
+                                                        <a href="javascript:void(0);"
+                                                            class="action-icon dropdown-toggle"
+                                                            data-bs-toggle="dropdown" aria-expanded="false"><i
+                                                                class="fa fa-ellipsis-v"></i></a>
+                                                        <div class="dropdown-menu dropdown-menu-end">
+                                                            <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#ventanaForm"
+                                                                routerLink="/edit-appointment/{{appointment.id}}">
+                                                                <i class="fa-solid fa-pen-to-square m-r-5"></i> Cambiar
+                                                                cita
+                                                            </a>
+                                                            <a class="dropdown-item" style="cursor: pointer;"
+                                                                (click)="deleteAppointment(appointment)"
+                                                                data-bs-toggle="modal"><i
+                                                                    class="fa fa-trash-alt m-r-5"></i> Eliminar
+                                                                cita</a>
+                                                            <a class="dropdown-item" style="cursor: pointer;"
+                                                                (click)="completeAppointment(appointment, appointment.completed)"
+                                                                data-bs-toggle="modal"><img style="width:20px" src="../../../assets/icons/tick-i.png"
+                                                                    > Cambiar estado</a>
+                                                        </div>
+                                                    </div>
+                                                    <span class="">{{appointment.description}} - </span><span *ngIf="appointment.completed">REALIZADA </span><img style="width: 25px;" *ngIf="appointment.completed" src="../../../../assets/icons/tick.png" alt="Completed">
+                                                    <span style="color: red;" *ngIf="!appointment.completed">NO REALIZADA </span><img style="width: 25px;" *ngIf="!appointment.completed" src="../../../../assets/icons/reloj-de-arena.png" alt="not Completed">
+                                                    <span class="time">{{appointment.bookDate |
+                                                        date:'dd/MM/yyyy'}} - {{appointment.fromDate | slice:0:5}}</span>
 
                                                 </div>
                                             </div>

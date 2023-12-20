@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { format } from 'date-fns';
+import { Appointment } from 'src/app/models/appointment.model';
 import { Document } from 'src/app/models/document.model';
 import { Intervention } from 'src/app/models/intervention.model';
 import { User } from 'src/app/models/user.model';
+import { AppointmentService } from 'src/app/services/appointment.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { DocumentService } from 'src/app/services/document.service';
 import { InterventionService } from 'src/app/services/intervention.service';
@@ -20,11 +22,12 @@ export class MyprofileComponent {
   profileAvatarUrls!: string;
   isAdmin: boolean = false;
 
+  appointmentsUser: Appointment[] = [];
   interventions: Intervention[] = [];
   documents: Document[] = [];
 
 
-  constructor(private documentService: DocumentService, public authService: AuthService, private interventionService: InterventionService, private userService: UserService, private utilService: UtilService) {
+  constructor(private appointmentService: AppointmentService, private documentService: DocumentService, public authService: AuthService, private interventionService: InterventionService, private userService: UserService, private utilService: UtilService) {
 
   }
 
@@ -48,6 +51,9 @@ export class MyprofileComponent {
       this.documentService.getAllDocumentsByUserId(this.user.id).subscribe((list: Document[]) => {
         this.documents = list;
       })
+
+      this.appointmentService.getAllAppointmentsByUser(this.user.id).subscribe(list => 
+        this.appointmentsUser = list)
     });
   }
 

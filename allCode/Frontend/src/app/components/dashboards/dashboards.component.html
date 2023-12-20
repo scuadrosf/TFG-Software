@@ -17,17 +17,12 @@
             <div class="row">
                 <div class="col-md-6">
                     <div *ngIf="authService.isAdmin()" class="morning-user">
-                        <!-- <h2 *ngIf="authService.currentUser().gender === 'Masculino'">Bienvenido de nuevo, <span>Dr. {{currentUser.lastName}}</span></h2> -->
-                        <!-- <h2 *ngIf="authService.currentUser().gender === 'Femenino'">Bienvenida de nuevo, <span>Dr. {{currentUser.lastName}}</span></h2> -->
-                        <h2>Bienvenido/a de nuevo, <span>Dr. {{authService.currentUser().lastName}}</span></h2>
-                        <p>¿Sacamos una muelas?</p>
+                        <h2 *ngIf="currentUser.gender === 'Masculino'">Bienvenido de nuevo, <span>Dr. {{currentUser.lastName}}</span></h2>
+                        <h2 *ngIf="currentUser.gender === 'Femenino'">Bienvenida de nuevo, <span>Dr. {{currentUser.lastName}}</span></h2>
                     </div>
                     <div *ngIf="!authService.isAdmin()" class="morning-user">
-                        <!-- <h2 *ngIf="authService.currentUser().gender === 'Masculino'">Bienvenido de nuevo, <span>{{currentUser.name}} {{currentUser.lastName}}</span></h2> -->
-                        <!-- <h2 *ngIf="authService.currentUser().gender === 'Femenino'">Bienvenida de nuevo, <span>{{currentUser.name}} {{currentUser.lastName}}</span></h2> -->
-                        <h2>Bienvenido/a de nuevo, <span>{{authService.currentUser().name}}
-                                {{authService.currentUser().lastName}}</span></h2>
-
+                        <h2 *ngIf="currentUser.gender === 'Masculino'">Bienvenido de nuevo, <span>{{currentUser.name}} {{currentUser.lastName}}</span></h2>
+                        <h2 *ngIf="currentUser.gender === 'Femenino'">Bienvenida de nuevo, <span>{{currentUser.name}} {{currentUser.lastName}}</span></h2>
                         <p>¿Qué podemos hacer por ti?</p>
                     </div>
                 </div>
@@ -251,9 +246,9 @@
                                 data-bs-parent="#accordionExampleTwo">
                                 <div class="accordion-body">
                                     <span><strong>Fecha: </strong></span>{{appointment.bookDate | date: "dd/MM/YYYY"}}<br>
+                                    <span><strong>Hora: </strong></span>{{appointment.fromDate | slice:0:5}}<br>
                                     <span><strong>Nota adicional: </strong></span>{{appointment.additionalNote}}<br>
                                     <span><strong>Realizada: </strong></span><span *ngIf="appointment.completed">Sí</span><span *ngIf="!appointment.completed">No</span>
-                                    <!-- <a routerLink="/documents/{{intervention.id}}">Documento</a> -->
                                 </div>
                             </div>
                         </div>

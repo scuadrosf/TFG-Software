@@ -47,6 +47,8 @@ $color-texto: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-top: 10px; /* Agrega margen superior para separarse del componente de arriba */
+
 
   &:hover {
     background-color: darken($color-fondo, 15%);
