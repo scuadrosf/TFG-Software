@@ -17,7 +17,8 @@ export class AppointmentComponent implements OnInit {
   loading: boolean = false;
   control = new FormControl();
   noResults: boolean = false;
-
+  selectedDay: string = '';
+  originalAppointmentList: Appointment[] = [];
   appointmentList: Appointment[] = [];
   profileAvatarUrls: string[] = [];
   todayNow!: Date;
@@ -39,7 +40,8 @@ export class AppointmentComponent implements OnInit {
     this.loading = true;
 
     this.appointmentService.getAllAppointments().subscribe(list => {
-      this.appointmentList = list;
+      this.originalAppointmentList = list;
+      this.appointmentList = [...list];
       this.appointmentList.forEach(appointment => {
         this.userService.getProfileAvatar(appointment.user.id).subscribe(blob => {
           const objectUrl = URL.createObjectURL(blob);
@@ -68,13 +70,13 @@ export class AppointmentComponent implements OnInit {
         })
       )
       .subscribe(result => {
-        if (result.length === 0){
+        if (result.length === 0) {
           this.noResults = true;
         }
         this.appointmentList = result;
         this.loading = false;
       });
-      
+
   }
 
 
@@ -94,29 +96,20 @@ export class AppointmentComponent implements OnInit {
   }
 
   deleteAppointment(id: number) {
-    // const confirmation = window.confirm('Esta seguro de eliminar la cita');
-    // if (confirmation) {
-      // this.appointmentService.deleteAppointment(id).subscribe();
-      this.appointmentService.deleteAppointment(id).subscribe();
-      this.ngOnInit();
-      // this.ngOnInit();
-      console.log("Cita eliminada")
-    //   this.ngOnInit();
-    // }
-    // else{
-      // console.log("Confirmación de eliminado cancelada")
-    // }
+    this.appointmentService.deleteAppointment(id).subscribe();
+    this.ngOnInit();
+    console.log("Cita eliminada")
     this.ngOnInit();
   }
 
   addIntervention(idAppointment: number) {
     this.appointmentService.getAppointment(idAppointment).subscribe(appointment => {
-      this.router.navigate(['appointment-list/'+appointment.user.id+'/add-intervention/'+idAppointment])
+      this.router.navigate(['appointment-list/' + appointment.user.id + '/add-intervention/' + idAppointment])
 
     })
   }
 
-  reload(){
+  reload() {
     window.location.reload();
   }
 
@@ -125,8 +118,18 @@ export class AppointmentComponent implements OnInit {
       const blob = new Blob([data], { type: 'application/pdf' });
       const link = document.createElement("a");
       link.href = window.URL.createObjectURL(blob);
-      link.download ="Citas_"+format(Date.now(), "yyyy-MM-dd")+".pdf";
+      link.download = "Citas_" + format(Date.now(), "yyyy-MM-dd") + ".pdf";
       link.click();
     });
+  }
+
+  filterAppointmentsByDay() {
+    if (this.selectedDay) {
+      this.appointmentList = this.originalAppointmentList.filter(appointment =>
+        appointment.bookDate === this.selectedDay
+      );
+    } else {
+      this.appointmentList = this.originalAppointmentList;
+    }
   }
 }

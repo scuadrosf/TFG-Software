@@ -37,14 +37,21 @@
                         <a (click)="reload()" class="btn btn-primary doctor-refresh ms-2"><img
                             src="assets/img/icons/re-fresh.svg" alt=""></a>
                       </div>
+                      <label style="margin-left: 10px;" for="selectedDay">Seleccionar día:</label>
+                      <div style="margin-left: 10px;">
+                        <input type="date" id="selectedDay" [(ngModel)]="selectedDay" class="form-control"
+                          (change)="filterAppointmentsByDay()" />
+                      </div>
                     </div>
                   </div>
                 </div>
                 <div class="col-auto text-end float-end ms-auto download-grp">
                   <a style="cursor: pointer;" (click)="exportPDF()" class=" me-2"><img
                       src="assets/img/icons/pdf-icon-01.svg" alt=""></a>
-
                 </div>
+                <!-- Agrega el campo de entrada para seleccionar el día -->
+
+
               </div>
             </div>
             <!-- /Table Header -->

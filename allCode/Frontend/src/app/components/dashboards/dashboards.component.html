@@ -17,12 +17,16 @@
             <div class="row">
                 <div class="col-md-6">
                     <div *ngIf="authService.isAdmin()" class="morning-user">
-                        <h2 *ngIf="currentUser.gender === 'Masculino'">Bienvenido de nuevo, <span>Dr. {{currentUser.lastName}}</span></h2>
-                        <h2 *ngIf="currentUser.gender === 'Femenino'">Bienvenida de nuevo, <span>Dr. {{currentUser.lastName}}</span></h2>
+                        <h2 *ngIf="currentUser.gender === 'Masculino'">Bienvenido de nuevo, <span>Dr.
+                                {{currentUser.lastName}}</span></h2>
+                        <h2 *ngIf="currentUser.gender === 'Femenino'">Bienvenida de nuevo, <span>Dr.
+                                {{currentUser.lastName}}</span></h2>
                     </div>
                     <div *ngIf="!authService.isAdmin()" class="morning-user">
-                        <h2 *ngIf="currentUser.gender === 'Masculino'">Bienvenido de nuevo, <span>{{currentUser.name}} {{currentUser.lastName}}</span></h2>
-                        <h2 *ngIf="currentUser.gender === 'Femenino'">Bienvenida de nuevo, <span>{{currentUser.name}} {{currentUser.lastName}}</span></h2>
+                        <h2 *ngIf="currentUser.gender === 'Masculino'">Bienvenido de nuevo, <span>{{currentUser.name}}
+                                {{currentUser.lastName}}</span></h2>
+                        <h2 *ngIf="currentUser.gender === 'Femenino'">Bienvenida de nuevo, <span>{{currentUser.name}}
+                                {{currentUser.lastName}}</span></h2>
                         <p>¿Qué podemos hacer por ti?</p>
                     </div>
                 </div>
@@ -215,18 +219,25 @@
                     <h2 class="title"> Intervenciones </h2>
                     <div class="accordion" id="accordionExample">
                         <div class="accordion-item" *ngFor="let intervention of interventionsUser">
-                            <h2 class="accordion-header">
-                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                                    {{intervention.type}}
-                                </button>
-                            </h2>
-                            <div id="collapseOne" class="accordion-collapse collapse"
-                                data-bs-parent="#accordionExample">
-                                <div class="accordion-body">
-                                    <span><strong>Fecha de intervención: </strong></span>{{intervention.interventionDate | date: "dd/MM/YYYY"}}<br>
-                                    <span><strong>Documento: </strong></span><a routerLink="/documents/{{intervention.id}}">Archivo adjunto</a>
+                            <div *ngIf="interventionsUser.length != 0">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                        {{intervention.type}}
+                                    </button>
+                                </h2>
+                                <div id="collapseOne" class="accordion-collapse collapse"
+                                    data-bs-parent="#accordionExample">
+                                    <div class="accordion-body">
+                                        <span><strong>Fecha de intervención:
+                                            </strong></span>{{intervention.interventionDate | date: "dd/MM/YYYY"}}<br>
+                                        <span><strong>Documento: </strong></span><a
+                                            routerLink="/documents/{{intervention.id}}">Archivo adjunto</a>
+                                    </div>
                                 </div>
+                            </div>
+                            <div *ngIf="interventionsUser.length == 0">
+                                <p> No tiene intervenciones </p>
                             </div>
                         </div>
                     </div>
@@ -245,10 +256,13 @@
                             <div id="collapseTwo" class="accordion-collapse collapse"
                                 data-bs-parent="#accordionExampleTwo">
                                 <div class="accordion-body">
-                                    <span><strong>Fecha: </strong></span>{{appointment.bookDate | date: "dd/MM/YYYY"}}<br>
+                                    <span><strong>Fecha: </strong></span>{{appointment.bookDate | date:
+                                    "dd/MM/YYYY"}}<br>
                                     <span><strong>Hora: </strong></span>{{appointment.fromDate | slice:0:5}}<br>
                                     <span><strong>Nota adicional: </strong></span>{{appointment.additionalNote}}<br>
-                                    <span><strong>Realizada: </strong></span><span *ngIf="appointment.completed">Sí</span><span *ngIf="!appointment.completed">No</span>
+                                    <span><strong>Realizada: </strong></span><span
+                                        *ngIf="appointment.completed">Sí</span><span
+                                        *ngIf="!appointment.completed">No</span>
                                 </div>
                             </div>
                         </div>
