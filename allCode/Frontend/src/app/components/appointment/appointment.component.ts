@@ -7,6 +7,7 @@ import { Appointment } from 'src/app/models/appointment.model';
 import { AppointmentService } from 'src/app/services/appointment.service';
 import { UserService } from 'src/app/services/user.service';
 import { UtilService } from 'src/app/services/util.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-appointment',
@@ -81,25 +82,33 @@ export class AppointmentComponent implements OnInit {
 
 
   changeStatus(id: number) {
-    const confirmed = window.confirm("¿Estas seguro que ha sido completado este evento?");
-    if (confirmed) {
-      this.isCompleted = !this.isCompleted;
-      console.log(this.isCompleted)
+    Swal.fire({
+      title: "¿Seguro/a que se ha completado este evento?",
+      showDenyButton: true,
+      showCancelButton: false,
+      confirmButtonText: "Completar",
+      denyButtonText: `Cancelar`
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.isCompleted = !this.isCompleted;
+        console.log(this.isCompleted)
 
-      this.appointmentService.updateAppointment(id, this.isCompleted).subscribe(updatedAppointment => {
-        console.log("Appointment actualizado:", updatedAppointment);
-      })
-    } else {
-      console.log("Cancelado por el usuario")
-      this.ngOnInit();
-    }
+        this.appointmentService.updateAppointment(id, this.isCompleted).subscribe(updatedAppointment => {
+          console.log("Appointment actualizado:", updatedAppointment);
+        })
+        Swal.fire("Cita completada", "", "success");
+        this.ngOnInit();
+        this.ngOnInit();
+      } else if (result.isDenied) {
+        this.ngOnInit();
+      }
+    });
   }
 
   deleteAppointment(id: number) {
     this.appointmentService.deleteAppointment(id).subscribe();
     this.ngOnInit();
     console.log("Cita eliminada")
-    this.ngOnInit();
   }
 
   addIntervention(idAppointment: number) {
@@ -131,5 +140,24 @@ export class AppointmentComponent implements OnInit {
     } else {
       this.appointmentList = this.originalAppointmentList;
     }
+  }
+
+  showModalDelete(id: number) {
+    Swal.fire({
+      title: "Vas a eliminar la cita",
+      showDenyButton: true,
+      showCancelButton: false,
+      confirmButtonText: "Eliminar",
+      denyButtonText: `Cancelar`
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        this.deleteAppointment(id);
+        Swal.fire("Eliminado", "", "success");
+        this.ngOnInit();
+      } else if (result.isDenied) {
+        // Swal.fire("Changes are not saved", "", "info");
+      }
+    });
   }
 }

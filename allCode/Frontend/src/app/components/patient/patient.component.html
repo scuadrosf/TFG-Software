@@ -105,7 +105,7 @@
                               class="fa-solid fa-pen-to-square m-r-5"></i> Editar paciente</a>
                           <a class="dropdown-item" routerLink="/add-appointment/{{patient.id}}"><i
                               class="fa-solid fa-pen m-r-5"></i> Dar cita</a>
-                          <a class="dropdown-item" (click)="deleteUser(patient)" data-bs-toggle="modal"
+                          <a class="dropdown-item" (click)="showModalDelete(patient)" data-bs-toggle="modal"
                             data-bs-target="#delete_patient"><i class="fa fa-trash-alt m-r-5"></i> Eliminar paciente</a>
                         </div>
                       </div>

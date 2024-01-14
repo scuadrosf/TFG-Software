@@ -5,6 +5,7 @@ import { Appointment } from 'src/app/models/appointment.model';
 import { User } from 'src/app/models/user.model';
 import { AppointmentService } from 'src/app/services/appointment.service';
 import { UserService } from 'src/app/services/user.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-edit-appointment',
@@ -37,32 +38,43 @@ export class EditAppointmentComponent {
   }
 
   confirmEdit() {
-    const confirm = window.confirm("¿Desea confirmar cambios?")
-    if (confirm) {
-      if (this.appointment) {
-        if(this.bookDate)
-          this.appointment.bookDate = this.bookDate;
-        if(this.fromDate)
-          this.appointment.fromDate = this.fromDate;
-        if(this.toDate)
-          this.appointment.toDate = this.toDate;
-        if(this.description)
-          this.appointment.description = this.description;
-        if (this.additionalNote)
-          this.appointment.additionalNote = this.additionalNote;
-        this.appointmentService.updateFullAppointment(this.appointment).subscribe(
-          (_) => {
-            console.log(this.appointment);
-            this.ngOnInit();
-            window.history.back();
-          },
-        );
+    Swal.fire({
+    title: "¿Esta seguro/a de actualizar los cambios?",
+    showDenyButton: false,
+    showCancelButton: true,
+    confirmButtonText: "Actualizar",
+    denyButtonText: `Cancelar`,
+    cancelButtonText: "Cancelar"
+  }).then((result) => {
+    if (result.isConfirmed) {
+      if (this.bookDate == null || this.fromDate == null || this.toDate == null){
+        Swal.fire("Debe completar todos los campos no rellenados", "", "warning");
+      }else{
+        if (this.appointment) {
+          if(this.bookDate)
+            this.appointment.bookDate = this.bookDate;
+          if(this.fromDate)
+            this.appointment.fromDate = this.fromDate;
+          if(this.toDate)
+            this.appointment.toDate = this.toDate;
+          if(this.description)
+            this.appointment.description = this.description;
+          if (this.additionalNote)
+            this.appointment.additionalNote = this.additionalNote;
+          this.appointmentService.updateFullAppointment(this.appointment).subscribe(
+            (_) => {
+              console.log(this.appointment);
+              this.ngOnInit();
+              window.history.back();
+            },
+          );
+        }
+        Swal.fire("Cita editada", "", "success");
       }
-    }else{
-      console.log("Cancelado por el usuario");
+    } else if (result.isDenied) {
     }
+  });
   }
-
 
   back() {
     window.history.back();

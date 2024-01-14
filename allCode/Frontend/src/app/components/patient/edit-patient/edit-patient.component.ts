@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { User } from 'src/app/models/user.model';
 import { AuthService } from 'src/app/services/auth.service';
 import { UserService } from 'src/app/services/user.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-edit-patient',
@@ -44,30 +45,40 @@ export class EditPatientComponent {
   }
 
   editUser() {
-    const confirm = window.confirm("¿Desea confirmar los cambios?")
-    if (confirm) {
-      if (this.user) {
-        if (this.address)
-          this.user.address = this.address;
-        if (this.city)
-          this.user.city = this.city;
-        if (this.country)
-          this.user.country = this.country;
-        if (this.postalCode)
-          this.user.postalCode = this.postalCode;
-        if (this.phone)
-          this.user.phone = this.phone;
-        this.userService.updateUser(this.user, this.avatarFile).subscribe(
-          (_) => {
-            console.log(this.user);
-            this.ngOnInit();
-            window.history.back();
-          },
-        );
+    Swal.fire({
+      title: "¿Estas seguro/a que quieres confirmar los cambios?",
+      showDenyButton: true,
+      showCancelButton: false,
+      confirmButtonText: "Eliminar",
+      denyButtonText: `Cancelar`
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        if (this.user) {
+          if (this.address)
+            this.user.address = this.address;
+          if (this.city)
+            this.user.city = this.city;
+          if (this.country)
+            this.user.country = this.country;
+          if (this.postalCode)
+            this.user.postalCode = this.postalCode;
+          if (this.phone)
+            this.user.phone = this.phone;
+          this.userService.updateUser(this.user, this.avatarFile).subscribe(
+            (_) => {
+              console.log(this.user);
+              this.ngOnInit();
+              window.history.back();
+            },
+          );
+          Swal.fire("Actualizado", "", "success");
+        }
+      } else if (result.isDenied) {
+        Swal.fire("Cancelado", "", "info");
+        window.history.back();
       }
-    } else {
-      console.log("Cancelado por el usuario");
-    }
+    });
   }
 
 }

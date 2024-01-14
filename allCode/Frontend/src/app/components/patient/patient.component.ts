@@ -7,6 +7,7 @@ import { format } from 'date-fns';
 import { UtilService } from 'src/app/services/util.service';
 import { FormControl } from '@angular/forms';
 import { Observable, debounceTime, filter, forkJoin, map, of, startWith, switchMap, tap } from 'rxjs';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-patient',
@@ -26,7 +27,7 @@ export class PatientComponent implements OnInit {
   constructor(public patientService: UserService, private router: Router, private utilService: UtilService) { }
 
   ngOnInit(): void {
-    
+
     this.getAllUsers();
 
     this.observerChangeSearch();
@@ -34,9 +35,7 @@ export class PatientComponent implements OnInit {
   }
 
   getAllUsers(): void {
-
     this.loading = true;
-
     this.patientService.getUserList().subscribe((list) => {
       this.patientsList = list;
 
@@ -61,16 +60,6 @@ export class PatientComponent implements OnInit {
         }
       );
     });
-    // this.patientService.getUserList().subscribe((list) => {
-    //   this.patientsList = list;
-    //   this.patientsList.forEach(patient => {
-    //     this.patientService.getProfileAvatar(patient.id).subscribe(blob => {
-    //       const objectUrl = URL.createObjectURL(blob);
-    //       this.profileAvatarUrls[patient.id] = objectUrl;
-    //     });
-    //     this.loading = false;
-    //   });
-    // });
   }
 
   public sortData(sort: Sort) {
@@ -94,16 +83,8 @@ export class PatientComponent implements OnInit {
   }
 
   deleteUser(user: User) {
-    const confirmation = window.confirm('Esta seguro de eliminar el usuario');
-    if (confirmation) {
-      this.patientService.deleteUser(user);
-      console.log("Usuario eliminado")
-      this.ngOnInit();
-      // window.location.reload();
-    }
-    else {
-      console.log("Confirmación de eliminado cancelada")
-    }
+    this.patientService.deleteUser(user);
+    console.log("Usuario eliminado")
     this.ngOnInit();
   }
 
@@ -148,12 +129,30 @@ export class PatientComponent implements OnInit {
         })
       )
       .subscribe(result => {
-        if (result.length === 0){
+        if (result.length === 0) {
           this.noResults = true;
         }
         this.patientsList = result;
         this.loading = false;
       });
-      
+  }
+
+  showModalDelete(user: User) {
+    Swal.fire({
+      title: "Vas a eliminar el paciente",
+      showDenyButton: true,
+      showCancelButton: false,
+      confirmButtonText: "Eliminar",
+      denyButtonText: `Cancelar`
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        this.deleteUser(user);
+        Swal.fire("Eliminado", "", "success");
+        this.ngOnInit();
+        this.ngOnInit();
+      } else if (result.isDenied) {
+      }
+    });
   }
 }

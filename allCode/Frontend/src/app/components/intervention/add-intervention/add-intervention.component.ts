@@ -4,6 +4,7 @@ import { User } from 'src/app/models/user.model';
 import { AppointmentService } from 'src/app/services/appointment.service';
 import { InterventionService } from 'src/app/services/intervention.service';
 import { UserService } from 'src/app/services/user.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-add-intervention',
@@ -54,12 +55,12 @@ export class AddInterventionComponent implements OnInit {
     }
     this.interventionService.addIntervention(this.appointmentId, this.userId, formData).subscribe(
       (_) => {
-        alert('Intervención añadida');
+        Swal.fire("Intervención añadida", "", "success");
         this.back();
       },
       (error) => {
         console.error(error);
-        this.router.navigate(['/error-page'])
+        this.back();
       }
     );
   }

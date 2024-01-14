@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { User } from 'src/app/models/user.model';
 import { AppointmentService } from 'src/app/services/appointment.service';
 import { UserService } from 'src/app/services/user.service';
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -48,11 +49,11 @@ export class AddAppointmentComponent implements OnInit {
       additionalNote: this.additionalNote
     }    
     if (this.bookDate == null || this.fromDate == null || this.toDate == null || this.description == null)
-      alert("Debe rellenar todos los campos")
+      Swal.fire("Debe rellenar todos los campos", "", "warning");
     else {
       this.appointmentService.bookAppointment(data, this.userId).subscribe(
         (_) => {
-          alert('Cita creada');
+          Swal.fire("Cita creada", "", "success");
           if (this.isAdmin){
             window.history.back();
           }else{
@@ -60,6 +61,7 @@ export class AddAppointmentComponent implements OnInit {
           }
         },
         (_) => {
+          Swal.fire("Algo ha ocurrido, vuelva a intentarlo", "", "error");
           console.error("error");
           this.router.navigate(['/error-page'])
         }

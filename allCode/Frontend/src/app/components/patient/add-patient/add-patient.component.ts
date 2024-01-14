@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { EmailService } from 'src/app/services/email.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-add-patient',
@@ -42,18 +43,22 @@ export class AddPatientComponent {
         city: this.city,
         postalCode: this.postalCode,
       }
-      console.log(this.gender);
-      this.authService.register(userData).subscribe(
-        (_) => {
-          alert('Paciente creado');
-          this.emailService.sendEmail(this.email, userData.passwordEncoded);
-          window.history.back();
-        },
-        (_) => {
-          console.error("error");
-          this.router.navigate(['/error-page'])
-        }
-      );
+      if (Object.values(userData).every(value => value !== '')){
+        this.authService.register(userData).subscribe(
+          (_) => {
+            Swal.fire("Usuario registrado", "", "success");
+            this.emailService.sendEmail(this.email, userData.passwordEncoded);
+            window.history.back();
+          },
+          (_) => {
+            Swal.fire("Probablemente este usuario ya exista, sino vuelva a intentarlo", "", "error");
+            console.error("error");
+            this.router.navigate(['/error-page'])
+          }
+        );
+      }else{
+        Swal.fire('Todos los campos son obligatorios', '', 'warning');
+      }
     }else{
       console.error(this.authService.currentUser())
     }
