@@ -47,26 +47,66 @@ export class AddAppointmentComponent implements OnInit {
       toDate: this.toDate,
       description: this.description,
       additionalNote: this.additionalNote
-    }    
-    if (this.bookDate == null || this.fromDate == null || this.toDate == null || this.description == null)
+    };
+
+    if (!this.bookDate || !this.fromDate || !this.toDate || !this.description) {
       Swal.fire("Debe rellenar todos los campos", "", "warning");
-    else {
-      this.appointmentService.bookAppointment(data, this.userId).subscribe(
-        (_) => {
-          Swal.fire("Cita creada", "", "success");
-          if (this.isAdmin){
-            window.history.back();
-          }else{
-            this.router.navigate(['/dashboard'])
-          }
-        },
-        (_) => {
-          Swal.fire("Algo ha ocurrido, vuelva a intentarlo", "", "error");
-          console.error("error");
-          this.router.navigate(['/error-page'])
-        }
-      )
+      return;
     }
+
+    this.appointmentService.checkAppointmentAvailability(this.bookDate, this.fromDate, this.toDate).subscribe(isAvailable => {
+      if (!isAvailable) {
+        Swal.fire("Ya existe una cita en este horario", "", "warning");
+        return;
+      } else {
+        this.appointmentService.bookAppointment(data, this.userId).subscribe(
+          (_) => {
+            Swal.fire("Cita creada", "", "success");
+            if (this.isAdmin) {
+              window.history.back();
+            } else {
+              this.router.navigate(['/dashboard']);
+            }
+          },
+          (_) => {
+            Swal.fire("Algo ha ocurrido, vuelva a intentarlo", "", "error");
+            console.error("error");
+            this.router.navigate(['/error-page']);
+          }
+        );
+      }
+    });
+  }
+
+  onDescriptionChange() {
+    if (!this.fromDate) {
+      return;
+    }
+    const fromDate = new Date(1970, 0, 1, parseInt(this.fromDate.substr(0, 2)), parseInt(this.fromDate.substr(3, 2)));
+    switch (this.description) {
+      case "Mantenimiento y Prevención":
+        fromDate.setMinutes(fromDate.getMinutes() + 30);
+        break;
+      case "Problemas Comunes y Tratamientos de Rutina":
+        fromDate.setMinutes(fromDate.getMinutes() + 45);
+        break;
+      case "Ortodoncia y Estética Dental":
+        fromDate.setMinutes(fromDate.getMinutes() + 45);
+        break;
+      case "Procedimientos Quirúrgicos y Restauradores":
+        fromDate.setMinutes(fromDate.getMinutes() + 45);
+        break;
+      case "Problemas Específicos y Emergencias":
+        fromDate.setMinutes(fromDate.getMinutes() + 45);
+        break;
+      case "Otros":
+        fromDate.setMinutes(fromDate.getMinutes() + 30);
+        break;
+      default:
+        break;
+    }
+    // Formatea toDate como 'HH:mm'
+    this.toDate = fromDate.toTimeString().substr(0, 5);
   }
 
   back() {

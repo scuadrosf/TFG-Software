@@ -172,4 +172,42 @@ public class AppointmentRestController {
     public List<Appointment> searchUsersByNameOrLastName(@RequestParam String query) {
         return appointmentService.findAppointmentsByUserDetails(query, query, query);
     }
+
+    @PostMapping("/check-availability")
+    public ResponseEntity<Boolean> checkAppointmentAvailability(@RequestBody AvailabilityCheckRequest request) {
+        boolean isAvailable = appointmentService.isAppointmentAvailable(request.getBookDate(), request.getFromDate(), request.getToDate());
+        return ResponseEntity.ok(isAvailable);
+    }
+}
+
+class AvailabilityCheckRequest {
+    private LocalDate bookDate;
+    private LocalTime fromDate;
+    private LocalTime toDate;
+
+    public LocalTime getFromDate() {
+        return fromDate;
+    }
+
+    public void setFromDate(LocalTime fromDate) {
+        this.fromDate = fromDate;
+    }
+
+    public LocalTime getToDate() {
+        return toDate;
+    }
+
+    public void setToDate(LocalTime toDate) {
+        this.toDate = toDate;
+    }
+
+    public LocalDate getBookDate() {
+        return bookDate;
+    }
+
+    public void setBookDate(LocalDate bookDate) {
+        this.bookDate = bookDate;
+    }
+
+    
 }

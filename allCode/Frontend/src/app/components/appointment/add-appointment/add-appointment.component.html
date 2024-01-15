@@ -70,32 +70,46 @@
                                         <h4>Detalles de la cita</h4>
                                     </div>
                                 </div>
-                                <div class="col-12 col-md-6 col-xl-4">
+                                <div class="col-12 col-md-6 col-xl-6">
                                     <div class="form-group local-forms">
                                         <label>Día <span class="login-danger">*</span></label>
                                         <input class="form-control datetimepicker" type="date" [(ngModel)]="bookDate"
                                             name="bookDate" required>
                                     </div>
                                 </div>
-                                <div class="col-12 col-md-6 col-xl-4">
+                                <div class="col-12 col-md-6 col-xl-6">
                                     <div class="form-group local-forms">
                                         <label>Desde <span class="login-danger">*</span></label>
-                                        <input type="time" class="form-control" [(ngModel)]="fromDate"
-                                            name="fromDate" required>
+                                        <input type="time" class="form-control" [(ngModel)]="fromDate" name="fromDate"
+                                            required>
                                     </div>
                                 </div>
-                                <div class="col-12 col-md-6 col-xl-4">
+                                
+                                <div class="col-12 col-md-6 col-xl-6">
                                     <div class="form-group local-forms">
-                                        <label>Hasta <span class="login-danger">*</span></label>
-                                        <input type="time" class="form-control" [(ngModel)]="toDate"
-                                            name="toDate" required>
+                                        <label>Motivo <span class="login-danger">*</span></label>
+                                        <select class="form-control" [(ngModel)]="description"
+                                            (ngModelChange)="onDescriptionChange()" name="description" required>
+                                            <option value="">Seleccione un motivo</option>
+                                            <option value="Mantenimiento y Prevención">Mantenimiento y Prevención
+                                            </option>
+                                            <option value="Problemas Comunes y Tratamientos de Rutina">Problemas Comunes
+                                                y Tratamientos de Rutina</option>
+                                            <option value="Ortodoncia y Estética Dental">Ortodoncia y Estética Dental
+                                            </option>
+                                            <option value="Procedimientos Quirúrgicos y Restauradores">Procedimientos
+                                                Quirúrgicos y Restauradores</option>
+                                            <option value="Problemas Específicos y Emergencias">Problemas Específicos y
+                                                Emergencias</option>
+                                            <option value="Otros">Otros</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6 col-xl-6">
                                     <div class="form-group local-forms">
-                                        <label>Motivo <span class="login-danger">*</span></label>
-                                        <input class="form-control" type="text" [(ngModel)]="description"
-                                            name="description" required>
+                                        <label>Hasta <span class="login-danger">*</span></label>
+                                        <input type="time" class="form-control" [ngModel]="toDate" name="toDate"
+                                            required readonly disabled>
                                     </div>
                                 </div>
                                 <div class="col-12 col-sm-12">
@@ -105,16 +119,6 @@
                                             name="additionalNote"></textarea>
                                     </div>
                                 </div>
-                                <!-- <div class="col-12 col-md-6 col-xl-6">
-                                    <div class="form-group local-top-form">
-                                        <label class="local-top">Avatar <span class="login-danger">*</span></label>
-                                        <div class="settings-btn upload-files-avator">
-                                            <input type="file" accept="image/*" name="image" id="file"
-                                                onchange="loadFile(event)" class="hide-input">
-                                            <label for="file" class="upload">Choose File</label>
-                                        </div>
-                                    </div>
-                                </div> -->
                                 <div class="col-12">
                                     <div class="doctor-submit text-end">
                                         <button type="submit" class="btn btn-primary submit-form me-2"
