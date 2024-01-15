@@ -8,6 +8,7 @@ import { UtilService } from 'src/app/services/util.service';
 import { FormControl } from '@angular/forms';
 import { Observable, debounceTime, filter, forkJoin, map, of, startWith, switchMap, tap } from 'rxjs';
 import Swal from 'sweetalert2';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-patient',
@@ -19,6 +20,8 @@ export class PatientComponent implements OnInit {
   loading: boolean = false;
   patientsList: User[] = [];
   profileAvatarUrls: string[] = [];
+  page!: number;
+  
 
   control = new FormControl();
   noResults: boolean = false
@@ -38,7 +41,6 @@ export class PatientComponent implements OnInit {
     this.loading = true;
     this.patientService.getUserList().subscribe((list) => {
       this.patientsList = list;
-
       // Usar forkJoin para esperar todas las llamadas a getProfileAvatar
       forkJoin(
         this.patientsList.map(patient =>
@@ -60,6 +62,10 @@ export class PatientComponent implements OnInit {
         }
       );
     });
+
+
+
+
   }
 
   public sortData(sort: Sort) {
@@ -145,7 +151,6 @@ export class PatientComponent implements OnInit {
       confirmButtonText: "Eliminar",
       denyButtonText: `Cancelar`
     }).then((result) => {
-      /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
         this.deleteUser(user);
         Swal.fire("Eliminado", "", "success");
@@ -155,4 +160,6 @@ export class PatientComponent implements OnInit {
       }
     });
   }
+
+
 }

@@ -116,7 +116,8 @@
                                 <div *ngIf="(interventions.length === 0)">
                                     <p>{{user.name}} {{user.lastName}} no ha tenido intervenciones</p>
                                 </div>
-                                <div class="experience-box" *ngFor="let intervention of interventions">
+                                <div class="experience-box"
+                                    *ngFor="let intervention of interventions | paginate: { itemsPerPage: 5, currentPage: page }">
                                     <ul class="experience-list">
                                         <li>
                                             <div class="experience-user">
@@ -151,6 +152,9 @@
                                         </li>
                                     </ul>
                                 </div>
+                                <pagination-controls (pageChange)="page = $event" previousLabel="Anterior"
+                                    nextLabel="Siguiente">
+                                </pagination-controls>
                             </div>
                         </div>
                     </div>
@@ -163,7 +167,8 @@
                                 <div *ngIf="(documents.length === 0)">
                                     <p>{{user.name}} {{user.lastName}} no tiene documentos</p>
                                 </div>
-                                <div class="experience-box" *ngFor="let document of documents">
+                                <div class="experience-box"
+                                    *ngFor="let document of documents | paginate: { itemsPerPage: 5, currentPage: page2 }">
                                     <ul class="experience-list">
                                         <li>
                                             <div class="experience-user">

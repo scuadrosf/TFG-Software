@@ -25,6 +25,7 @@ export class AppointmentComponent implements OnInit {
   todayNow!: Date;
   fechaBaseDatos!: Date;
   isCompleted: boolean = false;
+  page!: number;
 
   constructor(private router: Router, private appointmentService: AppointmentService, private userService: UserService, private utilService: UtilService) { }
 

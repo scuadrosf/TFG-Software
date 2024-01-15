@@ -26,6 +26,6 @@
       <a routerLink="/add-appointment" ngbDropdownItem>Dar cita</a>
     </div>
   </div>
-  <div ngbDropdown class="sidebarNew"><a type="button" class="btn btn-outline-primary bto" routerLink="/register-doctor">Registrar doctor</a></div>
+  <div *ngIf="authService.isAdmin()" ngbDropdown class="sidebarNew"><a type="button" class="btn btn-outline-primary bto" routerLink="/register-doctor">Registrar doctor</a></div>
   
 </div>  

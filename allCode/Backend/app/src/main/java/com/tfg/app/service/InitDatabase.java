@@ -72,6 +72,9 @@ public class InitDatabase {
         }
 
         users.save(user2);
+
+        createUsers(10);
+
     }
 
     private void setProfileAvatarContent(User user, String profileAvatarUrl) throws IOException {
@@ -79,4 +82,37 @@ public class InitDatabase {
         user.setProfileAvatarFile(BlobProxy.generateProxy(image.getInputStream(), image.contentLength()));
     }
 
+    public void createUsers(int numberOfUsers) {
+        String avatarUrlAdmin = "/static/assets/predAdminAvatar.png";
+        String avatarUrlUser = "/static/assets/predAvatar.png";
+
+        for (int i = 1; i <= numberOfUsers; i++) {
+            User user = new User();
+            user.setName("User" + i);
+            user.setLastName("LastName" + i);
+            user.setUsername("Username" + i);
+            user.setPhone("444444444");
+            user.setEmail("user" + i + "@gmail.com");
+            user.setPasswordEncoded(passwordEncoder.encode("pass" + i));
+            user.setRoles(i % 2 == 0 ? "USER" : "USER, ADMIN");
+            user.setBirth(LocalDate.now().minusYears(20 + i));
+            user.setGender(i % 2 == 0 ? "Masculino" : "Femenino");
+
+            if (i % 2 == 0) {
+                user.setAddress("Calle " + i);
+                user.setCity("Ciudad " + i);
+                user.setCountry("País " + i);
+                user.setPostalCode("CodigoPostal" + i);
+            }
+
+            String avatarUrl = i % 2 == 0 ? avatarUrlUser : avatarUrlAdmin;
+            try {
+                setProfileAvatarContent(user, avatarUrl);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            users.save(user);
+        }
+    }
 }

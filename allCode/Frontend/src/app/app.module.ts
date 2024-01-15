@@ -35,6 +35,8 @@ import { MatListModule } from '@angular/material/list';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { SidebarMobileComponent } from './components/common-components/sidebar-mobile/sidebar-mobile.component';
+import {NgxPaginationModule} from 'ngx-pagination';
+
 
 
 @NgModule({
@@ -75,7 +77,8 @@ import { SidebarMobileComponent } from './components/common-components/sidebar-m
     NgbModule,
     MatListModule,
     PdfViewerModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    NgxPaginationModule
   ],
   providers: [],
   bootstrap: [AppComponent]

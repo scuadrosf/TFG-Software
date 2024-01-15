@@ -20,6 +20,8 @@ export class ProfileComponent implements OnInit {
 
   selectedFile: File | null = null;
   selectedFileName: string = '';
+  page!: number;
+  page2!: number;
 
   user!: User;
   idUser!: number;
@@ -32,6 +34,7 @@ export class ProfileComponent implements OnInit {
   documents: Document[] = [];
 
   selectedDocumentId!: number;
+  $event2!: number;
 
 
   constructor(private appointmentService:AppointmentService, private documentService: DocumentService, private utilService: UtilService, public authService: AuthService, private interventionService: InterventionService, private userService: UserService, private activatedRoute: ActivatedRoute) {
