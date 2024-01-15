@@ -112,7 +112,8 @@
                                 <div *ngIf="(interventions.length === 0)">
                                     <p>{{user.name}} {{user.lastName}} no ha tenido intervenciones</p>
                                 </div>
-                                <div class="experience-box" *ngFor="let intervention of interventions">
+                                <div class="experience-box"
+                                    *ngFor="let intervention of interventions | paginate: { itemsPerPage: 5, currentPage: page }">
                                     <ul class="experience-list">
                                         <li>
                                             <div class="experience-user">
@@ -133,6 +134,9 @@
                                     </ul>
                                 </div>
                             </div>
+                            <pagination-controls (pageChange)="page = $event" previousLabel="Anterior"
+                                nextLabel="Siguiente">
+                            </pagination-controls>
                             <p> ** Para visualizar más detalles sobre la intervención haga click en la intervención
                                 deseada </p>
                         </div>

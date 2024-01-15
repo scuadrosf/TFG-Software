@@ -32,7 +32,7 @@ export class DashboardsComponent implements OnInit {
   newPatients: number = 0;
   incrementRate: number = 0;
   differenceTime: string = '';
-
+  page!: number;
   today = new Date();
 
 

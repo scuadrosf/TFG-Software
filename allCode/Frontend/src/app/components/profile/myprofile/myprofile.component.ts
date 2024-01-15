@@ -21,6 +21,7 @@ export class MyprofileComponent {
   user!: User;
   profileAvatarUrls!: string;
   isAdmin: boolean = false;
+  page!: number;
 
   appointmentsUser: Appointment[] = [];
   interventions: Intervention[] = [];

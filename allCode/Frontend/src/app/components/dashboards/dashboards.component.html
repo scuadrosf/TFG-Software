@@ -218,7 +218,8 @@
                 <div class="col-12 col-xl-6 col-md-12">
                     <h2 class="title"> Intervenciones </h2>
                     <div class="accordion" id="accordionExample">
-                        <div class="accordion-item" *ngFor="let intervention of interventionsUser">
+                        <div class="accordion-item"
+                            *ngFor="let intervention of interventionsUser | paginate: { itemsPerPage: 5, currentPage: page }">
                             <div *ngIf="interventionsUser.length != 0">
                                 <h2 class="accordion-header">
                                     <button class="accordion-button" type="button" data-bs-toggle="collapse"
@@ -240,6 +241,9 @@
                                 <p> No tiene intervenciones </p>
                             </div>
                         </div>
+                        <pagination-controls (pageChange)="page = $event" previousLabel="Anterior"
+                            nextLabel="Siguiente">
+                        </pagination-controls>
                     </div>
                     <br>
                 </div>
