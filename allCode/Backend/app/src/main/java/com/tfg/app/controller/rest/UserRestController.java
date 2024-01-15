@@ -111,8 +111,8 @@ public class UserRestController {
 
             userService.save(user);
             int totalAux = utilService.getNumPatientsTotal() + 1;
-            System.out.println("//////////////////////////////////////"+totalAux);
-            Util utilAux = new Util(0,0,totalAux);
+            System.out.println("//////////////////////////////////////" + totalAux);
+            Util utilAux = new Util(0, 0, totalAux);
             utilService.partialUpdate(2L, utilAux);
             URI location = fromCurrentRequest().path("/{id}").buildAndExpand(user.getId()).toUri();
 
@@ -168,6 +168,13 @@ public class UserRestController {
         }
         User updatedUser = userRepository.save(user);
         return ResponseEntity.ok(updatedUser);
+    }
+
+    @PostMapping("/check-password/{id}")
+    public ResponseEntity<Boolean> checkPassword(@PathVariable Long id, @RequestParam(value = "password") String currentPassword ) {
+        User currentUser = userService.findById(id).orElseThrow();
+        boolean matches = passwordEncoder.matches(currentPassword, currentUser.getEncodedPassword());
+        return ResponseEntity.ok(matches);
     }
 
     @GetMapping("/userList")
@@ -289,4 +296,17 @@ public class UserRestController {
         return userService.findUsersByNameOrLastNameOrUsername(query, query, query);
     }
 
+}
+
+class PasswordCheckRequest {
+    private String password;
+
+    // Getters y setters
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }

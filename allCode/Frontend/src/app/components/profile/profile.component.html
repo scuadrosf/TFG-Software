@@ -11,7 +11,6 @@
             </div>
 
             <div class="col-sm-5 col-6 text-end m-b-30 btn-group mb-3" role="group">
-                <!-- <a routerLink="/editprofile/{{user.id}}" class="btn btn-primary btn-rounded"><i class="fa fa-plus"></i> Editar -->
                 <a routerLink="/edit-patient/{{idUser}}" class="btn btn-outline-primary btn-rounded mr-2"><i
                         class="fa fa-pen-to-square"></i> Editar
                     perfil</a>
@@ -101,11 +100,11 @@
         <div class="profile-tabs">
             <ul class="nav nav-tabs nav-tabs-bottom">
                 <li class="nav-item"><a class="nav-link active" href="#historyIntervention"
-                    data-bs-toggle="tab">Historial
-                    médico</a></li>
+                        data-bs-toggle="tab">Historial
+                        médico</a></li>
                 <li class="nav-item"><a class="nav-link" href="#documents" data-bs-toggle="tab">Documentos</a></li>
                 <li class="nav-item"><a class="nav-link" href="#historyAppointment" data-bs-toggle="tab">Historial de
-                    citas</a></li>
+                        citas</a></li>
             </ul>
 
             <div class="tab-content">
@@ -142,7 +141,8 @@
                                                                 intervención</a>
                                                         </div>
                                                     </div>
-                                                    <a routerLink="/documents/{{intervention.id}}">{{intervention.type}}</a>
+                                                    <a
+                                                        routerLink="/documents/{{intervention.id}}">{{intervention.type}}</a>
                                                     <!-- Esto llevará justamente los documentos de esa intervención -->
                                                     <span class="time">{{intervention.interventionDate |
                                                         date:'dd-MM-yyyy'}}</span>
@@ -226,7 +226,8 @@
                                                             data-bs-toggle="dropdown" aria-expanded="false"><i
                                                                 class="fa fa-ellipsis-v"></i></a>
                                                         <div class="dropdown-menu dropdown-menu-end">
-                                                            <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#ventanaForm"
+                                                            <a class="dropdown-item" data-bs-toggle="modal"
+                                                                data-bs-target="#ventanaForm"
                                                                 routerLink="/edit-appointment/{{appointment.id}}">
                                                                 <i class="fa-solid fa-pen-to-square m-r-5"></i> Cambiar
                                                                 cita
@@ -238,14 +239,23 @@
                                                                 cita</a>
                                                             <a class="dropdown-item" style="cursor: pointer;"
                                                                 (click)="completeAppointment(appointment, appointment.completed)"
-                                                                data-bs-toggle="modal"><img style="width:20px" src="../../../assets/icons/tick-i.png"
-                                                                    > Cambiar estado</a>
+                                                                data-bs-toggle="modal"><img style="width:20px"
+                                                                    src="../../../assets/icons/tick-i.png"> Cambiar
+                                                                estado</a>
                                                         </div>
                                                     </div>
-                                                    <span class="">{{appointment.description}} - </span><span *ngIf="appointment.completed">REALIZADA </span><img style="width: 25px;" *ngIf="appointment.completed" src="../../../../assets/icons/tick.png" alt="Completed">
-                                                    <span style="color: red;" *ngIf="!appointment.completed">NO REALIZADA </span><img style="width: 25px;" *ngIf="!appointment.completed" src="../../../../assets/icons/reloj-de-arena.png" alt="not Completed">
+                                                    <span class="">{{appointment.description}} - </span><span
+                                                        *ngIf="appointment.completed">REALIZADA </span><img
+                                                        style="width: 25px;" *ngIf="appointment.completed"
+                                                        src="../../../../assets/icons/tick.png" alt="Completed">
+                                                    <span style="color: red;" *ngIf="!appointment.completed">NO
+                                                        REALIZADA </span><img style="width: 25px;"
+                                                        *ngIf="!appointment.completed"
+                                                        src="../../../../assets/icons/reloj-de-arena.png"
+                                                        alt="not Completed">
                                                     <span class="time">{{appointment.bookDate |
-                                                        date:'dd/MM/yyyy'}} - {{appointment.fromDate | slice:0:5}}</span>
+                                                        date:'dd/MM/yyyy'}} - {{appointment.fromDate |
+                                                        slice:0:5}}</span>
 
                                                 </div>
                                             </div>
@@ -279,7 +289,7 @@
                         <label class="local-top">Fichero adjunto <span class="login-danger">*</span></label>
                         <div class="settings-btn upload-files-avator">
                             <div *ngIf="selectedFileName">{{ selectedFileName }}</div>
-                            <input type="file" name="file" id="file"  (change)="onFileSelected($event)"
+                            <input type="file" name="file" id="file" (change)="onFileSelected($event)"
                                 class="hide-input" accept="application/pdf">
                             <label for="file" class="upload">Elegir fichero</label>
 

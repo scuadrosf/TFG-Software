@@ -25,23 +25,23 @@ export class UserService {
   getUserList(): Observable<User[]> {
     return this.httpClient.get<User[]>(baseUrl + 'userList');
   }
-  
-  getUser(id: number): Observable<User>{
-    return this.httpClient.get<User>(baseUrl+ id);
+
+  getUser(id: number): Observable<User> {
+    return this.httpClient.get<User>(baseUrl + id);
   }
 
-  getUserByEmail(email: string): Observable<User>{
-    return this.httpClient.get<User>(baseUrl+"email/"+ email);
+  getUserByEmail(email: string): Observable<User> {
+    return this.httpClient.get<User>(baseUrl + "email/" + email);
   }
 
-  updateUser(updatedUser: User, profileAvatarFile?: File): Observable<any>{
+  updateUser(updatedUser: User, profileAvatarFile?: File): Observable<any> {
     const formData = new FormData();
     formData.append('address', updatedUser.address || '');
     formData.append('city', updatedUser.city || '');
     formData.append('country', updatedUser.country || '');
     formData.append('postalCode', updatedUser.postalCode || '');
     formData.append('phone', updatedUser.phone || '');
-    if (profileAvatarFile){
+    if (profileAvatarFile) {
       formData.append('profileAvatarFile', profileAvatarFile);
     }
 
@@ -52,15 +52,21 @@ export class UserService {
     );
   }
 
-  updatePassword(updatedUser: User): Observable<any>{
+  updatePassword(updatedUser: User): Observable<any> {
     const formData = new FormData();
     formData.append('password', updatedUser.encodedPassword || '');
     console.log(formData.get("password"))
-    return this.httpClient.put(baseUrl+"pass/"+updatedUser.id, formData).pipe(
+    return this.httpClient.put(baseUrl + "pass/" + updatedUser.id, formData).pipe(
       catchError((error) => {
         return throwError(error);
       })
     );
+  }
+
+  checkCurrentPassword(currentPassword: string, user: User): Observable<boolean> {
+    const formData = new FormData();
+    formData.append('password', currentPassword);
+    return this.httpClient.post<boolean>(baseUrl + "check-password/"+ user.id, formData);
   }
 
   deleteUser(user: User) {
@@ -70,11 +76,11 @@ export class UserService {
   checkAdmin(id: number): Observable<boolean> {
     return this.httpClient.get<boolean>('/api/users/rol/' + id);
   }
-  
+
 
   getUsersByNameOrLastNameOrUsername(query: string): Observable<User[]> {
-    return this.httpClient.get<User[]>(baseUrl+"/search?query="+query);
+    return this.httpClient.get<User[]>(baseUrl + "/search?query=" + query);
   }
 
-  
+
 }

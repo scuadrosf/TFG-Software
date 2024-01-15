@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { User } from 'src/app/models/user.model';
 import { AuthService } from 'src/app/services/auth.service';
+import { EmailService } from 'src/app/services/email.service';
 import { UserService } from 'src/app/services/user.service';
 import Swal from 'sweetalert2';
 
@@ -22,7 +23,7 @@ export class EditPatientComponent {
   phone!: string
   avatarFile!: File;
 
-  constructor(private router: Router, private userService: UserService, public authService: AuthService, private activatedRoute: ActivatedRoute) { }
+  constructor(private emailService: EmailService, private router: Router, private userService: UserService, public authService: AuthService, private activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.userId = this.activatedRoute.snapshot.params['id'];
@@ -42,6 +43,25 @@ export class EditPatientComponent {
       this.avatarFile = event.target.files[0];
     }
 
+  }
+
+  resetPassword() {
+    this.emailService.sendEmailRecovery(this.user.email, this.user.username);
+    this.editPassword();
+    Swal.fire("Se ha enviado un correo electrónico con sus nuevas credenciales", "", "info");
+  }
+  
+  editPassword() {
+    if (this.user) {
+      this.user.encodedPassword = this.user.username;
+      console.log(this.user.encodedPassword)
+      this.userService.updatePassword(this.user).subscribe(
+        (_) => {
+          console.log(this.user);
+          window.history.back();
+        }
+      )
+    }
   }
 
   editUser() {

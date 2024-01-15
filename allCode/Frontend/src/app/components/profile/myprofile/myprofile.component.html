@@ -185,10 +185,18 @@
                                             </div>
                                             <div style="color: black;" class="experience-content">
                                                 <div class="timeline-content">
-                                                    <span class="">{{appointment.description}} - </span><span *ngIf="appointment.completed">REALIZADA </span><img style="width: 25px;" *ngIf="appointment.completed" src="../../../../assets/icons/tick.png" alt="Completed">
-                                                    <span style="color: red;" *ngIf="!appointment.completed">NO REALIZADA </span><img style="width: 25px;" *ngIf="!appointment.completed" src="../../../../assets/icons/reloj-de-arena.png" alt="not Completed">
+                                                    <span class="">{{appointment.description}} - </span><span
+                                                        *ngIf="appointment.completed">REALIZADA </span><img
+                                                        style="width: 25px;" *ngIf="appointment.completed"
+                                                        src="../../../../assets/icons/tick.png" alt="Completed">
+                                                    <span style="color: red;" *ngIf="!appointment.completed">NO
+                                                        REALIZADA </span><img style="width: 25px;"
+                                                        *ngIf="!appointment.completed"
+                                                        src="../../../../assets/icons/reloj-de-arena.png"
+                                                        alt="not Completed">
                                                     <span class="time">{{appointment.bookDate |
-                                                        date:'dd/MM/yyyy'}} - {{appointment.fromDate | slice:0:5}}</span>
+                                                        date:'dd/MM/yyyy'}} - {{appointment.fromDate |
+                                                        slice:0:5}}</span>
                                                 </div>
                                             </div>
                                         </li>
