@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { User } from 'src/app/models/user.model';
 import { AuthService } from 'src/app/services/auth.service';
 import { EmailService } from 'src/app/services/email.service';
+import { UserService } from 'src/app/services/user.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -9,7 +11,7 @@ import Swal from 'sweetalert2';
   templateUrl: './add-patient.component.html',
   styleUrls: ['./add-patient.component.scss']
 })
-export class AddPatientComponent {
+export class AddPatientComponent implements OnInit{
   name: string = '';
   lastName: string = '';
   email: string = '';
@@ -22,13 +24,20 @@ export class AddPatientComponent {
   country: string = '';
   city: string = '';
   postalCode: string = '';
+  doctorAsignated!: User;
 
 
-  constructor(public authService: AuthService, private router: Router, private emailService: EmailService) { }
+  constructor(private userService:UserService, public authService: AuthService, private router: Router, private emailService: EmailService) { }
+
+  ngOnInit(): void {
+      this.userService.getMe().subscribe(response =>{
+        this.doctorAsignated = response;
+      })
+  }
 
 
   addPatient() {
-    if (this.authService.isAdmin()) {
+    if (this.authService.isAdmin() || this.authService.isDoctor()) {
       const userData = {
         name: this.name,
         lastName: this.lastName,
@@ -42,6 +51,7 @@ export class AddPatientComponent {
         country: this.country,
         city: this.city,
         postalCode: this.postalCode,
+        doctorAsignated: this.doctorAsignated
       }
       if (Object.values(userData).every(value => value !== '')){
         this.authService.register(userData).subscribe(

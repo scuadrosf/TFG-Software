@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -13,7 +12,6 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { DashboardsComponent } from './components/dashboards/dashboards.component';
 import { HeaderComponent } from './components/common-components/header/header.component';
 import { ProfileComponent } from './components/profile/profile.component';
-import { SettingsComponent } from './components/settings/settings.component';
 import { SidebarComponent } from './components/common-components/sidebar/sidebar.component';
 import { EditProfileComponent } from './components/profile/edit-profile/edit-profile.component';
 import { PatientComponent } from './components/patient/patient.component';

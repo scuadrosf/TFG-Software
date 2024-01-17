@@ -2,6 +2,7 @@ package com.tfg.app.service;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 
@@ -35,7 +36,7 @@ public class InitDatabase {
         user.setPhone("444444444");
         user.setEmail("admin@gmail.com");
         user.setPasswordEncoded(passwordEncoder.encode("12345"));
-        user.setRoles("USER", "ADMIN");
+        user.setRoles(List.of("USER", "ADMIN"));
         user.setBirth(LocalDate.now());
         user.setGender("Masculino");
         String avatarUrlAdmin = "/static/assets/predAdminAvatar.png";
@@ -57,7 +58,7 @@ public class InitDatabase {
         user2.setPhone("444444444");
         user2.setEmail("sercua.flores@gmail.com");
         user2.setPasswordEncoded(passwordEncoder.encode("pass"));
-        user2.setRoles("USER");
+        user2.setRoles(List.of("USER"));
         user2.setBirth(LocalDate.of(2002, 12, 24));
         user2.setGender("Masculino");
         user2.setAddress("Calle Benito Perez");
@@ -87,6 +88,7 @@ public class InitDatabase {
         String avatarUrlUser = "/static/assets/predAvatar.png";
 
         for (int i = 1; i <= numberOfUsers; i++) {
+
             User user = new User();
             user.setName("User" + i);
             user.setLastName("LastName" + i);
@@ -94,7 +96,7 @@ public class InitDatabase {
             user.setPhone("444444444");
             user.setEmail("user" + i + "@gmail.com");
             user.setPasswordEncoded(passwordEncoder.encode("pass" + i));
-            user.setRoles(i % 2 == 0 ? "USER" : "USER, ADMIN");
+            user.setRoles(List.of("USER", "ADMIN"));
             user.setBirth(LocalDate.now().minusYears(20 + i));
             user.setGender(i % 2 == 0 ? "Masculino" : "Femenino");
 
@@ -114,5 +116,31 @@ public class InitDatabase {
 
             users.save(user);
         }
+
+        User user = new User();
+        user.setName("User" + 11);
+        user.setLastName("LastName" + 11);
+        user.setUsername("Username" + 11);
+        user.setPhone("444444444");
+        user.setEmail("user" + 11 + "@gmail.com");
+        user.setPasswordEncoded(passwordEncoder.encode("pass"));
+        user.setRoles(List.of("DOCTOR"));
+        user.setBirth(LocalDate.now().minusYears(20 + 11));
+        user.setGender("Femenino");
+
+        user.setAddress("Calle " + 11);
+        user.setCity("Ciudad " + 11);
+        user.setCountry("País " + 11);
+        user.setPostalCode("CodigoPostal" + 11);
+
+        String avatarUrl = avatarUrlAdmin;
+        try {
+            setProfileAvatarContent(user, avatarUrl);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        users.save(user);
+
     }
 }

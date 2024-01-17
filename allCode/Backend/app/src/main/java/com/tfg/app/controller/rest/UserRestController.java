@@ -108,7 +108,8 @@ public class UserRestController {
                 e.printStackTrace();
             }
             user.setPasswordEncoded(passwordEncoder.encode(user.getPasswordEncoded()));
-            user.setRoles(Arrays.asList("USER"));
+            // user.setDoctorAsignated(currentUser);
+            user.setRoles(List.of("USER"));
 
             userService.save(user);
             int totalAux = utilService.getNumPatientsTotal() + 1;
@@ -136,7 +137,7 @@ public class UserRestController {
                 e.printStackTrace();
             }
             user.setPasswordEncoded(passwordEncoder.encode(user.getPasswordEncoded()));
-            user.setRoles(Arrays.asList("DOCTOR"));
+            user.setRoles(List.of("DOCTOR"));
 
             userService.save(user);
             URI location = fromCurrentRequest().path("/{id}").buildAndExpand(user.getId()).toUri();

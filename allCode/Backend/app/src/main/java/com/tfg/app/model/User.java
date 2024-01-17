@@ -13,6 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -66,6 +67,10 @@ public class User {
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Appointment> appointments;
+
+    @ManyToOne
+    @JsonIgnore
+    private User doctorAsignated;
 
 
 
@@ -129,6 +134,7 @@ public class User {
         this.gender = userDTO.getGender();
         this.birth = userDTO.getBirth();
         this.roles = List.of("USER");
+        this.doctorAsignated = userDTO.getDoctorAsignated();
     }
 
     public User(UserDoctorDTO userDoctorDTO) {
@@ -266,9 +272,9 @@ public class User {
         this.roles = roles;
     }
 
-    public void setRoles(String ... roles) {
-        this.roles = List.of(roles);
-    }
+    // public void setRoles(String ... roles) {
+    //     this.roles = List.of(roles);
+    // }
 
     public Blob getProfileAvatarFile() {
         return profileAvatarFile;
@@ -305,6 +311,14 @@ public class User {
 
     public void setSpeciality(String speciality) {
         this.speciality = speciality;
+    }
+
+    public User getDoctorAsignated() {
+        return doctorAsignated;
+    }
+
+    public void setDoctorAsignated(User doctorAsignated) {
+        this.doctorAsignated = doctorAsignated;
     }
 
     

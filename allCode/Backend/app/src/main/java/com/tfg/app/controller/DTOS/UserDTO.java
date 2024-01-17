@@ -2,6 +2,8 @@ package com.tfg.app.controller.DTOS;
 
 import java.time.LocalDate;
 
+import com.tfg.app.model.User;
+
 public class UserDTO {
     
     private String name;
@@ -16,9 +18,10 @@ public class UserDTO {
     private String phone;
     private String gender;
     private LocalDate birth;
+    private User doctorAsignated;
 
     public UserDTO(String name, String lastName, String username, String email, String passwordEncoded, String address,
-            String city, String country, String postalCode, String phone, String gender, LocalDate birth) {
+            String city, String country, String postalCode, String phone, String gender, LocalDate birth, User doctorAsignated) {
         this.name = name;
         this.lastName = lastName;
         this.username = username;
@@ -31,6 +34,7 @@ public class UserDTO {
         this.phone = phone;
         this.gender = gender;
         this.birth = birth;
+        this.doctorAsignated = doctorAsignated;
     }    
 
     public String getName() {
@@ -129,6 +133,14 @@ public class UserDTO {
 
     public String getPasswordEncoded() {
         return passwordEncoded;
+    }
+
+    public User getDoctorAsignated() {
+        return doctorAsignated;
+    }
+
+    public void setDoctorAsignated(User doctorAsignated) {
+        this.doctorAsignated = doctorAsignated;
     }
 
     
