@@ -36,6 +36,7 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { SidebarMobileComponent } from './components/common-components/sidebar-mobile/sidebar-mobile.component';
 import {NgxPaginationModule} from 'ngx-pagination';
+import { RegisterDoctorComponent } from './components/login/register-doctor/register-doctor.component';
 
 
 
@@ -47,7 +48,6 @@ import {NgxPaginationModule} from 'ngx-pagination';
     HeaderComponent,
     SidebarComponent,
     ProfileComponent,
-    SettingsComponent,
     EditProfileComponent,
     PatientComponent,
     AddPatientComponent,
@@ -64,7 +64,8 @@ import {NgxPaginationModule} from 'ngx-pagination';
     AddInterventionComponent,
     EditInterventionComponent,
     ForgotPasswordComponent,
-    SidebarMobileComponent
+    SidebarMobileComponent,
+    RegisterDoctorComponent
   ],
   imports: [
     BrowserModule,

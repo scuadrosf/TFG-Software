@@ -21,10 +21,10 @@
                 <a href="javascript:void(0)" class="dropdown-toggle nav-link user-link" data-bs-toggle="dropdown">
                     <div *ngIf="authService.isLogged()" class="user-names">
                         <h5>{{currentUser().name}}</h5>
-                        <div *ngIf="authService.isAdmin()">
+                        <div *ngIf="authService.isAdmin() || authService.isDoctor()">
                             <span>Doctor</span>
                         </div>
-                        <div *ngIf="!authService.isAdmin()">
+                        <div *ngIf="!authService.isAdmin() && !authService.isDoctor()">
                             <span>Paciente</span>
                         </div>
                     </div>

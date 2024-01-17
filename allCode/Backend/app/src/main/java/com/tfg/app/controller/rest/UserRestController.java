@@ -42,6 +42,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.tfg.app.controller.DTOS.UserDTO;
+import com.tfg.app.controller.DTOS.UserDoctorDTO;
 import com.tfg.app.controller.DTOS.UserEditDTO;
 import com.tfg.app.model.Appointment;
 import com.tfg.app.model.User;
@@ -114,6 +115,30 @@ public class UserRestController {
             System.out.println("//////////////////////////////////////" + totalAux);
             Util utilAux = new Util(0, 0, totalAux);
             utilService.partialUpdate(2L, utilAux);
+            URI location = fromCurrentRequest().path("/{id}").buildAndExpand(user.getId()).toUri();
+
+            return ResponseEntity.created(location).body(user);
+        } else {
+            return new ResponseEntity<User>(HttpStatus.FORBIDDEN);
+        }
+    }
+    @PostMapping("/doctor")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<User> registerDoctor(@RequestBody UserDoctorDTO UserDoctorDTO) throws NotFoundException {
+        User user = new User(UserDoctorDTO);
+
+        if (!userService.existUsername(user.getUsername())) {
+            String imageUrl = "/static/assets/predAdminAvatar.png";
+            try {
+                Resource image = new ClassPathResource(imageUrl);
+                user.setProfileAvatarFile(BlobProxy.generateProxy(image.getInputStream(), image.contentLength()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            user.setPasswordEncoded(passwordEncoder.encode(user.getPasswordEncoded()));
+            user.setRoles(Arrays.asList("DOCTOR"));
+
+            userService.save(user);
             URI location = fromCurrentRequest().path("/{id}").buildAndExpand(user.getId()).toUri();
 
             return ResponseEntity.created(location).body(user);

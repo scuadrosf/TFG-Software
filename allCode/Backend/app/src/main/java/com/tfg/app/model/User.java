@@ -18,6 +18,7 @@ import javax.persistence.OneToMany;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tfg.app.controller.DTOS.UserDTO;
+import com.tfg.app.controller.DTOS.UserDoctorDTO;
 import com.tfg.app.controller.DTOS.UserEditDTO;
 
 @Entity (name = "userTable")
@@ -45,6 +46,7 @@ public class User {
     private String postalCode;
     private String phone;
     private String gender;
+    private String speciality;
 
     @JsonFormat(pattern="dd-MM-yyyy")
     private LocalDate birth;
@@ -64,6 +66,8 @@ public class User {
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Appointment> appointments;
+
+
 
 
     public User() {
@@ -125,6 +129,24 @@ public class User {
         this.gender = userDTO.getGender();
         this.birth = userDTO.getBirth();
         this.roles = List.of("USER");
+    }
+
+    public User(UserDoctorDTO userDoctorDTO) {
+        super();
+        this.name = userDoctorDTO.getName();
+        this.lastName = userDoctorDTO.getLastName();
+        this.username = userDoctorDTO.getUsername();
+        this.email = userDoctorDTO.getEmail();
+        this.passwordEncoded = userDoctorDTO.getPasswordEncoded();
+        this.address = userDoctorDTO.getAddress();
+        this.city = userDoctorDTO.getCity();
+        this.country = userDoctorDTO.getCountry();
+        this.postalCode = userDoctorDTO.getPostalCode();
+        this.phone = userDoctorDTO.getPhone();
+        this.gender = userDoctorDTO.getGender();
+        this.birth = userDoctorDTO.getBirth();
+        this.roles = List.of("DOCTOR");
+        this.speciality = userDoctorDTO.getSpeciality();
     }
 
     public User(String username, String password) {
@@ -275,6 +297,14 @@ public class User {
 
     public String getEncodedPassword() {
         return passwordEncoded;
+    }
+
+    public String getSpeciality() {
+        return speciality;
+    }
+
+    public void setSpeciality(String speciality) {
+        this.speciality = speciality;
     }
 
     

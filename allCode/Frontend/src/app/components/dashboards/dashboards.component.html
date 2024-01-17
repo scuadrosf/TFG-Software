@@ -16,13 +16,13 @@
         <div class="good-morning-blk">
             <div class="row">
                 <div class="col-md-6">
-                    <div *ngIf="authService.isAdmin()" class="morning-user">
+                    <div *ngIf="authService.isAdmin() || authService.isDoctor()" class="morning-user">
                         <h2 *ngIf="currentUser.gender === 'Masculino'">Bienvenido de nuevo, <span>Dr.
                                 {{currentUser.lastName}}</span></h2>
                         <h2 *ngIf="currentUser.gender === 'Femenino'">Bienvenida de nuevo, <span>Dr.
                                 {{currentUser.lastName}}</span></h2>
                     </div>
-                    <div *ngIf="!authService.isAdmin()" class="morning-user">
+                    <div *ngIf="!authService.isAdmin() && !authService.isDoctor()" class="morning-user">
                         <h2 *ngIf="currentUser.gender === 'Masculino'">Bienvenido de nuevo, <span>{{currentUser.name}}
                                 {{currentUser.lastName}}</span></h2>
                         <h2 *ngIf="currentUser.gender === 'Femenino'">Bienvenida de nuevo, <span>{{currentUser.name}}
@@ -38,7 +38,7 @@
             </div>
         </div>
 
-        <div class="doctor-list-blk" *ngIf="authService.isAdmin()">
+        <div class="doctor-list-blk" *ngIf="authService.isAdmin() || authService.isDoctor()">
             <div class="row">
                 <div class="col-xl-4 col-md-6">
                     <div class="doctor-widget border-right-bg">
@@ -87,7 +87,7 @@
                 </div>
             </div>
         </div>
-        <div *ngIf="authService.isAdmin()">
+        <div *ngIf="authService.isAdmin() || authService.isDoctor()">
             <div class="row">
                 <div class="col-12 col-md-12 col-lg-6 col-xl-2 d-flex">
 
@@ -201,7 +201,7 @@
                 </div>
             </div>
         </div>
-        <div *ngIf="!authService.isAdmin()">
+        <div *ngIf="!authService.isAdmin() && !authService.isDoctor()">
             <div class="row">
                 <div class="col-12 col-xl-6 col-xs-12">
                     <a type="button" class="btn btn-block btn-atractivo"

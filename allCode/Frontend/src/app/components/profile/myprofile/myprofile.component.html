@@ -19,7 +19,7 @@
         <div class="card-box profile-header">
             <div class="row">
                 <div class="col-md-12">
-                    <div *ngIf="!isAdmin" class="profile-view">
+                    <div *ngIf="!isAdmin && !authService.isDoctor()" class="profile-view">
                         <div class="profile-img-wrap">
                             <div class="profile-img">
                                 <a href="javascript:void(0);"><img class="avatar" [src]="profileAvatarUrls" alt=""></a>
@@ -64,7 +64,7 @@
                             </div>
                         </div>
                     </div>
-                    <div *ngIf="isAdmin" class="profile-view">
+                    <div *ngIf="isAdmin || authService.isDoctor()" class="profile-view">
                         <div class="user-img">
                             <div class="profile-img">
                                 <a href="javascript:void(0);"><img class="avatar" [src]="profileAvatarUrls" alt=""></a>
