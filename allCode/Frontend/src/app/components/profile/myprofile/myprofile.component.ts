@@ -26,6 +26,7 @@ export class MyprofileComponent {
   appointmentsUser: Appointment[] = [];
   interventions: Intervention[] = [];
   documents: Document[] = [];
+  doctorAsignated!: User;
 
 
   constructor(private appointmentService: AppointmentService, private documentService: DocumentService, public authService: AuthService, private interventionService: InterventionService, private userService: UserService, private utilService: UtilService) {
@@ -53,8 +54,12 @@ export class MyprofileComponent {
         this.documents = list;
       })
 
-      this.appointmentService.getAllAppointmentsByUser(this.user.id).subscribe(list => 
-        this.appointmentsUser = list)
+      this.appointmentService.getAllAppointmentsByUser(this.user.id).subscribe(list =>
+        this.appointmentsUser = list);
+
+      this.userService.getDoctorAsignated(this.user.id).subscribe(doctor =>
+        this.doctorAsignated = doctor)
+
     });
   }
 
@@ -63,13 +68,13 @@ export class MyprofileComponent {
       const blob = new Blob([data], { type: 'application/pdf' });
       const link = document.createElement("a");
       link.href = window.URL.createObjectURL(blob);
-      link.download ="Intervenciones_"+format(Date.now(), "yyyy-MM-dd")+".pdf";
+      link.download = "Intervenciones_" + format(Date.now(), "yyyy-MM-dd") + ".pdf";
       link.click();
     });
   }
 
-  download(documentId: number){
-    this.documentService.downloadDocument(documentId).subscribe(blob =>{
+  download(documentId: number) {
+    this.documentService.downloadDocument(documentId).subscribe(blob => {
       const link = document.createElement('a');
       link.href = window.URL.createObjectURL(blob);
       link.target = '_blank';

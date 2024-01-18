@@ -27,6 +27,7 @@ export class ProfileComponent implements OnInit {
   idUser!: number;
   profileAvatarUrls!: string;
   isAdmin: boolean = false;
+  doctorAsignated!: User;
 
   appointmentsUser: Appointment[] = [];
   apointment!: Appointment | null;
@@ -69,6 +70,9 @@ export class ProfileComponent implements OnInit {
 
       this.appointmentService.getAllAppointmentsByUser(this.idUser).subscribe(list => 
         this.appointmentsUser = list)
+
+        this.userService.getDoctorAsignated(this.user.id).subscribe(doctor =>
+          this.doctorAsignated = doctor)
     });
 
   }

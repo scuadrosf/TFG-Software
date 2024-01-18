@@ -26,6 +26,10 @@ export class UserService {
     return this.httpClient.get<User[]>(baseUrl + 'userList');
   }
 
+  getUserListByDoctor(doctorId: number): Observable<User[]> {
+    return this.httpClient.get<User[]>(baseUrl + 'userList/doctor='+doctorId);
+  }
+
   getUser(id: number): Observable<User> {
     return this.httpClient.get<User>(baseUrl + id);
   }
@@ -80,6 +84,10 @@ export class UserService {
 
   getUsersByNameOrLastNameOrUsername(query: string): Observable<User[]> {
     return this.httpClient.get<User[]>(baseUrl + "/search?query=" + query);
+  }
+  
+  getDoctorAsignated(id: number){
+    return this.httpClient.get<User>(baseUrl+"/doctorAsignated/"+id);
   }
 
 

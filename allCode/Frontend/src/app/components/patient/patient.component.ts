@@ -9,6 +9,7 @@ import { FormControl } from '@angular/forms';
 import { Observable, debounceTime, filter, forkJoin, map, of, startWith, switchMap, tap } from 'rxjs';
 import Swal from 'sweetalert2';
 import { PageEvent } from '@angular/material/paginator';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-patient',
@@ -21,21 +22,29 @@ export class PatientComponent implements OnInit {
   patientsList: User[] = [];
   profileAvatarUrls: string[] = [];
   page!: number;
-  
+  doctorAsignated!: number;
+  showingAllUsers!: boolean;
 
   control = new FormControl();
   noResults: boolean = false
 
 
-  constructor(public patientService: UserService, private router: Router, private utilService: UtilService) { }
+  constructor(private authService: AuthService, private patientService: UserService, private router: Router, private utilService: UtilService) { }
 
   ngOnInit(): void {
+    this.showingAllUsers = false;
 
-    this.getAllUsers();
+    this.patientService.getMe().subscribe((response) => {
+      this.doctorAsignated = response.id;
+      this.getAllUsersByDoctor(this.doctorAsignated);
+    });
+
+
 
     this.observerChangeSearch();
 
   }
+
 
   getAllUsers(): void {
     this.loading = true;
@@ -62,11 +71,44 @@ export class PatientComponent implements OnInit {
         }
       );
     });
-
-
-
-
   }
+
+  getAllUsersByDoctor(doctorId:number): void {
+    this.loading = true;
+
+    this.patientService.getUserListByDoctor(doctorId).subscribe((list) => {
+      this.patientsList = list;
+      // Usar forkJoin para esperar todas las llamadas a getProfileAvatar
+      forkJoin(
+        this.patientsList.map(patient =>
+          this.patientService.getProfileAvatar(patient.id).pipe(
+            switchMap(blob => {
+              const objectUrl = URL.createObjectURL(blob);
+              this.profileAvatarUrls[patient.id] = objectUrl;
+              return of(patient); // Devuelve el usuario después de manejar el avatar
+            })
+          )
+        )
+      ).subscribe(
+        () => {
+          this.loading = false;
+        },
+        (error) => {
+          console.error('Error:', error);
+          this.loading = false;
+        }
+      );
+    });
+  }
+
+  togglePatientView(): void {
+    if (this.showingAllUsers) {
+        this.getAllUsersByDoctor(this.doctorAsignated);
+    } else {
+        this.getAllUsers();
+    }
+    this.showingAllUsers = !this.showingAllUsers;
+}
 
   public sortData(sort: Sort) {
     const data = this.patientsList.slice();

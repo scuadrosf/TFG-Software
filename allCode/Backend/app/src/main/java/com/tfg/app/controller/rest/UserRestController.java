@@ -8,7 +8,6 @@ import java.net.URISyntaxException;
 import java.security.Principal;
 import java.sql.Blob;
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -108,7 +107,7 @@ public class UserRestController {
                 e.printStackTrace();
             }
             user.setPasswordEncoded(passwordEncoder.encode(user.getPasswordEncoded()));
-            // user.setDoctorAsignated(currentUser);
+            user.setDoctorAsignated(currentUser);
             user.setRoles(List.of("USER"));
 
             userService.save(user);
@@ -206,6 +205,12 @@ public class UserRestController {
     @GetMapping("/userList")
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> userList = userService.findAll();
+        return ResponseEntity.ok(userList);
+    }
+
+    @GetMapping("/userList/doctor={id}")
+    public ResponseEntity<List<User>> getAllUsersByDoctor(@PathVariable Long id) {
+        List<User> userList = userService.findAllUsersByDoctorAsignatedId(id);
         return ResponseEntity.ok(userList);
     }
 
@@ -321,6 +326,13 @@ public class UserRestController {
     public List<User> searchUsersByNameOrLastName(@RequestParam String query) {
         return userService.findUsersByNameOrLastNameOrUsername(query, query, query);
     }
+    
+    @GetMapping("/doctorAsignated/{id}")
+    public User getDoctorAsignated(@PathVariable Long id) {
+        User patient = userService.findById(id).orElseThrow();
+        return patient.getDoctorAsignated();
+    }
+    
 
 }
 

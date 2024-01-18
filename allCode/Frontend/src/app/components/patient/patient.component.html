@@ -37,6 +37,9 @@
                             src="assets/img/icons/plus.svg" alt=""></a>
                         <a (click)="reload()" class="btn btn-primary doctor-refresh ms-2"><img
                             src="assets/img/icons/re-fresh.svg" alt=""></a>
+                            <a class="btn btn2 ms-2" (click)="togglePatientView()">
+                              {{ showingAllUsers ? 'Mostrar mis pacientes' : 'Mostrar todos los pacientes' }}
+                          </a>
                       </div>
                     </div>
                   </div>
