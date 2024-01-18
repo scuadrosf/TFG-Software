@@ -39,18 +39,16 @@ export class PatientComponent implements OnInit {
       this.getAllUsersByDoctor(this.doctorAsignated);
     });
 
-
-
     this.observerChangeSearch();
-
   }
 
 
   getAllUsers(): void {
     this.loading = true;
     this.patientService.getUserList().subscribe((list) => {
-      this.patientsList = list.filter(patient => 
-        patient.roles.length === 1 && patient.roles.includes('USER'));      // Usar forkJoin para esperar todas las llamadas a getProfileAvatar
+      this.patientsList = list.filter(patient =>
+        patient.roles.length === 1 && patient.roles.includes('USER'));
+      // Usar forkJoin para esperar todas las llamadas a getProfileAvatar
       forkJoin(
         this.patientsList.map(patient =>
           this.patientService.getProfileAvatar(patient.id).pipe(
@@ -73,11 +71,12 @@ export class PatientComponent implements OnInit {
     });
   }
 
-  getAllUsersByDoctor(doctorId:number): void {
+  getAllUsersByDoctor(doctorId: number): void {
     this.loading = true;
 
     this.patientService.getUserListByDoctor(doctorId).subscribe((list) => {
-      this.patientsList = list;
+      this.patientsList = list.filter(patient =>
+        patient.roles.length === 1 && patient.roles.includes('USER'));
       // Usar forkJoin para esperar todas las llamadas a getProfileAvatar
       forkJoin(
         this.patientsList.map(patient =>
@@ -103,12 +102,12 @@ export class PatientComponent implements OnInit {
 
   togglePatientView(): void {
     if (this.showingAllUsers) {
-        this.getAllUsersByDoctor(this.doctorAsignated);
+      this.getAllUsersByDoctor(this.doctorAsignated);
     } else {
-        this.getAllUsers();
+      this.getAllUsers();
     }
     this.showingAllUsers = !this.showingAllUsers;
-}
+  }
 
   public sortData(sort: Sort) {
     const data = this.patientsList.slice();

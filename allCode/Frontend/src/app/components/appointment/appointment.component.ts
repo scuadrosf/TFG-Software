@@ -26,14 +26,21 @@ export class AppointmentComponent implements OnInit {
   fechaBaseDatos!: Date;
   isCompleted: boolean = false;
   page!: number;
+  showingAllAppointments!: boolean;
+  doctorAsignated!: number;
 
   constructor(private router: Router, private appointmentService: AppointmentService, private userService: UserService, private utilService: UtilService) { }
 
 
   ngOnInit(): void {
-    this.getAllAppointments();
-    this.observerChangeSearch();
+    this.showingAllAppointments = false;
 
+    this.userService.getMe().subscribe((response) => {
+      this.doctorAsignated = response.id;
+      this.getAllAppointmentsByDoctor(this.doctorAsignated);
+    });
+
+    this.observerChangeSearch();
 
     console.log(this.isCompleted)
   }
@@ -52,7 +59,29 @@ export class AppointmentComponent implements OnInit {
       });
       this.loading = false;
     })
+  }
 
+  getAllAppointmentsByDoctor(doctorId: number): void {
+    this.loading = true;
+
+    this.appointmentService.getAllAppointments().subscribe(list => {
+      // Filtra las citas para incluir solo aquellas cuyo usuario tiene el doctorAsignated igual a doctorId
+      this.originalAppointmentList = list.filter(appointment =>
+        appointment.user && appointment.user.doctorAsignated &&
+        appointment.user.doctorAsignated.id === doctorId
+      );
+      this.appointmentList = [...this.originalAppointmentList];
+
+      // Obtiene los avatares para los usuarios filtrados
+      this.appointmentList.forEach(appointment => {
+        this.userService.getProfileAvatar(appointment.user.id).subscribe(blob => {
+          const objectUrl = URL.createObjectURL(blob);
+          this.profileAvatarUrls[appointment.user.id] = objectUrl;
+        });
+      });
+
+      this.loading = false;
+    });
   }
 
   observerChangeSearch() {
@@ -151,14 +180,21 @@ export class AppointmentComponent implements OnInit {
       confirmButtonText: "Eliminar",
       denyButtonText: `Cancelar`
     }).then((result) => {
-      /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
         this.deleteAppointment(id);
         Swal.fire("Eliminado", "", "success");
         this.ngOnInit();
       } else if (result.isDenied) {
-        // Swal.fire("Changes are not saved", "", "info");
       }
     });
+  }
+
+  togglePatientView(): void {
+    if (this.showingAllAppointments) {
+      this.getAllAppointmentsByDoctor(this.doctorAsignated);
+    } else {
+      this.getAllAppointments();
+    }
+    this.showingAllAppointments = !this.showingAllAppointments;
   }
 }

@@ -69,7 +69,6 @@ public class User {
     private List<Appointment> appointments;
 
     @ManyToOne
-    @JsonIgnore
     private User doctorAsignated;
 
 

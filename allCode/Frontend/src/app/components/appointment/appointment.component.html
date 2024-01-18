@@ -42,6 +42,9 @@
                         <input type="date" id="selectedDay" [(ngModel)]="selectedDay" class="form-control"
                           (change)="filterAppointmentsByDay()" />
                       </div>
+                      <a class="btn btn2 ms-2" (click)="togglePatientView()">
+                        {{ showingAllAppointments ? 'Mostrar mis pacientes' : 'Mostrar todos los pacientes' }}
+                      </a>
                     </div>
                   </div>
                 </div>

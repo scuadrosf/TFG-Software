@@ -120,26 +120,24 @@ public class AppointmentRestController {
             @RequestParam(value = "additionalNote", required = false) String additionalNote) {
 
         Appointment appointment = appointmentService.findById(id).orElseThrow();
-        if (bookDate != null){
+        if (bookDate != null) {
             appointment.setBookDate(LocalDate.parse(bookDate));
         }
-        if (fromDate != null){
+        if (fromDate != null) {
             appointment.setFromDate(LocalTime.parse(fromDate));
         }
-        if (toDate != null){
+        if (toDate != null) {
             appointment.setToDate(LocalTime.parse(toDate));
         }
-        if (description != null){
+        if (description != null) {
             appointment.setDescription(description);
         }
-        if (additionalNote != null){
+        if (additionalNote != null) {
             appointment.setAdditionalNote(additionalNote);
         }
         Appointment updatedAppointment = appointmentRepository.save(appointment);
         return ResponseEntity.ok(updatedAppointment);
     }
-
-    
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteAppointment(@PathVariable Long id) {
@@ -153,18 +151,19 @@ public class AppointmentRestController {
     }
 
     @GetMapping("/all/{id}")
-    public ResponseEntity<List<Appointment>> getAppointmentByUser(@PathVariable Long id){
+    public ResponseEntity<List<Appointment>> getAppointmentByUser(@PathVariable Long id) {
         User user = userService.findById(id).orElseThrow();
-        if (user != null){
+        if (user != null) {
             List<Appointment> appointments = appointmentService.getAllAppointmentsByUserId(id);
             return ResponseEntity.ok(appointments);
-        }else{
+        } else {
             return ResponseEntity.notFound().build();
         }
     }
 
     @GetMapping("byAppointment/{idIntervention}")
-    public ResponseEntity<Appointment> getAppointmentByInterventionId(@PathVariable("idIntervention") Long idIntervention){
+    public ResponseEntity<Appointment> getAppointmentByInterventionId(
+            @PathVariable("idIntervention") Long idIntervention) {
         return ResponseEntity.ok().body(appointmentService.getAppointmentByInterventionId(idIntervention));
     }
 
@@ -175,7 +174,8 @@ public class AppointmentRestController {
 
     @PostMapping("/check-availability")
     public ResponseEntity<Boolean> checkAppointmentAvailability(@RequestBody AvailabilityCheckRequest request) {
-        boolean isAvailable = appointmentService.isAppointmentAvailable(request.getBookDate(), request.getFromDate(), request.getToDate());
+        boolean isAvailable = appointmentService.isAppointmentAvailable(request.getBookDate(), request.getFromDate(),
+                request.getToDate());
         return ResponseEntity.ok(isAvailable);
     }
 }
@@ -209,5 +209,4 @@ class AvailabilityCheckRequest {
         this.bookDate = bookDate;
     }
 
-    
 }
