@@ -96,7 +96,7 @@ public class InitDatabase {
             user.setPhone("444444444");
             user.setEmail("user" + i + "@gmail.com");
             user.setPasswordEncoded(passwordEncoder.encode("pass" + i));
-            user.setRoles(List.of("USER", "ADMIN"));
+            user.setRoles(i % 2 == 0 ? List.of("USER", "ADMIN"): List.of("USER"));
             user.setBirth(LocalDate.now().minusYears(20 + i));
             user.setGender(i % 2 == 0 ? "Masculino" : "Femenino");
 

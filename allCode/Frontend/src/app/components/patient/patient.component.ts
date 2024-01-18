@@ -49,8 +49,8 @@ export class PatientComponent implements OnInit {
   getAllUsers(): void {
     this.loading = true;
     this.patientService.getUserList().subscribe((list) => {
-      this.patientsList = list;
-      // Usar forkJoin para esperar todas las llamadas a getProfileAvatar
+      this.patientsList = list.filter(patient => 
+        patient.roles.length === 1 && patient.roles.includes('USER'));      // Usar forkJoin para esperar todas las llamadas a getProfileAvatar
       forkJoin(
         this.patientsList.map(patient =>
           this.patientService.getProfileAvatar(patient.id).pipe(
