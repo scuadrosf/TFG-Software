@@ -31,6 +31,9 @@ public class Appointment {
     private String description;
     private String additionalNote;
 
+    @ManyToOne
+    private User doctorAsignated;
+
     @OneToMany(mappedBy = "appointment", cascade = CascadeType.ALL)
     private List<Intervention> interventions;
 
@@ -40,7 +43,7 @@ public class Appointment {
     private boolean completed;
 
     public Appointment(Long id, LocalDate bookDate, LocalTime from, LocalTime to, String description, List<Intervention> interventions,
-            User user, boolean completed) {
+            User user, boolean completed, User doctorAsignated) {
         this.id = id;
         this.bookDate = bookDate;
         this.fromDate = from;
@@ -49,6 +52,7 @@ public class Appointment {
         this.interventions = interventions;
         this.user = user;
         this.completed = completed;
+        this.doctorAsignated = doctorAsignated;
     }
 
     public Appointment() {
@@ -62,6 +66,7 @@ public class Appointment {
         this.description = appointmentDTO.getDescription();
         this.additionalNote = appointmentDTO.getAdditionalNote();
         this.completed = appointmentDTO.getCompleted();
+        this.doctorAsignated = appointmentDTO.getDoctorAsignated();
     }
 
     public Long getId() {
@@ -139,6 +144,14 @@ public class Appointment {
 
     public void setCompleted(boolean completed) {
         this.completed = completed;
+    }
+
+    public User getDoctorAsignated() {
+        return doctorAsignated;
+    }
+
+    public void setDoctorAsignated(User doctorAsignated) {
+        this.doctorAsignated = doctorAsignated;
     }
 
     

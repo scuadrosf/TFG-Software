@@ -1,20 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from 'src/app/models/user.model';
-import { Sort } from '@angular/material/sort';
 import { UserService } from 'src/app/services/user.service';
 import { Router } from '@angular/router';
 import { format } from 'date-fns';
 import { UtilService } from 'src/app/services/util.service';
 import { FormControl } from '@angular/forms';
-import { Observable, debounceTime, filter, forkJoin, map, of, startWith, switchMap, tap } from 'rxjs';
+import { debounceTime, forkJoin, of, switchMap } from 'rxjs';
 import Swal from 'sweetalert2';
-import { PageEvent } from '@angular/material/paginator';
-import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-patient',
-  templateUrl: './patient.component.html',
-  styleUrls: ['./patient.component.scss']
+  templateUrl: './patient.component.html'
 })
 export class PatientComponent implements OnInit {
 
@@ -29,7 +25,7 @@ export class PatientComponent implements OnInit {
   noResults: boolean = false
 
 
-  constructor(private authService: AuthService, private patientService: UserService, private router: Router, private utilService: UtilService) { }
+  constructor(private patientService: UserService, private router: Router, private utilService: UtilService) { }
 
   ngOnInit(): void {
     this.showingAllUsers = false;
@@ -107,22 +103,6 @@ export class PatientComponent implements OnInit {
       this.getAllUsers();
     }
     this.showingAllUsers = !this.showingAllUsers;
-  }
-
-  public sortData(sort: Sort) {
-    const data = this.patientsList.slice();
-
-    if (!sort.active || sort.direction === '') {
-      this.patientsList = data;
-    } else {
-      this.patientsList = data.sort((a, b) => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const aValue = (a as any)[sort.active];
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const bValue = (b as any)[sort.active];
-        return (aValue < bValue ? -1 : 1) * (sort.direction === 'asc' ? 1 : -1);
-      });
-    }
   }
 
   goToProfile(id: number): any {

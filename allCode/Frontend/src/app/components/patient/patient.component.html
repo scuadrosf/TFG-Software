@@ -49,7 +49,6 @@
                       src="assets/img/icons/pdf-icon-01.svg" alt=""></a>
                   <a style="cursor: pointer;" (click)="exportExcel()" class="me-2"><img
                       src="assets/img/icons/pdf-icon-04.svg" alt=""></a>
-
                 </div>
               </div>
             </div>
@@ -58,7 +57,6 @@
             <div class="table-responsive" *ngIf="!loading">
 
               <table #table id="table" class="table border-0 custom-table comman-table datatable mb-0">
-                <!-- <table matSort (matSortChange)="sortData($event)" class="table border-0 custom-table comman-table datatable mb-0"> -->
                 <thead>
                   <tr>
                     <th mat-sort-header="checkbox">
@@ -81,7 +79,6 @@
                   <div *ngIf="noResults">
                     <p>No hay resultados coincidentes</p>
                   </div>
-                  <!-- <tr *ngFor="let patient of patientsList | slice:initIndexPage:endIndexPage"> -->
                   <tr *ngFor="let patient of patientsList | paginate: { itemsPerPage: 5, currentPage: page }">
                     <td>
                       <div class="form-check check-tables">
@@ -119,8 +116,8 @@
               </pagination-controls>
 
             </div>
-            <!-- LOADING -->
 
+            <!-- LOADING -->
             <div *ngIf="loading" fxLayoutAlign="center">
               <div class="spinner-grow text-primary" role="status">
                 <span class="visually-hidden">Loading...</span>

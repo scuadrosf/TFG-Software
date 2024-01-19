@@ -234,6 +234,16 @@ public class UserRestController {
         }
     }
 
+    @GetMapping("/name/{name}")
+    public ResponseEntity<User> getUserByName(@PathVariable String name) {
+        Optional<User> user = userService.findByName(name);
+        if (user.isPresent()) {
+            return ResponseEntity.ok(user.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @PostMapping("/me/edit")
     public ResponseEntity<User> editMe(HttpServletRequest request, @RequestBody UserEditDTO userDTO) {
 

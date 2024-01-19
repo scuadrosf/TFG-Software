@@ -38,6 +38,10 @@ export class UserService {
     return this.httpClient.get<User>(baseUrl + "email/" + email);
   }
 
+  getUserByName(name: string): Observable<User> {
+    return this.httpClient.get<User>(baseUrl + "name/" + name);
+  }
+
   updateUser(updatedUser: User, profileAvatarFile?: File): Observable<any> {
     const formData = new FormData();
     formData.append('address', updatedUser.address || '');

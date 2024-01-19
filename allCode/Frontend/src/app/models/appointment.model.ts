@@ -12,5 +12,6 @@ export interface Appointment {
     user: User;
     additionalNote: string;
     completed: boolean;
+    doctorAsignated: User;
 
 }

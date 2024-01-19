@@ -52,16 +52,12 @@
                   <a style="cursor: pointer;" (click)="exportPDF()" class=" me-2"><img
                       src="assets/img/icons/pdf-icon-01.svg" alt=""></a>
                 </div>
-                <!-- Agrega el campo de entrada para seleccionar el día -->
-
-
               </div>
             </div>
             <!-- /Table Header -->
 
             <div class="table-responsive" *ngIf="!loading">
               <table class="table border-0 custom-table comman-table datatable mb-0">
-                <!-- <table matSort (matSortChange)="sortData($event)" class="table border-0 custom-table comman-table datatable mb-0"> -->
                 <thead>
                   <tr>
                     <th mat-sort-header="checkbox">
@@ -72,7 +68,6 @@
                     <th mat-sort-header="name">Nombre</th>
                     <th mat-sort-header="lastName">Apellidos</th>
                     <th mat-sort-header="dni">DNI</th>
-                    <!-- <th mat-sort-header="birth">Fecha de nacimiento</th> -->
                     <th mat-sort-header="reason">Motivo</th>
                     <th mat-sort-header="bookDate">Día</th>
                     <th mat-sort-header="fromDate">Hora inicio</th>
@@ -111,15 +106,12 @@
                             cita</a>
                           <a class="dropdown-item" (click)="showModalDelete(appointment.id)" data-bs-toggle="modal"
                             data-bs-target="#delete_patient"><i class="fa fa-trash-alt m-r-5"></i> Eliminar cita</a>
-                          <!-- <a class="dropdown-item" (click)="deleteAppointment(appointment.id)" data-bs-toggle="modal"
-                            data-bs-target="#delete_patient"><i class="fa fa-trash-alt m-r-5"></i> Eliminar cita</a> -->
                           <a class="dropdown-item" (click)="addIntervention(appointment.id)" data-bs-toggle="modal"
                             data-bs-target="#delete_patient"><i class="fa-solid fa-pen-alt m-r-5"></i> Añadir
                             intervención</a>
                         </div>
                       </div>
                     </td>
-                    <!-- </div> -->
                   </tr>
                 </tbody>
               </table>

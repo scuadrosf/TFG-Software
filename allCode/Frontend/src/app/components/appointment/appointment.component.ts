@@ -65,21 +65,25 @@ export class AppointmentComponent implements OnInit {
     this.loading = true;
 
     this.appointmentService.getAllAppointments().subscribe(list => {
+      console.log(list)
       // Filtra las citas para incluir solo aquellas cuyo usuario tiene el doctorAsignated igual a doctorId
       this.originalAppointmentList = list.filter(appointment =>
-        appointment.user && appointment.user.doctorAsignated &&
-        appointment.user.doctorAsignated.id === doctorId
+        (appointment.user && appointment.user.doctorAsignated &&
+        appointment.user.doctorAsignated.id === doctorId) ||
+        (appointment.doctorAsignated && appointment.doctorAsignated.id === doctorId)
       );
       this.appointmentList = [...this.originalAppointmentList];
-
+  
       // Obtiene los avatares para los usuarios filtrados
       this.appointmentList.forEach(appointment => {
-        this.userService.getProfileAvatar(appointment.user.id).subscribe(blob => {
-          const objectUrl = URL.createObjectURL(blob);
-          this.profileAvatarUrls[appointment.user.id] = objectUrl;
-        });
+        if (appointment.user && appointment.user.id) {
+          this.userService.getProfileAvatar(appointment.user.id).subscribe(blob => {
+            const objectUrl = URL.createObjectURL(blob);
+            this.profileAvatarUrls[appointment.user.id] = objectUrl;
+          });
+        }
       });
-
+  
       this.loading = false;
     });
   }

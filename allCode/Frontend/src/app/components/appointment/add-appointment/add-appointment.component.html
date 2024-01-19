@@ -77,11 +77,18 @@
                                             name="bookDate" required>
                                     </div>
                                 </div>
-                                <div class="col-12 col-md-6 col-xl-6">
+                                <div class="col-12 col-md-6 col-xl-3">
                                     <div class="form-group local-forms">
                                         <label>Desde <span class="login-danger">*</span></label>
                                         <input type="time" class="form-control" [(ngModel)]="fromDate" name="fromDate"
                                             required>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-xl-3">
+                                    <div class="form-group local-forms">
+                                        <label>Hasta <span class="login-danger">*</span></label>
+                                        <input type="time" class="form-control" [ngModel]="toDate" name="toDate"
+                                            required readonly disabled>
                                     </div>
                                 </div>
                                 
@@ -105,13 +112,19 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-12 col-md-6 col-xl-6">
+
+                                <div class="col-12 col-md-12 col-xl-6">
                                     <div class="form-group local-forms">
-                                        <label>Hasta <span class="login-danger">*</span></label>
-                                        <input type="time" class="form-control" [ngModel]="toDate" name="toDate"
-                                            required readonly disabled>
+                                        <label>Doctor <span class="login-danger">*</span></label>
+                                        <select class="form-control" [(ngModel)]="doctorName"
+                                            (ngModelChange)="onDoctorChange()" name="doctorName" required>
+                                            <option value="">Seleccione un doctor</option>
+                                            <option *ngFor="let doctor of doctorList" ngValue="{{doctor.name}}">Dr. {{doctor.name}}</option>
+                                        </select>
                                     </div>
                                 </div>
+
+                                
                                 <div class="col-12 col-sm-12">
                                     <div class="form-group local-forms">
                                         <label>Nota adicional</label>

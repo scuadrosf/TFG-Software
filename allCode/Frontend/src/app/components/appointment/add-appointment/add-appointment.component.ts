@@ -24,8 +24,11 @@ export class AddAppointmentComponent implements OnInit {
   description: string = '';
   additionalNote: string = '';
   isAdmin: boolean = false;
+  doctorList!: User[];
+  doctorName: string = '';
+  doctorAsignated!: User;
 
-  constructor(private httpClient: HttpClient, private router: Router, private activatedRoute: ActivatedRoute, private userService: UserService, private appointmentService: AppointmentService) { }
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private userService: UserService, private appointmentService: AppointmentService) { }
 
   ngOnInit(): void {
     this.userId = this.activatedRoute.snapshot.params['id'];
@@ -38,6 +41,14 @@ export class AddAppointmentComponent implements OnInit {
         this.isAdmin = isAdmin;
       })
     })
+    this.getDoctorList();
+  }
+
+  getDoctorList(){
+    this.userService.getUserList().subscribe((list) => {
+      this.doctorList = list.filter(user => 
+        user.roles.length === 1 && user.roles.includes('DOCTOR'));
+    });
   }
 
   addAppointment() {
@@ -46,10 +57,11 @@ export class AddAppointmentComponent implements OnInit {
       fromDate: this.fromDate,
       toDate: this.toDate,
       description: this.description,
-      additionalNote: this.additionalNote
+      additionalNote: this.additionalNote,
+      doctorAsignated: this.doctorAsignated
     };
 
-    if (!this.bookDate || !this.fromDate || !this.toDate || !this.description) {
+    if (!this.bookDate || !this.fromDate || !this.toDate || !this.description || !this.doctorAsignated) {
       Swal.fire("Debe rellenar todos los campos", "", "warning");
       return;
     }
@@ -80,6 +92,7 @@ export class AddAppointmentComponent implements OnInit {
 
   onDescriptionChange() {
     if (!this.fromDate) {
+      Swal.fire("Seleccione la hora de inicio", "", "warning");
       return;
     }
     const fromDate = new Date(1970, 0, 1, parseInt(this.fromDate.substr(0, 2)), parseInt(this.fromDate.substr(3, 2)));
@@ -107,6 +120,12 @@ export class AddAppointmentComponent implements OnInit {
     }
     // Formatea toDate como 'HH:mm'
     this.toDate = fromDate.toTimeString().substr(0, 5);
+  }
+
+  onDoctorChange() {
+    this.userService.getUserByName(this.doctorName).subscribe(doctor => {
+      this.doctorAsignated = doctor
+    })
   }
 
   back() {
