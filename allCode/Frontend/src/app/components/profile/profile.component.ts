@@ -38,7 +38,7 @@ export class ProfileComponent implements OnInit {
   $event2!: number;
 
 
-  constructor(private appointmentService:AppointmentService, private documentService: DocumentService, private utilService: UtilService, public authService: AuthService, private interventionService: InterventionService, private userService: UserService, private activatedRoute: ActivatedRoute) {
+  constructor(private appointmentService: AppointmentService, private documentService: DocumentService, private utilService: UtilService, public authService: AuthService, private interventionService: InterventionService, private userService: UserService, private activatedRoute: ActivatedRoute) {
     this.idUser = this.activatedRoute.snapshot.params['id'];
 
   }
@@ -68,11 +68,11 @@ export class ProfileComponent implements OnInit {
         this.documents = list;
       })
 
-      this.appointmentService.getAllAppointmentsByUser(this.idUser).subscribe(list => 
+      this.appointmentService.getAllAppointmentsByUser(this.idUser).subscribe(list =>
         this.appointmentsUser = list)
 
-        this.userService.getDoctorAsignated(this.user.id).subscribe(doctor =>
-          this.doctorAsignated = doctor)
+      this.userService.getDoctorAsignated(this.user.id).subscribe(doctor =>
+        this.doctorAsignated = doctor)
     });
 
   }
@@ -82,12 +82,12 @@ export class ProfileComponent implements OnInit {
     this.selectedFileName = this.selectedFile?.name || '';
   }
 
-  completeAppointment(appointment: Appointment, status:boolean){
+  completeAppointment(appointment: Appointment, status: boolean) {
     this.appointmentService.updateAppointment(appointment.id, !status).subscribe();
     this.ngOnInit();
   }
 
-  deleteAppointment(appointment: Appointment){
+  deleteAppointment(appointment: Appointment) {
     const confirmation = window.confirm('Esta seguro de eliminar la cita');
     if (confirmation) {
       this.appointmentService.deleteAppointment(appointment.id);

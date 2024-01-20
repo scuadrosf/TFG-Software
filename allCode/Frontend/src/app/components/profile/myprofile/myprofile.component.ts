@@ -52,33 +52,36 @@ export class MyprofileComponent {
 
       this.documentService.getAllDocumentsByUserId(this.user.id).subscribe((list: Document[]) => {
         this.documents = list;
-      })
+      });
 
-      this.appointmentService.getAllAppointmentsByUser(this.user.id).subscribe(list =>
-        this.appointmentsUser = list);
+      this.appointmentService.getAllAppointmentsByUser(this.user.id).subscribe(list => {
+        this.appointmentsUser = list
+      });
 
-      this.userService.getDoctorAsignated(this.user.id).subscribe(doctor =>
-        this.doctorAsignated = doctor)
-
+      this.userService.getDoctorAsignated(this.user.id).subscribe(doctor => {
+        console.log(doctor);
+        this.doctorAsignated = doctor;
+        console.log("//////////////" + this.doctorAsignated);
+      });
     });
   }
 
   exportPDF() {
-    this.utilService.exportInterventionsPDF(this.user.id).subscribe((data) => {
-      const blob = new Blob([data], { type: 'application/pdf' });
-      const link = document.createElement("a");
-      link.href = window.URL.createObjectURL(blob);
-      link.download = "Intervenciones_" + format(Date.now(), "yyyy-MM-dd") + ".pdf";
-      link.click();
-    });
-  }
+      this.utilService.exportInterventionsPDF(this.user.id).subscribe((data) => {
+        const blob = new Blob([data], { type: 'application/pdf' });
+        const link = document.createElement("a");
+        link.href = window.URL.createObjectURL(blob);
+        link.download = "Intervenciones_" + format(Date.now(), "yyyy-MM-dd") + ".pdf";
+        link.click();
+      });
+    }
 
   download(documentId: number) {
-    this.documentService.downloadDocument(documentId).subscribe(blob => {
-      const link = document.createElement('a');
-      link.href = window.URL.createObjectURL(blob);
-      link.target = '_blank';
-      link.click();
-    });
-  }
+      this.documentService.downloadDocument(documentId).subscribe(blob => {
+        const link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        link.target = '_blank';
+        link.click();
+      });
+    }
 }

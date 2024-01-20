@@ -65,7 +65,8 @@
                                         </li>
                                         <li>
                                             <span class="title">Doctor asignado:</span>
-                                            <span class="text">{{doctorAsignated.name}} {{doctorAsignated.lastName}}</span>
+                                            <span class="text" *ngIf="doctorAsignated != null">{{doctorAsignated.name}} {{doctorAsignated.lastName}}</span>
+                                            <span class="text" *ngIf="doctorAsignated == null">No tiene doctor asignado</span>
                                         </li>
                                     </ul>
                                 </div>
@@ -221,6 +222,9 @@
                         <div class="col-md-12">
                             <div class="card-box">
                                 <h3 class="card-title">Registro de citas</h3>
+                                <div *ngIf="(appointmentsUser.length === 0)">
+                                    <p>{{user.name}} {{user.lastName}} no tiene historial de citas</p>
+                                </div>
                                 <div class="experience-box" *ngFor="let appointment of appointmentsUser">
                                     <ul class="experience-list">
                                         <li>
@@ -272,8 +276,6 @@
                                     </ul>
                                 </div>
                             </div>
-                            <p> ** Para visualizar más detalles sobre la intervención haga click en la intervención
-                                deseada </p>
                         </div>
                     </div>
                 </div>

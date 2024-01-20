@@ -343,6 +343,11 @@ public class UserRestController {
         return patient.getDoctorAsignated();
     }
     
+    // @GetMapping("/doctorAsignated/{id}")
+    // public User getDoctorAsignated(@PathVariable Long id) {
+    //     User doctor = userService.findDoctorAsignatedByUserId(id).orElseThrow();
+    //     return doctor;
+    // }
 
 }
 

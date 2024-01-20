@@ -58,5 +58,8 @@ public class UserService {
         return users.findAllUsersByDoctorAsignatedId(id);
     }
 
+    public Optional<User> findDoctorAsignatedByUserId(Long id){
+        return users.getDoctorAsignatedById(id);
+    }
 
 }
