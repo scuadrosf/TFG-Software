@@ -41,8 +41,6 @@ export class AppointmentComponent implements OnInit {
     });
 
     this.observerChangeSearch();
-
-    console.log(this.isCompleted)
   }
 
   getAllAppointments(): void {
@@ -65,15 +63,15 @@ export class AppointmentComponent implements OnInit {
     this.loading = true;
 
     this.appointmentService.getAllAppointments().subscribe(list => {
-      console.log(list)
-      // Filtra las citas para incluir solo aquellas cuyo usuario tiene el doctorAsignated igual a doctorId
+      /* Filtra las citas para incluir solo aquellas cuyo usuario tiene el doctorAsignated igual a doctorId 
+      o se le ha asignado dicha cita en específico */
       this.originalAppointmentList = list.filter(appointment =>
         (appointment.user && appointment.user.doctorAsignated &&
-        appointment.user.doctorAsignated.id === doctorId) ||
+          appointment.user.doctorAsignated.id === doctorId) ||
         (appointment.doctorAsignated && appointment.doctorAsignated.id === doctorId)
       );
       this.appointmentList = [...this.originalAppointmentList];
-  
+
       // Obtiene los avatares para los usuarios filtrados
       this.appointmentList.forEach(appointment => {
         if (appointment.user && appointment.user.id) {
@@ -83,7 +81,7 @@ export class AppointmentComponent implements OnInit {
           });
         }
       });
-  
+
       this.loading = false;
     });
   }
@@ -127,12 +125,19 @@ export class AppointmentComponent implements OnInit {
         this.isCompleted = !this.isCompleted;
         console.log(this.isCompleted)
 
-        this.appointmentService.updateAppointment(id, this.isCompleted).subscribe(updatedAppointment => {
-          console.log("Appointment actualizado:", updatedAppointment);
-        })
-        Swal.fire("Cita completada", "", "success");
-        this.ngOnInit();
-        this.ngOnInit();
+        this.appointmentService.updateAppointment(id, this.isCompleted).subscribe(
+          (_) => {
+            Swal.fire("Cita completada", "", "success");
+            this.ngOnInit();
+            this.ngOnInit();
+          },
+          (error) => {
+            Swal.fire("La cita no se ha podido actualizar", "", "error");
+            this.ngOnInit();
+            this.ngOnInit();
+          }
+        );
+
       } else if (result.isDenied) {
         this.ngOnInit();
       }

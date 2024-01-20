@@ -116,8 +116,7 @@
                 </tbody>
               </table>
               <!-- Paginación -->
-              <pagination-controls (pageChange)="page = $event"
-                previousLabel="Anterior" nextLabel="Siguiente">
+              <pagination-controls (pageChange)="page = $event" previousLabel="Anterior" nextLabel="Siguiente">
               </pagination-controls>
             </div>
             <!-- LOADING -->
@@ -148,6 +147,8 @@
                 <span class="visually-hidden">Loading...</span>
               </div>
             </div>
+
+            <div *ngIf="!loading"></div>
           </div>
         </div>
       </div>

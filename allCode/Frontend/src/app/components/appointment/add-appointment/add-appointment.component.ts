@@ -1,5 +1,3 @@
-import { NgFor } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { User } from 'src/app/models/user.model';
@@ -44,9 +42,9 @@ export class AddAppointmentComponent implements OnInit {
     this.getDoctorList();
   }
 
-  getDoctorList(){
+  getDoctorList() {
     this.userService.getUserList().subscribe((list) => {
-      this.doctorList = list.filter(user => 
+      this.doctorList = list.filter(user =>
         user.roles.length === 1 && user.roles.includes('DOCTOR'));
     });
   }
@@ -123,9 +121,11 @@ export class AddAppointmentComponent implements OnInit {
   }
 
   onDoctorChange() {
+
     this.userService.getUserByName(this.doctorName).subscribe(doctor => {
       this.doctorAsignated = doctor
     })
+
   }
 
   back() {

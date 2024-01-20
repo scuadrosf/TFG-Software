@@ -117,7 +117,8 @@ public class AppointmentRestController {
             @RequestParam(value = "fromDate", required = false) String fromDate,
             @RequestParam(value = "toDate", required = false) String toDate,
             @RequestParam(value = "description", required = false) String description,
-            @RequestParam(value = "additionalNote", required = false) String additionalNote) {
+            @RequestParam(value = "additionalNote", required = false) String additionalNote,
+            @RequestParam(value = "doctorAsignatedId", required = false) String doctorAsignatedId) {
 
         Appointment appointment = appointmentService.findById(id).orElseThrow();
         if (bookDate != null) {
@@ -134,6 +135,12 @@ public class AppointmentRestController {
         }
         if (additionalNote != null) {
             appointment.setAdditionalNote(additionalNote);
+        }
+        if (doctorAsignatedId != null) {
+            User doctor = userService.findById(Long.parseLong(doctorAsignatedId)).orElseThrow();
+            if (doctor != null) {
+                appointment.setDoctorAsignated(doctor);
+            }
         }
         Appointment updatedAppointment = appointmentRepository.save(appointment);
         return ResponseEntity.ok(updatedAppointment);

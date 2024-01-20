@@ -30,8 +30,8 @@ export class AppointmentService {
     return this.httpClient.get<Appointment[]>(baseUrl + "all");
   }
 
-  getAllAppointmentsByUser(id: number): Observable<Appointment[]>{
-    return this.httpClient.get<Appointment[]>(baseUrl + "all/"+id);
+  getAllAppointmentsByUser(id: number): Observable<Appointment[]> {
+    return this.httpClient.get<Appointment[]>(baseUrl + "all/" + id);
   }
 
   getAppointment(id: number): Observable<Appointment> {
@@ -54,20 +54,22 @@ export class AppointmentService {
     formData.append('toDate', appointment.toDate || '');
     formData.append('description', appointment.description || '');
     formData.append('additionalNote', appointment.additionalNote || '');
+    formData.append('doctorAsignatedId', appointment.doctorAsignated.id.toString());
+
     return this.httpClient.put(baseUrl + "fullupdate/" + appointment.id, formData);
   }
 
-  getAppointmentByInterventionId(idIntervention: number): Observable<Appointment>{
-    return this.httpClient.get<Appointment>(baseUrl+"byAppointment/"+idIntervention);
+  getAppointmentByInterventionId(idIntervention: number): Observable<Appointment> {
+    return this.httpClient.get<Appointment>(baseUrl + "byAppointment/" + idIntervention);
   }
 
   findAppointmentsByUserDetails(query: string): Observable<Appointment[]> {
-    return this.httpClient.get<Appointment[]>(baseUrl+"/search?query="+query);
+    return this.httpClient.get<Appointment[]>(baseUrl + "/search?query=" + query);
   }
 
   checkAppointmentAvailability(bookDate: string, fromDate: string, toDate: string): Observable<boolean> {
-    const appointmentData = {bookDate, fromDate, toDate };
-    return this.httpClient.post<boolean>(baseUrl+"/check-availability", appointmentData);
+    const appointmentData = { bookDate, fromDate, toDate };
+    return this.httpClient.post<boolean>(baseUrl + "/check-availability", appointmentData);
   }
 
 }

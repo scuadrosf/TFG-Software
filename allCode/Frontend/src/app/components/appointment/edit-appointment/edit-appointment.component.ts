@@ -1,6 +1,5 @@
-import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Appointment } from 'src/app/models/appointment.model';
 import { User } from 'src/app/models/user.model';
 import { AppointmentService } from 'src/app/services/appointment.service';
@@ -22,8 +21,11 @@ export class EditAppointmentComponent {
   toDate!: string;
   description: string = '';
   additionalNote: string = '';
+  doctorList!: User[];
+  doctorName: string = '';
+  doctorAsignated!: User;
 
-  constructor(private httpClient: HttpClient, private router: Router, private activatedRoute: ActivatedRoute, private userService: UserService, private appointmentService: AppointmentService) { }
+  constructor(private activatedRoute: ActivatedRoute, private userService: UserService, private appointmentService: AppointmentService) { }
 
   ngOnInit(): void {
     this.appointmentId = this.activatedRoute.snapshot.params['id'];
@@ -36,8 +38,15 @@ export class EditAppointmentComponent {
         this.user = patient;
       })
     });
-
+    this.getDoctorList();
     this.onDescriptionChange();
+  }
+
+  getDoctorList() {
+    this.userService.getUserList().subscribe((list) => {
+      this.doctorList = list.filter(user =>
+        user.roles.length === 1 && user.roles.includes('DOCTOR'));
+    });
   }
 
   confirmEdit() {
@@ -64,6 +73,8 @@ export class EditAppointmentComponent {
               this.appointment.description = this.description;
             if (this.additionalNote)
               this.appointment.additionalNote = this.additionalNote;
+            if (this.doctorAsignated)
+              this.appointment.doctorAsignated = this.doctorAsignated;
             this.appointmentService.updateFullAppointment(this.appointment).subscribe(
               (_) => {
                 console.log(this.appointment);
@@ -108,6 +119,14 @@ export class EditAppointmentComponent {
     }
     // Formatea toDate como 'HH:mm'
     this.toDate = fromDate.toTimeString().substr(0, 5);
+  }
+
+  onDoctorChange() {
+
+    this.userService.getUserByName(this.doctorName).subscribe(doctor => {
+      this.doctorAsignated = doctor
+    })
+
   }
 
   back() {
