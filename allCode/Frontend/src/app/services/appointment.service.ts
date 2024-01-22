@@ -2,6 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError, map, throwError } from 'rxjs';
 import { Appointment } from '../models/appointment.model';
+import { Description } from '../models/description.model';
 
 
 const baseUrl = '/api/appointments/';
@@ -70,6 +71,10 @@ export class AppointmentService {
   checkAppointmentAvailability(bookDate: string, fromDate: string, toDate: string): Observable<boolean> {
     const appointmentData = { bookDate, fromDate, toDate };
     return this.httpClient.post<boolean>(baseUrl + "/check-availability", appointmentData);
+  }
+
+  getAllDescriptions(){
+    return this.httpClient.get<Description[]>(baseUrl+"/all-description");
   }
 
 }

@@ -29,9 +29,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tfg.app.controller.DTOS.AppointmentDTO;
 import com.tfg.app.model.Appointment;
+import com.tfg.app.model.Description;
 import com.tfg.app.model.User;
 import com.tfg.app.repository.AppointmentRepository;
 import com.tfg.app.service.AppointmentService;
+import com.tfg.app.service.DescriptionService;
 import com.tfg.app.service.UserService;
 
 @RestController
@@ -42,6 +44,8 @@ public class AppointmentRestController {
     private UserService userService;
     @Autowired
     private AppointmentService appointmentService;
+    @Autowired
+    private DescriptionService descriptionService;
 
     @Autowired
     private AppointmentRepository appointmentRepository;
@@ -185,6 +189,13 @@ public class AppointmentRestController {
                 request.getToDate());
         return ResponseEntity.ok(isAvailable);
     }
+
+    @GetMapping("/all-description")
+    public ResponseEntity<List<Description>> getAllDescriptions() {
+        List<Description> descriptions = descriptionService.findAll();
+        return ResponseEntity.ok(descriptions);
+    }
+    
 }
 
 class AvailabilityCheckRequest {
