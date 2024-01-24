@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tfg.app.controller.DTOS.AppointmentDTO;
 
 @Entity(name = "appointmentTable")
@@ -34,6 +35,7 @@ public class Appointment {
     @ManyToOne
     private User doctorAsignated;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "appointment", cascade = CascadeType.ALL)
     private List<Intervention> interventions;
 

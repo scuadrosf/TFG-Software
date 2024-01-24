@@ -5,7 +5,7 @@
             <div class="row">
                 <div class="col-sm-12">
                     <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a routerLink="/profile">Mi perfil </a></li>
+                        <li class="breadcrumb-item"><a style="cursor: pointer;" (click)="back()">Mi perfil </a></li>
                         <li class="breadcrumb-item"><i class="feather icon icon-chevron-right"></i></li>
                         <li class="breadcrumb-item active">Documento</li>
                     </ul>
@@ -33,14 +33,13 @@
                         <div class="blog-grp-blk">
                             <div class="blog-img-blk">
                                 <div class="content-blk-blog ms-2">
-                                    <h3 class="blog-title">{{intervention.type}}</h3>
-                                    <h5>{{appointment.description}}</h5>
+                                    <h3 class="blog-title">{{appointment.description}}</h3>
+                                    <h5>{{intervention.type}}</h5>
                                     <p>{{appointment.additionalNote}}</p>
                                 </div>
                             </div>
-                            <span><i class="feather icon-calendar me-1"></i>{{intervention.interventionDate |
-                                date}}</span>
                         </div>
+                        <span><i class="feather icon-calendar me-1"></i>{{intervention.interventionDate |date}}</span><br>
                         <div class="d-grid">
                             <button class="btn btn-primary" type="button" (click)="download()">{{document.fileName}}<i
                                     class="fa fa-long-arrow-down ms-2"></i></button>
@@ -53,7 +52,7 @@
             <div class="col">
                 <div class="card">
                     <div class="card-body">
-                        <h3> La intervención {{intervention.type}} no tiene documentos adjuntos</h3>
+                        <h3> La intervención con informe:</h3> <br><br><p>{{intervention.type}},</p> <h3><br>no tiene documentos adjuntos</h3>
                     </div>
                 </div>
             </div>

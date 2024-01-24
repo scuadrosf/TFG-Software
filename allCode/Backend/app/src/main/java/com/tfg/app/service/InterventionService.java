@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.tfg.app.controller.DTOS.InterventionDTO;
+import com.tfg.app.controller.DTOS.InterventionDTO2;
 import com.tfg.app.model.Document;
 import com.tfg.app.model.Intervention;
 import com.tfg.app.repository.DocumentRepository;
@@ -50,6 +51,19 @@ public class InterventionService {
 
     public Optional<Intervention> getInterventionByDocumentId(Long id){
         return interventions.getInterventionByDocumentId(id);
+    }
+
+    public InterventionDTO2 getInterventionDTO(Long interventionId) {
+        Intervention intervention = interventions.findById(interventionId).orElse(null);
+        if (intervention != null) {
+            InterventionDTO2 dto = new InterventionDTO2();
+            dto.setId(intervention.getId());
+            if (intervention.getAppointment() != null) {
+                dto.setAppointmentDescription(intervention.getAppointment().getDescription());
+            }
+            return dto;
+        }
+        return null;
     }
     
 

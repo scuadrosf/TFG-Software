@@ -9233,6 +9233,7 @@ a.btn.add-links {
     -webkit-justify-content: center;
     -ms-flex-pack: center;
     border-color: $border-color_3;
+
     &:hover {
       border: 0;
       background: #2e37a4;
@@ -11103,6 +11104,10 @@ blockquote {
 }
 
 .content-blk-blog {
+  max-height: 200px;
+  overflow-y: auto;
+  word-break: break-word;
+
   h4 {
     a {
       font-size: 15px;

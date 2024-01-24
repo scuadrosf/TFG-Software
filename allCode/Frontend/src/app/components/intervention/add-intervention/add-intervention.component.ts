@@ -14,8 +14,7 @@ export class AddInterventionComponent implements OnInit {
 
   selectedFile: File | null = null;
   selectedFileName: string = '';
-
-
+  descriptionAppointment!: string;
   appointmentId!: number;
   userId!: number;
   user!: User;
@@ -31,6 +30,9 @@ export class AddInterventionComponent implements OnInit {
     this.userService.getUser(this.userId).subscribe(user => {
       this.user = user;
     })
+
+    this.appointmentService.getAppointment(this.appointmentId).subscribe(response =>
+      this.descriptionAppointment = response.description)
 
 
 
@@ -59,6 +61,7 @@ export class AddInterventionComponent implements OnInit {
         this.back();
       },
       (error) => {
+        Swal.fire("Ha ocurrido un error", "", "error");
         console.error(error);
         this.back();
       }

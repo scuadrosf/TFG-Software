@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { format } from 'date-fns';
+import { Observable } from 'rxjs';
 import { Appointment } from 'src/app/models/appointment.model';
 import { Document } from 'src/app/models/document.model';
 import { Intervention } from 'src/app/models/intervention.model';
+import { InterventionDTO } from 'src/app/models/interventionDTO.model';
 import { User } from 'src/app/models/user.model';
 import { AppointmentService } from 'src/app/services/appointment.service';
 import { AuthService } from 'src/app/services/auth.service';
@@ -30,13 +32,12 @@ export class ProfileComponent implements OnInit {
   doctorAsignated!: User;
 
   appointmentsUser: Appointment[] = [];
-  apointment!: Appointment | null;
+  apointmentsOfIntervention: Observable<string>[] = [];
   interventions: Intervention[] = [];
   documents: Document[] = [];
+  appointmentDescription: string = '';
 
   selectedDocumentId!: number;
-  $event2!: number;
-
 
   constructor(private appointmentService: AppointmentService, private documentService: DocumentService, private utilService: UtilService, public authService: AuthService, private interventionService: InterventionService, private userService: UserService, private activatedRoute: ActivatedRoute) {
     this.idUser = this.activatedRoute.snapshot.params['id'];
@@ -62,6 +63,7 @@ export class ProfileComponent implements OnInit {
 
       this.interventionService.getUserInterventions(this.idUser).subscribe((list: Intervention[]) => {
         this.interventions = list;
+        // this.interventions.forEach(element => this.apointmentsOfIntervention.push(this.interventionService.getAppointmentDescription(element.id)));
       });
 
       this.documentService.getAllDocumentsByUserId(this.idUser).subscribe((list: Document[]) => {
@@ -74,8 +76,21 @@ export class ProfileComponent implements OnInit {
       this.userService.getDoctorAsignated(this.user.id).subscribe(doctor =>
         this.doctorAsignated = doctor)
     });
-
+    // console.log(this.loadAppointmentDescription(34));
   }
+
+  // loadAppointmentDescription(id: number) {
+  //   this.interventionService.getAppointmentDescription(id).subscribe(
+  //     description => {
+  //       this.appointmentDescription = description;
+  //     },
+  //     error => {
+  //       console.error('Error loading appointment description', error);
+  //     }
+  //   );
+  //   // console.log("ALLA", this.appointmentDescription)
+  //   return this.appointmentDescription;
+  // }
 
   onFileSelected(event: any) {
     this.selectedFile = event.target.files[0];

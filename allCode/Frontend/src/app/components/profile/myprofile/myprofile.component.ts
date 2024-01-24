@@ -59,9 +59,7 @@ export class MyprofileComponent {
       });
 
       this.userService.getDoctorAsignated(this.user.id).subscribe(doctor => {
-        console.log(doctor);
         this.doctorAsignated = doctor;
-        console.log("//////////////" + this.doctorAsignated);
       });
     });
   }

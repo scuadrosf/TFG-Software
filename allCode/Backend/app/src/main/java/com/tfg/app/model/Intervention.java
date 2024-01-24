@@ -30,7 +30,7 @@ public class Intervention {
     @OneToOne(mappedBy = "intervention", cascade = CascadeType.ALL)
     private Document document;
 
-    @JsonIgnore
+    // @JsonIgnore
     @ManyToOne
     private Appointment appointment;
 

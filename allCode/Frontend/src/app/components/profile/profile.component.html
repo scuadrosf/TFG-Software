@@ -149,8 +149,7 @@
                                                                 intervención</a>
                                                         </div>
                                                     </div>
-                                                    <a
-                                                        routerLink="/documents/{{intervention.id}}">{{intervention.type}}</a>
+                                                    <a routerLink="/documents/{{intervention.id}}">{{intervention.appointment.description}}</a>
                                                     <!-- Esto llevará justamente los documentos de esa intervención -->
                                                     <span class="time">{{intervention.interventionDate |
                                                         date:'dd-MM-yyyy'}}</span>
@@ -159,10 +158,13 @@
                                         </li>
                                     </ul>
                                 </div>
+
                                 <pagination-controls (pageChange)="page = $event" previousLabel="Anterior"
                                     nextLabel="Siguiente">
                                 </pagination-controls>
                             </div>
+                            <p> ** Para visualizar más detalles sobre la intervención haga click en la intervención
+                                deseada </p>
                         </div>
                     </div>
                 </div>
@@ -202,7 +204,8 @@
                                                                 documento</a>
                                                         </div>
                                                     </div>
-                                                    <span class="">{{document.intervention.type}} - </span>
+                                                    <span class="">{{document.intervention.appointment.description}} -
+                                                    </span>
                                                     <a style="cursor: pointer;"
                                                         (click)="download(document.id)">{{document.fileName}}</a>
                                                     <span class="time">{{document.creationDate|
@@ -214,8 +217,6 @@
                                     </ul>
                                 </div>
                             </div>
-                            <p> ** Para visualizar más detalles sobre la intervención haga click en la intervención
-                                deseada </p>
                         </div>
                     </div>
                 </div>
