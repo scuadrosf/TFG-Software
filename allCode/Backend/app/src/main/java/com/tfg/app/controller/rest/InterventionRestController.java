@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.tfg.app.controller.DTOS.InterventionDTO2;
 import com.tfg.app.model.Appointment;
 import com.tfg.app.model.Document;
 import com.tfg.app.model.Intervention;
@@ -204,11 +203,4 @@ public class InterventionRestController {
     public ResponseEntity<Document> getDocument(@PathVariable Long id) {
         return ResponseEntity.ok().body(interventionService.getDocumentByInterventionId(id).get());
     }
-
-    @GetMapping("/interventionDTO/{id}")
-    public String getInterventionDTO(@PathVariable Long id) {
-        return interventionService.getInterventionDTO(id).getAppointmentDescription();
-    }
-    
-
 }

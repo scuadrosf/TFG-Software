@@ -342,13 +342,6 @@ public class UserRestController {
         User patient = userService.findById(id).orElseThrow();
         return patient.getDoctorAsignated();
     }
-    
-    // @GetMapping("/doctorAsignated/{id}")
-    // public User getDoctorAsignated(@PathVariable Long id) {
-    //     User doctor = userService.findDoctorAsignatedByUserId(id).orElseThrow();
-    //     return doctor;
-    // }
-
 }
 
 class PasswordCheckRequest {

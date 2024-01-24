@@ -11103,6 +11103,11 @@ blockquote {
   align-items: center;
 }
 
+.contenido{
+  max-height: 200px;
+  overflow-y: auto;
+  word-break: break-word;
+}
 .content-blk-blog {
   max-height: 200px;
   overflow-y: auto;

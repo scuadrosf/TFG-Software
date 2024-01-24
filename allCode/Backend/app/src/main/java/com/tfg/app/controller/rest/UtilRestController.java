@@ -141,13 +141,6 @@ public class UtilRestController {
         return utilService.getNumPatientsTotal();
     }
 
-    // @PutMapping("/update")
-    // public ResponseEntity<Util> updateUtil(@RequestBody Util partialUtil) throws
-    // NotFoundException {
-    // Util updatedUtil = utilService.partialUpdate(2L, partialUtil);
-    // return ResponseEntity.ok(updatedUtil);
-    // }
-
     @PutMapping("/update")
     public ResponseEntity<?> updateUtil(@RequestParam(value = "appointmentsCompletedYesterday") int aptComplYest,
             @RequestParam(value = "numPatientsYesterday") int numPatientsYesterday,
