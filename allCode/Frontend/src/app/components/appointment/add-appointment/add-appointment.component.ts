@@ -41,13 +41,13 @@ export class AddAppointmentComponent implements OnInit {
       this.userService.checkAdmin(this.userMe.id).subscribe(isAdmin => {
         this.isAdmin = isAdmin;
       })
+      this.getDoctorList(this.userMe);
     })
     this.appointmentService.getAllDescriptions().subscribe(response => {
       this.descriptionList = response;
       this.groupDescriptions();
     });
 
-    this.getDoctorList();
   }
 
   groupDescriptions() {
@@ -65,10 +65,10 @@ export class AddAppointmentComponent implements OnInit {
     return Object.keys(obj);
   }
 
-  getDoctorList() {
+  getDoctorList(userMe: User) {
     this.userService.getUserList().subscribe((list) => {
       this.doctorList = list.filter(user =>
-        user.roles.length === 1 && user.roles.includes('DOCTOR'));
+        user.roles.length > 1 && user.roles.includes('DOCTOR') && user.codEntity == userMe.codEntity);
     });
   }
 
