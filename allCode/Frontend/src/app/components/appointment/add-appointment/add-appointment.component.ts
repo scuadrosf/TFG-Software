@@ -68,7 +68,7 @@ export class AddAppointmentComponent implements OnInit {
   getDoctorList(userMe: User) {
     this.userService.getUserList().subscribe((list) => {
       this.doctorList = list.filter(user =>
-        user.roles.length > 1 && user.roles.includes('DOCTOR') && user.codEntity == userMe.codEntity);
+        user.roles.length >= 1 && user.roles.includes('DOCTOR') && user.codEntity == userMe.codEntity);
     });
   }
 

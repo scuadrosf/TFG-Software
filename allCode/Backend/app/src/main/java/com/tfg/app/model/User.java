@@ -155,6 +155,7 @@ public class User {
         this.birth = userDoctorDTO.getBirth();
         this.roles = List.of("DOCTOR");
         this.speciality = userDoctorDTO.getSpeciality();
+        this.codEntity = userDoctorDTO.getCodEntity();
     }
 
     public User(String username, String password) {

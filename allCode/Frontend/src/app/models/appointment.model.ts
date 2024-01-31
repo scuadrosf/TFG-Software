@@ -13,5 +13,6 @@ export interface Appointment {
     additionalNote: string;
     completed: boolean;
     doctorAsignated: User;
+    codEntity: number;
 
 }

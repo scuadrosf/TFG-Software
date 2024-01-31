@@ -17,12 +17,13 @@ public class UserDoctorDTO {
     private String gender;
     private LocalDate birth;
     private String speciality;
+    private Long codEntity;
 
 
     
     public UserDoctorDTO(String name, String lastName, String username, String email, String passwordEncoded,
             String address, String city, String country, String postalCode, String phone, String gender,
-            LocalDate birth, String speciality) {
+            LocalDate birth, String speciality, Long codEntity) {
         this.name = name;
         this.lastName = lastName;
         this.username = username;
@@ -36,6 +37,7 @@ public class UserDoctorDTO {
         this.gender = gender;
         this.birth = birth;
         this.speciality = speciality;
+        this.codEntity = codEntity;
     }
     
     public String getName() {
@@ -115,6 +117,14 @@ public class UserDoctorDTO {
     }
     public void setSpeciality(String speciality) {
         this.speciality = speciality;
+    }
+
+    public Long getCodEntity() {
+        return codEntity;
+    }
+
+    public void setCodEntity(Long codEntity) {
+        this.codEntity = codEntity;
     }
 
     

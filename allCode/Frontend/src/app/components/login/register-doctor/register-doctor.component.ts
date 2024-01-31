@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { User } from 'src/app/models/user.model';
 import { AuthService } from 'src/app/services/auth.service';
+import { UserService } from 'src/app/services/user.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -8,7 +10,7 @@ import Swal from 'sweetalert2';
   templateUrl: './register-doctor.component.html',
   styleUrls: ['./register-doctor.component.scss']
 })
-export class RegisterDoctorComponent implements OnInit{
+export class RegisterDoctorComponent implements OnInit {
 
   name: string = '';
   lastName: string = '';
@@ -23,16 +25,22 @@ export class RegisterDoctorComponent implements OnInit{
   city: string = '';
   postalCode: string = '';
   speciality: string = '';
+  codEntity!: number;
+  user!: User;
 
-  constructor(public authService: AuthService, private router: Router){}
+  constructor(public authService: AuthService, private router: Router, private userService: UserService) { }
 
   ngOnInit(): void {
-      
+    this.userService.getMe().subscribe(response => {
+      this.user = response;
+      this.codEntity = response.codEntity;
+    })
+    console.log(this.codEntity)
   }
 
 
-  addDoctor(){
-    if (this.authService.isAdmin()) {
+  addDoctor() {
+    if (this.authService.isAdmin() || this.authService.isDoctor()) {
       const userData = {
         name: this.name,
         lastName: this.lastName,
@@ -46,10 +54,11 @@ export class RegisterDoctorComponent implements OnInit{
         country: this.country,
         city: this.city,
         postalCode: this.postalCode,
-        speciality: this.speciality
+        speciality: this.speciality,
+        codEntity: this.codEntity
       }
       console.log(userData)
-      if (Object.values(userData).every(value => value !== '')){
+      if (Object.values(userData).every(value => value !== '')) {
         this.authService.registerDoctor(userData).subscribe(
           (_) => {
             Swal.fire("Doctor dado de alta", "", "success");
@@ -61,10 +70,10 @@ export class RegisterDoctorComponent implements OnInit{
             this.router.navigate(['/error-page'])
           }
         );
-      }else{
+      } else {
         Swal.fire('Todos los campos son obligatorios', '', 'warning');
       }
-    }else{
+    } else {
       console.error(this.authService.currentUser())
     }
   }
