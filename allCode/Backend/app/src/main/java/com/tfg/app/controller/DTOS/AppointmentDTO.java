@@ -18,9 +18,11 @@ public class AppointmentDTO {
     private String additionalNote;
     private boolean completed;
     private User doctorAsignated;
+    private Long codEntity;
+
 
     public AppointmentDTO(LocalDate bookDate, LocalTime fromDate, LocalTime toDate, String description,
-            String additionalNote, boolean completed, User doctorAsignated) {
+            String additionalNote, boolean completed, User doctorAsignated, Long codEntity) {
         this.bookDate = bookDate;
         this.fromDate = fromDate;
         this.toDate = toDate;
@@ -28,6 +30,7 @@ public class AppointmentDTO {
         this.additionalNote = additionalNote;
         this.completed = completed;
         this.doctorAsignated = doctorAsignated;
+        this.codEntity = codEntity;
     }
 
     public LocalDate getBookDate() {
@@ -84,6 +87,14 @@ public class AppointmentDTO {
 
     public void setDoctorAsignated(User doctorAsignated) {
         this.doctorAsignated = doctorAsignated;
+    }
+
+    public Long getCodEntity() {
+        return codEntity;
+    }
+
+    public void setCodEntity(Long codEntity) {
+        this.codEntity = codEntity;
     }
 
 }

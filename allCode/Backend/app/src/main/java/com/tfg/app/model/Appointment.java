@@ -44,6 +44,9 @@ public class Appointment {
 
     private boolean completed;
 
+    private Long codEntity;
+
+
     public Appointment(Long id, LocalDate bookDate, LocalTime from, LocalTime to, String description, List<Intervention> interventions,
             User user, boolean completed, User doctorAsignated) {
         this.id = id;
@@ -69,6 +72,7 @@ public class Appointment {
         this.additionalNote = appointmentDTO.getAdditionalNote();
         this.completed = appointmentDTO.getCompleted();
         this.doctorAsignated = appointmentDTO.getDoctorAsignated();
+        this.codEntity = appointmentDTO.getCodEntity();
     }
 
     public Long getId() {
@@ -154,6 +158,14 @@ public class Appointment {
 
     public void setDoctorAsignated(User doctorAsignated) {
         this.doctorAsignated = doctorAsignated;
+    }
+
+    public Long getCodEntity() {
+        return codEntity;
+    }
+
+    public void setCodEntity(Long codEntity) {
+        this.codEntity = codEntity;
     }
 
     

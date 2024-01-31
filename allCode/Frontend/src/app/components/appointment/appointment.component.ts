@@ -28,6 +28,7 @@ export class AppointmentComponent implements OnInit {
   page!: number;
   showingAllAppointments!: boolean;
   doctorAsignated!: number;
+  codEntity!: number;
 
   constructor(private router: Router, private appointmentService: AppointmentService, private userService: UserService, private utilService: UtilService) { }
 
@@ -37,7 +38,8 @@ export class AppointmentComponent implements OnInit {
 
     this.userService.getMe().subscribe((response) => {
       this.doctorAsignated = response.id;
-      this.getAllAppointmentsByDoctor(this.doctorAsignated);
+      this.codEntity = response.codEntity;
+      this.getAllAppointmentsByDoctor(this.doctorAsignated, this.codEntity);
     });
 
     this.observerChangeSearch();
@@ -46,7 +48,7 @@ export class AppointmentComponent implements OnInit {
   getAllAppointments(): void {
     this.loading = true;
 
-    this.appointmentService.getAllAppointments().subscribe(list => {
+    this.appointmentService.getAllAppointmentsByCodEntity(this.codEntity).subscribe(list => {
       this.originalAppointmentList = list;
       this.appointmentList = [...list];
       this.appointmentList.forEach(appointment => {
@@ -59,16 +61,16 @@ export class AppointmentComponent implements OnInit {
     })
   }
 
-  getAllAppointmentsByDoctor(doctorId: number): void {
+  getAllAppointmentsByDoctor(doctorId: number, codEntity: number): void {
     this.loading = true;
 
     this.appointmentService.getAllAppointments().subscribe(list => {
       /* Filtra las citas para incluir solo aquellas cuyo usuario tiene el doctorAsignated igual a doctorId 
       o se le ha asignado dicha cita en específico */
       this.originalAppointmentList = list.filter(appointment =>
-        (appointment.user && appointment.user.doctorAsignated &&
+        ((appointment.user && appointment.user.doctorAsignated &&
           appointment.user.doctorAsignated.id === doctorId) ||
-        (appointment.doctorAsignated && appointment.doctorAsignated.id === doctorId)
+        (appointment.doctorAsignated && appointment.doctorAsignated.id === doctorId)) && (appointment.user && appointment.user.codEntity === codEntity)
       );
       this.appointmentList = [...this.originalAppointmentList];
 
@@ -200,7 +202,7 @@ export class AppointmentComponent implements OnInit {
 
   togglePatientView(): void {
     if (this.showingAllAppointments) {
-      this.getAllAppointmentsByDoctor(this.doctorAsignated);
+      this.getAllAppointmentsByDoctor(this.doctorAsignated, this.codEntity);
     } else {
       this.getAllAppointments();
     }

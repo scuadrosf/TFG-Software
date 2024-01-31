@@ -16,4 +16,5 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
 
         boolean existsByBookDateAndFromDateLessThanEqualAndToDateGreaterThanEqual(
                         LocalDate bookDate, LocalTime fromTime, LocalTime toTime);
+        List<Appointment> getAllAppointmentsByCodEntity(Long codEntity);
 }

@@ -108,7 +108,7 @@ public class UserRestController {
             }
             user.setPasswordEncoded(passwordEncoder.encode(user.getPasswordEncoded()));
             user.setDoctorAsignated(currentUser);
-            user.setRoles(List.of("USER"));
+            user.setRoles(List.of("USER"));;
 
             userService.save(user);
             int totalAux = utilService.getNumPatientsTotal() + 1;
@@ -341,6 +341,12 @@ public class UserRestController {
     public User getDoctorAsignated(@PathVariable Long id) {
         User patient = userService.findById(id).orElseThrow();
         return patient.getDoctorAsignated();
+    }
+
+    @GetMapping("/cod/{codEntity}")
+    public ResponseEntity<List<User>> getUsersByCodEntity (@PathVariable("codEntity") Long codEntity){
+        List<User> users = userService.findByCodEntity(codEntity);
+        return new ResponseEntity<>(users, HttpStatus.OK);
     }
 }
 

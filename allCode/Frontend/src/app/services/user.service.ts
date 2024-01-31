@@ -85,6 +85,10 @@ export class UserService {
     return this.httpClient.get<boolean>('/api/users/rol/' + id);
   }
 
+  checkDoctor(id: number): Observable<boolean> {
+    return this.httpClient.get<boolean>('/api/users/rolD/' + id);
+  }
+
 
   getUsersByNameOrLastNameOrUsername(query: string): Observable<User[]> {
     return this.httpClient.get<User[]>(baseUrl + "/search?query=" + query);
@@ -92,6 +96,10 @@ export class UserService {
   
   getDoctorAsignated(id: number){
     return this.httpClient.get<User>(baseUrl+"/doctorAsignated/"+id);
+  }
+
+  getUsersByCodEntity(codEntity: number): Observable<User[]> {
+    return this.httpClient.get<User[]>(baseUrl+"/cod/"+codEntity)
   }
 
 

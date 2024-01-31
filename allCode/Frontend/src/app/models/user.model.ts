@@ -23,6 +23,7 @@ export interface User {
     appointments: Appointment[];
     speciality: string;
     doctorAsignated: User;
+    codEntity: number;
 
 
 }

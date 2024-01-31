@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,6 +77,7 @@ public class AppointmentRestController {
         Appointment appointment = new Appointment(appointmentDTO);
         appointment.setUser(currentUser);
         appointment.setInterventions(new ArrayList<>());
+        appointment.setCodEntity(currentUser.getCodEntity());
         appointmentService.save(appointment);
         URI location = fromCurrentRequest().path("/{id}").buildAndExpand(appointment.getId()).toUri();
         return ResponseEntity.created(location).body(appointment);
@@ -86,10 +88,14 @@ public class AppointmentRestController {
             @PathVariable("userId") Long userId) {
         Appointment appointment = new Appointment(appointmentDTO);
         User user = userService.findById(userId).orElseThrow();
-        if (user != null)
+        if (user != null){
             appointment.setUser(user);
+            appointment.setCodEntity(user.getCodEntity());
+        }
         appointment.setCompleted(false);
         appointment.setInterventions(new ArrayList<>());
+        appointment.setDoctorAsignated(currentUser);
+
         appointmentService.save(appointment);
         URI location = fromCurrentRequest().path("/{id}").buildAndExpand(appointment.getId()).toUri();
         return ResponseEntity.created(location).body(appointment);
@@ -195,7 +201,12 @@ public class AppointmentRestController {
         List<Description> descriptions = descriptionService.findAll();
         return ResponseEntity.ok(descriptions);
     }
-    
+
+    @GetMapping("/appointment/{codEntity}")
+    public ResponseEntity<List<Appointment>> getAppointmentByCodEntity(@PathVariable("codEntity") Long codEntity){
+        List<Appointment> appointments = appointmentService.getAllAppointmentsByCodEntity(codEntity);
+        return new ResponseEntity<>(appointments, HttpStatus.OK);
+    }
 }
 
 class AvailabilityCheckRequest {

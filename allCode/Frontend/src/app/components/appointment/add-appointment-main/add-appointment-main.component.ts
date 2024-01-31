@@ -18,6 +18,7 @@ export class AddAppointmentMainComponent implements OnInit {
   showingAllUsers!: boolean;
   doctorAsignated!: number;
   control = new FormControl();
+  codEntity!: number;
 
 
   constructor(private patientService: UserService) { }
@@ -27,7 +28,8 @@ export class AddAppointmentMainComponent implements OnInit {
 
     this.patientService.getMe().subscribe((response) => {
       this.doctorAsignated = response.id;
-      this.getAllUsersByDoctor(this.doctorAsignated);
+      this.codEntity = response.codEntity;
+      this.getAllUsersByDoctor(this.doctorAsignated, this.codEntity);
     });
 
     this.observerChangeSearch();
@@ -35,7 +37,7 @@ export class AddAppointmentMainComponent implements OnInit {
 
   getAllUsers(): void {
     this.loading = true;
-    this.patientService.getUserList().subscribe((list) => {
+    this.patientService.getUsersByCodEntity(this.codEntity).subscribe((list) => {
       this.patientsList = list.filter(patient =>
         patient.roles.length === 1 && patient.roles.includes('USER'));
       // Usar forkJoin para esperar todas las llamadas a getProfileAvatar
@@ -61,12 +63,12 @@ export class AddAppointmentMainComponent implements OnInit {
     });
   }
 
-  getAllUsersByDoctor(doctorId: number): void {
+  getAllUsersByDoctor(doctorId: number, codEntity: number): void {
     this.loading = true;
 
     this.patientService.getUserListByDoctor(doctorId).subscribe((list) => {
       this.patientsList = list.filter(patient =>
-        patient.roles.length === 1 && patient.roles.includes('USER'));
+        patient.roles.length === 1 && patient.roles.includes('USER') && patient.codEntity === codEntity);
       // Usar forkJoin para esperar todas las llamadas a getProfileAvatar
       forkJoin(
         this.patientsList.map(patient =>
@@ -92,7 +94,7 @@ export class AddAppointmentMainComponent implements OnInit {
 
   togglePatientView(): void {
     if (this.showingAllUsers) {
-      this.getAllUsersByDoctor(this.doctorAsignated);
+      this.getAllUsersByDoctor(this.doctorAsignated, this.codEntity);
     } else {
       this.getAllUsers();
     }

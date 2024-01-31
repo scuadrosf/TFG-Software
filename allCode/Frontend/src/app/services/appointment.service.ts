@@ -30,6 +30,9 @@ export class AppointmentService {
   getAllAppointments(): Observable<Appointment[]> {
     return this.httpClient.get<Appointment[]>(baseUrl + "all");
   }
+  getAllAppointmentsByCodEntity(codEntity: number): Observable<Appointment[]> {
+    return this.httpClient.get<Appointment[]>(baseUrl + "/appointment/"+ codEntity)
+  }
 
   getAllAppointmentsByUser(id: number): Observable<Appointment[]> {
     return this.httpClient.get<Appointment[]>(baseUrl + "all/" + id);

@@ -44,6 +44,7 @@ public class InitDatabase {
         user.setRoles(List.of("USER", "ADMIN"));
         user.setBirth(LocalDate.now());
         user.setGender("Masculino");
+        user.setCodEntity(100L);
         String avatarUrlAdmin = "/static/assets/predAdminAvatar.png";
         try {
             setProfileAvatarContent(user, avatarUrlAdmin);
@@ -54,6 +55,26 @@ public class InitDatabase {
 
         Util util = new Util(0, 0, 0);
         utilService.save(util);
+
+        User user3 = new User();
+
+        user3.setName("Admin2");
+        user3.setLastName("Doctor2");
+        user3.setUsername("332W");
+        user3.setPhone("444444444");
+        user3.setEmail("admin2@gmail.com");
+        user3.setCodEntity(200L);
+        user3.setPasswordEncoded(passwordEncoder.encode("12345"));
+        user3.setRoles(List.of("USER", "ADMIN"));
+        user3.setBirth(LocalDate.now());
+        user3.setGender("Masculino");
+        avatarUrlAdmin = "/static/assets/predAdminAvatar.png";
+        try {
+            setProfileAvatarContent(user3, avatarUrlAdmin);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        users.save(user3);
 
         User user2 = new User();
 
@@ -70,6 +91,7 @@ public class InitDatabase {
         user2.setCity("Madrid");
         user2.setCountry("España");
         user2.setPostalCode("28220");
+        user2.setCodEntity(200L);
         String avatarUrlUser = "/static/assets/predAvatar.png";
         try {
             setProfileAvatarContent(user2, avatarUrlUser);
@@ -150,7 +172,7 @@ public class InitDatabase {
         String avatarUrlAdmin = "/static/assets/predAdminAvatar.png";
         String avatarUrlUser = "/static/assets/predAvatar.png";
 
-        for (int i = 1; i <= numberOfUsers; i++) {
+        for (int i = 0; i < numberOfUsers; i++) {
 
             User user = new User();
             user.setName("User" + i);
@@ -159,18 +181,22 @@ public class InitDatabase {
             user.setPhone("444444444");
             user.setEmail("user" + i + "@gmail.com");
             user.setPasswordEncoded(passwordEncoder.encode("pass" + i));
-            user.setRoles(i % 2 == 0 ? List.of("USER", "ADMIN") : List.of("USER"));
+            user.setRoles(i % 2 == 0 ? List.of("USER", "ADMIN", "DOCTOR") : List.of("USER"));
             user.setBirth(LocalDate.now().minusYears(20 + i));
             user.setGender(i % 2 == 0 ? "Masculino" : "Femenino");
+            if (i <= 5)
+                user.setCodEntity(100L);
+            else
+                user.setCodEntity(200L);
 
-            if (i % 2 == 0) {
+            if (i % 2 != 0) {
                 user.setAddress("Calle " + i);
                 user.setCity("Ciudad " + i);
                 user.setCountry("País " + i);
                 user.setPostalCode("CodigoPostal" + i);
             }
 
-            String avatarUrl = i % 2 == 0 ? avatarUrlUser : avatarUrlAdmin;
+            String avatarUrl = i % 2 == 0 ? avatarUrlAdmin : avatarUrlUser;
             try {
                 setProfileAvatarContent(user, avatarUrl);
             } catch (IOException e) {
@@ -190,7 +216,7 @@ public class InitDatabase {
         user.setRoles(List.of("DOCTOR"));
         user.setBirth(LocalDate.now().minusYears(20 + 11));
         user.setGender("Femenino");
-
+        user.setCodEntity(200L);
         user.setAddress("Calle " + 11);
         user.setCity("Ciudad " + 11);
         user.setCountry("País " + 11);

@@ -67,4 +67,8 @@ public class AppointmentService {
     public boolean isAppointmentAvailable(LocalDate bookDate, LocalTime fromDate, LocalTime toDate) {
         return !appointments.existsByBookDateAndFromDateLessThanEqualAndToDateGreaterThanEqual(bookDate, fromDate, toDate);
     }
+
+    public List<Appointment> getAllAppointmentsByCodEntity(Long codEntity){
+        return appointments.getAllAppointmentsByCodEntity(codEntity);
+    }
 }

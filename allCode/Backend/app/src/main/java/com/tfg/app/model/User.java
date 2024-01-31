@@ -71,6 +71,8 @@ public class User {
     @ManyToOne
     private User doctorAsignated;
 
+    private Long codEntity;
+
 
 
 
@@ -134,6 +136,7 @@ public class User {
         this.birth = userDTO.getBirth();
         this.roles = List.of("USER");
         this.doctorAsignated = userDTO.getDoctorAsignated();
+        this.codEntity = userDTO.getCodEntity();
     }
 
     public User(UserDoctorDTO userDoctorDTO) {
@@ -319,6 +322,17 @@ public class User {
     public void setDoctorAsignated(User doctorAsignated) {
         this.doctorAsignated = doctorAsignated;
     }
+
+    public Long getCodEntity() {
+        return codEntity;
+    }
+
+    public void setCodEntity(Long codEntity) {
+        this.codEntity = codEntity;
+    }
+
+    
+
 
     
     

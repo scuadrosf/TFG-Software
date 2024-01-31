@@ -25,6 +25,7 @@ export class AddPatientComponent implements OnInit{
   city: string = '';
   postalCode: string = '';
   doctorAsignated!: User;
+  codEntity!: number;
 
 
   constructor(private userService:UserService, public authService: AuthService, private router: Router, private emailService: EmailService) { }
@@ -32,9 +33,9 @@ export class AddPatientComponent implements OnInit{
   ngOnInit(): void {
       this.userService.getMe().subscribe(response =>{
         this.doctorAsignated = response;
+        this.codEntity = response.codEntity;
       })
   }
-
 
   addPatient() {
     if (this.authService.isAdmin() || this.authService.isDoctor()) {
@@ -51,7 +52,8 @@ export class AddPatientComponent implements OnInit{
         country: this.country,
         city: this.city,
         postalCode: this.postalCode,
-        doctorAsignated: this.doctorAsignated
+        doctorAsignated: this.doctorAsignated,
+        codEntity: this.codEntity
       }
       if (Object.values(userData).every(value => value !== '')){
         this.authService.register(userData).subscribe(

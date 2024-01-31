@@ -19,9 +19,13 @@ public class UserDTO {
     private String gender;
     private LocalDate birth;
     private User doctorAsignated;
+    private Long codEntity;
+
+   
 
     public UserDTO(String name, String lastName, String username, String email, String passwordEncoded, String address,
-            String city, String country, String postalCode, String phone, String gender, LocalDate birth, User doctorAsignated) {
+            String city, String country, String postalCode, String phone, String gender, LocalDate birth,
+            User doctorAsignated, Long codEntity) {
         this.name = name;
         this.lastName = lastName;
         this.username = username;
@@ -35,7 +39,8 @@ public class UserDTO {
         this.gender = gender;
         this.birth = birth;
         this.doctorAsignated = doctorAsignated;
-    }    
+        this.codEntity = codEntity;
+    }
 
     public String getName() {
         return name;
@@ -141,6 +146,14 @@ public class UserDTO {
 
     public void setDoctorAsignated(User doctorAsignated) {
         this.doctorAsignated = doctorAsignated;
+    }
+
+    public Long getCodEntity() {
+        return codEntity;
+    }
+
+    public void setCodEntity(Long codEntity) {
+        this.codEntity = codEntity;
     }
 
     

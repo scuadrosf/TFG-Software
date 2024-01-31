@@ -62,4 +62,8 @@ public class UserService {
         return users.getDoctorAsignatedById(id);
     }
 
+    public List<User> findByCodEntity(Long codEntity){
+        return users.findByCodEntity(codEntity);
+    }
+
 }
