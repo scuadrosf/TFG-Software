@@ -89,7 +89,10 @@ public class AppointmentRestController {
         User user = userService.findById(userId).orElseThrow();
         if (user != null){
             appointment.setUser(user);
-            appointment.setCodEntity(user.getCodEntity());
+            if (user.getCodEntity() == currentUser.getCodEntity())
+                appointment.setCodEntity(user.getCodEntity());
+            else
+                return ResponseEntity.badRequest().build();
         }
         appointment.setCompleted(false);
         appointment.setInterventions(new ArrayList<>());
