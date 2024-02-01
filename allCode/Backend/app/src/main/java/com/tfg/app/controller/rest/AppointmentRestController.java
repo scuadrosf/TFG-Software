@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.tfg.app.controller.DTOS.AppointmentDTO;
 import com.tfg.app.model.Appointment;
@@ -89,10 +90,10 @@ public class AppointmentRestController {
         User user = userService.findById(userId).orElseThrow();
         if (user != null){
             appointment.setUser(user);
-            if (user.getCodEntity() == currentUser.getCodEntity())
+            if (user.getCodEntity().equals(currentUser.getCodEntity()))
                 appointment.setCodEntity(user.getCodEntity());
             else
-                return ResponseEntity.badRequest().build();
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Las entidades de código no coinciden.");
         }
         appointment.setCompleted(false);
         appointment.setInterventions(new ArrayList<>());
