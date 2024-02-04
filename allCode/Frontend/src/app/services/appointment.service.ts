@@ -71,9 +71,9 @@ export class AppointmentService {
     return this.httpClient.get<Appointment[]>(baseUrl + "/search?query=" + query);
   }
 
-  checkAppointmentAvailability(bookDate: string, fromDate: string, toDate: string): Observable<boolean> {
-    const appointmentData = { bookDate, fromDate, toDate };
-    return this.httpClient.post<boolean>(baseUrl + "/check-availability", appointmentData);
+  checkAppointmentAvailability(doctorId: number, bookDate: string, fromDate: string, toDate: string): Observable<boolean> {
+    const appointmentData = { doctorId, bookDate, fromDate, toDate };
+    return this.httpClient.post<boolean>(baseUrl + "check-availability", appointmentData);
   }
 
   getAllDescriptions(){

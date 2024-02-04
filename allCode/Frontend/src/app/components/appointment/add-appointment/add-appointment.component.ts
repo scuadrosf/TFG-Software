@@ -87,9 +87,9 @@ export class AddAppointmentComponent implements OnInit {
       return;
     }
 
-    this.appointmentService.checkAppointmentAvailability(this.bookDate, this.fromDate, this.toDate).subscribe(isAvailable => {
+    this.appointmentService.checkAppointmentAvailability(this.doctorAsignated.id, this.bookDate, this.fromDate, this.toDate).subscribe(isAvailable => {
       if (!isAvailable) {
-        Swal.fire("Ya existe una cita en este horario", "", "warning");
+        Swal.fire("Ya existe una cita en este horario para este doctor", "", "warning");
         return;
       } else {
         this.appointmentService.bookAppointment(data, this.userId).subscribe(

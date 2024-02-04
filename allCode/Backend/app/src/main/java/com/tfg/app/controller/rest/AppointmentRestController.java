@@ -88,7 +88,7 @@ public class AppointmentRestController {
             @PathVariable("userId") Long userId) {
         Appointment appointment = new Appointment(appointmentDTO);
         User user = userService.findById(userId).orElseThrow();
-        if (user != null){
+        if (user != null) {
             appointment.setUser(user);
             if (user.getCodEntity().equals(currentUser.getCodEntity()))
                 appointment.setCodEntity(user.getCodEntity());
@@ -97,7 +97,7 @@ public class AppointmentRestController {
         }
         appointment.setCompleted(false);
         appointment.setInterventions(new ArrayList<>());
-        appointment.setDoctorAsignated(currentUser);
+        // appointment.setDoctorAsignated(currentUser);
 
         appointmentService.save(appointment);
         URI location = fromCurrentRequest().path("/{id}").buildAndExpand(appointment.getId()).toUri();
@@ -192,11 +192,31 @@ public class AppointmentRestController {
         return appointmentService.findAppointmentsByUserDetails(query, query, query);
     }
 
+    // @PostMapping("/check-availability")
+    // public ResponseEntity<Boolean> checkAppointmentAvailability(@RequestBody
+    // AvailabilityCheckRequest request) {
+    // boolean isAvailable =
+    // appointmentService.isAppointmentAvailable(request.getBookDate(),
+    // request.getFromDate(),
+    // request.getToDate());
+    // return ResponseEntity.ok(isAvailable);
+    // }
+
     @PostMapping("/check-availability")
     public ResponseEntity<Boolean> checkAppointmentAvailability(@RequestBody AvailabilityCheckRequest request) {
-        boolean isAvailable = appointmentService.isAppointmentAvailable(request.getBookDate(), request.getFromDate(),
-                request.getToDate());
-        return ResponseEntity.ok(isAvailable);
+        List<Appointment> appointments = appointmentService
+                .findAllAppointmentsByDoctorAsignatedId(request.getDoctorId());
+        boolean isDoctorAvailable = true;
+        for (Appointment appointment : appointments) {
+            if (appointment.getBookDate().isEqual(request.getBookDate()) &&
+                    !(appointment.getFromDate().isAfter(request.getToDate()) ||
+                            appointment.getToDate().isBefore(request.getFromDate()))) {
+                // Si hay una superposición, el doctor no está disponible
+                return ResponseEntity.ok(false);
+            }
+        }
+
+        return ResponseEntity.ok(isDoctorAvailable);
     }
 
     @GetMapping("/all-description")
@@ -206,7 +226,7 @@ public class AppointmentRestController {
     }
 
     @GetMapping("/appointment/{codEntity}")
-    public ResponseEntity<List<Appointment>> getAppointmentByCodEntity(@PathVariable("codEntity") Long codEntity){
+    public ResponseEntity<List<Appointment>> getAppointmentByCodEntity(@PathVariable("codEntity") Long codEntity) {
         List<Appointment> appointments = appointmentService.getAllAppointmentsByCodEntity(codEntity);
         return new ResponseEntity<>(appointments, HttpStatus.OK);
     }
@@ -216,6 +236,7 @@ class AvailabilityCheckRequest {
     private LocalDate bookDate;
     private LocalTime fromDate;
     private LocalTime toDate;
+    private Long doctorId;
 
     public LocalTime getFromDate() {
         return fromDate;
@@ -239,6 +260,14 @@ class AvailabilityCheckRequest {
 
     public void setBookDate(LocalDate bookDate) {
         this.bookDate = bookDate;
+    }
+
+    public Long getDoctorId() {
+        return doctorId;
+    }
+
+    public void setDoctorId(Long doctorId) {
+        this.doctorId = doctorId;
     }
 
 }
