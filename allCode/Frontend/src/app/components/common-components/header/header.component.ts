@@ -48,10 +48,6 @@ export class HeaderComponent implements OnInit {
     this.router.navigate(['/auth']);
   }
 
-  settings() {
-    this.router.navigate(['/settings'])
-  }
-
   myProfile(){
     this.router.navigate(['/profile/'])
   }

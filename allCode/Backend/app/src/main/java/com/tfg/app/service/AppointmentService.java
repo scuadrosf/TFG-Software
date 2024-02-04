@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import com.tfg.app.model.Appointment;
 import com.tfg.app.model.Intervention;
-import com.tfg.app.model.User;
 import com.tfg.app.repository.AppointmentRepository;
 import com.tfg.app.repository.InterventionRepository;
 
@@ -18,8 +17,6 @@ import com.tfg.app.repository.InterventionRepository;
 public class AppointmentService {
     @Autowired
     private AppointmentRepository appointments;
-    @Autowired
-    private UserService userService;
     @Autowired
     private InterventionRepository interventionRepository;
 
