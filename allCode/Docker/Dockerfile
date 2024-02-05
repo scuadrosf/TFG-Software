@@ -1,6 +1,6 @@
 FROM node:16-alpine as builder
 
-WORKDIR /project
+WORKDIR /app/frontend
 
 COPY Frontend/ .
 
@@ -11,13 +11,13 @@ RUN npm run build -- --configuration production --base-href=/new/
 
 FROM maven:3-openjdk-17 as backend
 
-WORKDIR /project
+WORKDIR /app/backend
 
-COPY Backend/app/pom.xml /project
+COPY Backend/app/pom.xml /.
 
-COPY Backend/app/src /project/src
+COPY Backend/app/src ./src
 
-COPY --from=builder /project/dist/* /project/src/main/resources/public/new
+COPY --from=builder /ap/frontend/dist/* ./src/main/resources/static/new
 
 RUN mvn package -DskipTests
 
@@ -25,10 +25,10 @@ FROM openjdk:17
 
 ENV JAVA_TOOL_OPTIONS="-Xss256K -XX:ReservedCodeCacheSize=64M -XX:MaxMetaspaceSize=100000K -Xmx64M"
 
-WORKDIR /usr/src/app/
+WORKDIR /app
 
-COPY --from=backend /project/target/*.jar /usr/src/app/
+COPY --from=backend /app/backend/target/*.jar ./app.jar
 
-EXPOSE 443
+EXPOSE 8080
 
-CMD ["java", "-jar", "app-0.0.1-SNAPSHOT.jar" ]
+CMD ["java", "-jar", "app.jar" ]

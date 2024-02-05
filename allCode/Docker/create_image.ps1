@@ -1,12 +1,8 @@
-Param(
-    [String] $image
-)
-
 Set-Location ../
 
-docker build -t scuadrosf/$image -f Docker/Dockerfile .
+docker build -t scuadrosf/smilelink:v1 -f Docker/Dockerfile .
 
-docker push scuadrosf/$image
+docker push scuadrosf/smilelink:v1
 
 Set-Location ./Docker
 

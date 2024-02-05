@@ -8,9 +8,9 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:mysql://localhost/smilelink
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=password.12345
-      - SPRING_JPA_HIBERNATE_DDL-AUTO=update
+      - SPRING_JPA_HIBERNATE_DDL-AUTO=create-drop
     ports:
-      - 443:443
+      - 8443:8443
     depends_on:
       - db
   db:
@@ -22,4 +22,4 @@ services:
     volumes:
       - ./.mysql:/var/lib/mysql
     ports:
-      - 3306:3306
+      - 3307:3306
