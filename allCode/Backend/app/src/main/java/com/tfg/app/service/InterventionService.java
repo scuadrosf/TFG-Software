@@ -51,6 +51,4 @@ public class InterventionService {
     public Optional<Intervention> getInterventionByDocumentId(Long id){
         return interventions.getInterventionByDocumentId(id);
     }
-    
-
 }

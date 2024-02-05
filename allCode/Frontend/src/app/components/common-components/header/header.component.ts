@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, HostListener, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { User } from 'src/app/models/user.model';
@@ -46,10 +45,6 @@ export class HeaderComponent implements OnInit {
   logout() {
     this.authService.logOut();
     this.router.navigate(['/auth']);
-  }
-
-  settings() {
-    this.router.navigate(['/settings'])
   }
 
   myProfile(){

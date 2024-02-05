@@ -5,6 +5,7 @@ import { Appointment } from 'src/app/models/appointment.model';
 import { Document } from 'src/app/models/document.model';
 import { Intervention } from 'src/app/models/intervention.model';
 import { User } from 'src/app/models/user.model';
+import { AppointmentService } from 'src/app/services/appointment.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { DocumentService } from 'src/app/services/document.service';
 import { InterventionService } from 'src/app/services/intervention.service';
@@ -19,20 +20,22 @@ export class ProfileComponent implements OnInit {
 
   selectedFile: File | null = null;
   selectedFileName: string = '';
+  page!: number;
+  page2!: number;
 
   user!: User;
   idUser!: number;
   profileAvatarUrls!: string;
   isAdmin: boolean = false;
+  doctorAsignated!: User;
 
-  apointment!: Appointment | null;
+  appointmentsUser: Appointment[] = [];
   interventions: Intervention[] = [];
   documents: Document[] = [];
 
   selectedDocumentId!: number;
 
-
-  constructor(private documentService: DocumentService, private utilService: UtilService, public authService: AuthService, private interventionService: InterventionService, private userService: UserService, private activatedRoute: ActivatedRoute) {
+  constructor(private appointmentService: AppointmentService, private documentService: DocumentService, private utilService: UtilService, public authService: AuthService, private interventionService: InterventionService, private userService: UserService, private activatedRoute: ActivatedRoute) {
     this.idUser = this.activatedRoute.snapshot.params['id'];
 
   }
@@ -54,20 +57,47 @@ export class ProfileComponent implements OnInit {
         this.isAdmin = isAdmin;
       });
 
+      // this.userService.checkDoctor(this.idUser).subscribe(isDoctor => {
+      //   this.isDoctor = isDoctor;
+      // })
+
       this.interventionService.getUserInterventions(this.idUser).subscribe((list: Intervention[]) => {
         this.interventions = list;
       });
 
-      this.documentService.getAllDocumentsByUserId(this.user.id).subscribe((list: Document[]) => {
+      this.documentService.getAllDocumentsByUserId(this.idUser).subscribe((list: Document[]) => {
         this.documents = list;
       })
-    });
 
+      this.appointmentService.getAllAppointmentsByUser(this.idUser).subscribe(list =>
+        this.appointmentsUser = list)
+
+      this.userService.getDoctorAsignated(this.user.id).subscribe(doctor =>
+        this.doctorAsignated = doctor)
+    });
   }
 
   onFileSelected(event: any) {
     this.selectedFile = event.target.files[0];
     this.selectedFileName = this.selectedFile?.name || '';
+  }
+
+  completeAppointment(appointment: Appointment, status: boolean) {
+    this.appointmentService.updateAppointment(appointment.id, !status).subscribe();
+    this.ngOnInit();
+  }
+
+  deleteAppointment(appointment: Appointment) {
+    const confirmation = window.confirm('Esta seguro de eliminar la cita');
+    if (confirmation) {
+      this.appointmentService.deleteAppointment(appointment.id);
+      console.log("Appointment eliminado")
+      this.ngOnInit();
+    }
+    else {
+      console.log("Confirmación de eliminado cancelada")
+    }
+    this.ngOnInit();
   }
 
   deleteIntervention(intervention: Intervention) {

@@ -4,6 +4,7 @@ import { User } from 'src/app/models/user.model';
 import { AppointmentService } from 'src/app/services/appointment.service';
 import { InterventionService } from 'src/app/services/intervention.service';
 import { UserService } from 'src/app/services/user.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-add-intervention',
@@ -13,8 +14,7 @@ export class AddInterventionComponent implements OnInit {
 
   selectedFile: File | null = null;
   selectedFileName: string = '';
-
-
+  descriptionAppointment!: string;
   appointmentId!: number;
   userId!: number;
   user!: User;
@@ -30,6 +30,9 @@ export class AddInterventionComponent implements OnInit {
     this.userService.getUser(this.userId).subscribe(user => {
       this.user = user;
     })
+
+    this.appointmentService.getAppointment(this.appointmentId).subscribe(response =>
+      this.descriptionAppointment = response.description)
 
 
 
@@ -54,12 +57,13 @@ export class AddInterventionComponent implements OnInit {
     }
     this.interventionService.addIntervention(this.appointmentId, this.userId, formData).subscribe(
       (_) => {
-        alert('Intervención añadida');
+        Swal.fire("Intervención añadida", "", "success");
         this.back();
       },
       (error) => {
+        Swal.fire("Ha ocurrido un error", "", "error");
         console.error(error);
-        this.router.navigate(['/error-page'])
+        this.back();
       }
     );
   }

@@ -2,6 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError, map, throwError } from 'rxjs';
 import { Appointment } from '../models/appointment.model';
+import { Description } from '../models/description.model';
 
 
 const baseUrl = '/api/appointments/';
@@ -29,9 +30,12 @@ export class AppointmentService {
   getAllAppointments(): Observable<Appointment[]> {
     return this.httpClient.get<Appointment[]>(baseUrl + "all");
   }
+  getAllAppointmentsByCodEntity(codEntity: number): Observable<Appointment[]> {
+    return this.httpClient.get<Appointment[]>(baseUrl + "/appointment/"+ codEntity)
+  }
 
-  getAllAppointmentsByUser(id: number): Observable<Appointment[]>{
-    return this.httpClient.get<Appointment[]>(baseUrl + "all/"+id);
+  getAllAppointmentsByUser(id: number): Observable<Appointment[]> {
+    return this.httpClient.get<Appointment[]>(baseUrl + "all/" + id);
   }
 
   getAppointment(id: number): Observable<Appointment> {
@@ -44,16 +48,6 @@ export class AppointmentService {
   }
 
   deleteAppointment(id: number) {
-    const confirmation = window.confirm('Esta seguro de eliminar la cita');
-    if (confirmation) {
-      return this.httpClient.delete(baseUrl + "delete/" + id);
-      console.log("Cita eliminada")
-      // this.ngOnInit();
-    }
-    else{
-      console.log("Confirmación de eliminado cancelada")
-    }
-    // this.ngOnInit();
     return this.httpClient.delete(baseUrl + "delete/" + id);
   }
 
@@ -64,15 +58,26 @@ export class AppointmentService {
     formData.append('toDate', appointment.toDate || '');
     formData.append('description', appointment.description || '');
     formData.append('additionalNote', appointment.additionalNote || '');
+    formData.append('doctorAsignatedId', appointment.doctorAsignated.id.toString());
+
     return this.httpClient.put(baseUrl + "fullupdate/" + appointment.id, formData);
   }
 
-  getAppointmentByInterventionId(idIntervention: number): Observable<Appointment>{
-    return this.httpClient.get<Appointment>(baseUrl+"byAppointment/"+idIntervention);
+  getAppointmentByInterventionId(idIntervention: number): Observable<Appointment> {
+    return this.httpClient.get<Appointment>(baseUrl + "byAppointment/" + idIntervention);
   }
 
   findAppointmentsByUserDetails(query: string): Observable<Appointment[]> {
-    return this.httpClient.get<Appointment[]>(baseUrl+"/search?query="+query);
-
+    return this.httpClient.get<Appointment[]>(baseUrl + "/search?query=" + query);
   }
+
+  checkAppointmentAvailability(doctorId: number, bookDate: string, fromDate: string, toDate: string): Observable<boolean> {
+    const appointmentData = { doctorId, bookDate, fromDate, toDate };
+    return this.httpClient.post<boolean>(baseUrl + "check-availability", appointmentData);
+  }
+
+  getAllDescriptions(){
+    return this.httpClient.get<Description[]>(baseUrl+"/all-description");
+  }
+
 }

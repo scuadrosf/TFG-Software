@@ -21,6 +21,9 @@ export interface User {
     profileAvatarFile: Blob;
     interventions: Intervention[];
     appointments: Appointment[];
+    speciality: string;
+    doctorAsignated: User;
+    codEntity: number;
 
 
 }

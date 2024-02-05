@@ -40,7 +40,7 @@ export class InterventionService {
   }
 
   updateIntervention(interventionId: number, userId: number, formData: FormData): Observable<any> {
-    return this.httpClient.put(baseUrl + 'update/' + interventionId+"/user="+userId, formData);
+    return this.httpClient.put(baseUrl + 'update/' + interventionId + "/user=" + userId, formData);
   }
 
   deleteIntervention(intervention: Intervention) {
@@ -48,7 +48,7 @@ export class InterventionService {
   }
 
   getAllInterventions(): Observable<Intervention[]> {
-    return this.httpClient.get<Intervention[]>(baseUrl+"all")
+    return this.httpClient.get<Intervention[]>(baseUrl + "all")
   }
 
 }

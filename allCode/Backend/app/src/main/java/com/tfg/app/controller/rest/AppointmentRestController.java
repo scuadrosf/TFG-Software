@@ -26,12 +26,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.tfg.app.controller.DTOS.AppointmentDTO;
 import com.tfg.app.model.Appointment;
+import com.tfg.app.model.Description;
 import com.tfg.app.model.User;
 import com.tfg.app.repository.AppointmentRepository;
 import com.tfg.app.service.AppointmentService;
+import com.tfg.app.service.DescriptionService;
 import com.tfg.app.service.UserService;
 
 @RestController
@@ -42,6 +45,8 @@ public class AppointmentRestController {
     private UserService userService;
     @Autowired
     private AppointmentService appointmentService;
+    @Autowired
+    private DescriptionService descriptionService;
 
     @Autowired
     private AppointmentRepository appointmentRepository;
@@ -72,6 +77,7 @@ public class AppointmentRestController {
         Appointment appointment = new Appointment(appointmentDTO);
         appointment.setUser(currentUser);
         appointment.setInterventions(new ArrayList<>());
+        appointment.setCodEntity(currentUser.getCodEntity());
         appointmentService.save(appointment);
         URI location = fromCurrentRequest().path("/{id}").buildAndExpand(appointment.getId()).toUri();
         return ResponseEntity.created(location).body(appointment);
@@ -82,10 +88,17 @@ public class AppointmentRestController {
             @PathVariable("userId") Long userId) {
         Appointment appointment = new Appointment(appointmentDTO);
         User user = userService.findById(userId).orElseThrow();
-        if (user != null)
+        if (user != null) {
             appointment.setUser(user);
+            if (user.getCodEntity().equals(currentUser.getCodEntity()))
+                appointment.setCodEntity(user.getCodEntity());
+            else
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Las entidades de código no coinciden.");
+        }
         appointment.setCompleted(false);
         appointment.setInterventions(new ArrayList<>());
+        // appointment.setDoctorAsignated(currentUser);
+
         appointmentService.save(appointment);
         URI location = fromCurrentRequest().path("/{id}").buildAndExpand(appointment.getId()).toUri();
         return ResponseEntity.created(location).body(appointment);
@@ -117,29 +130,34 @@ public class AppointmentRestController {
             @RequestParam(value = "fromDate", required = false) String fromDate,
             @RequestParam(value = "toDate", required = false) String toDate,
             @RequestParam(value = "description", required = false) String description,
-            @RequestParam(value = "additionalNote", required = false) String additionalNote) {
+            @RequestParam(value = "additionalNote", required = false) String additionalNote,
+            @RequestParam(value = "doctorAsignatedId", required = false) String doctorAsignatedId) {
 
         Appointment appointment = appointmentService.findById(id).orElseThrow();
-        if (bookDate != null){
+        if (bookDate != null) {
             appointment.setBookDate(LocalDate.parse(bookDate));
         }
-        if (fromDate != null){
+        if (fromDate != null) {
             appointment.setFromDate(LocalTime.parse(fromDate));
         }
-        if (toDate != null){
+        if (toDate != null) {
             appointment.setToDate(LocalTime.parse(toDate));
         }
-        if (description != null){
+        if (description != null) {
             appointment.setDescription(description);
         }
-        if (additionalNote != null){
+        if (additionalNote != null) {
             appointment.setAdditionalNote(additionalNote);
+        }
+        if (doctorAsignatedId != null) {
+            User doctor = userService.findById(Long.parseLong(doctorAsignatedId)).orElseThrow();
+            if (doctor != null) {
+                appointment.setDoctorAsignated(doctor);
+            }
         }
         Appointment updatedAppointment = appointmentRepository.save(appointment);
         return ResponseEntity.ok(updatedAppointment);
     }
-
-    
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteAppointment(@PathVariable Long id) {
@@ -153,18 +171,19 @@ public class AppointmentRestController {
     }
 
     @GetMapping("/all/{id}")
-    public ResponseEntity<List<Appointment>> getAppointmentByUser(@PathVariable Long id){
+    public ResponseEntity<List<Appointment>> getAppointmentByUser(@PathVariable Long id) {
         User user = userService.findById(id).orElseThrow();
-        if (user != null){
+        if (user != null) {
             List<Appointment> appointments = appointmentService.getAllAppointmentsByUserId(id);
             return ResponseEntity.ok(appointments);
-        }else{
+        } else {
             return ResponseEntity.notFound().build();
         }
     }
 
     @GetMapping("byAppointment/{idIntervention}")
-    public ResponseEntity<Appointment> getAppointmentByInterventionId(@PathVariable("idIntervention") Long idIntervention){
+    public ResponseEntity<Appointment> getAppointmentByInterventionId(
+            @PathVariable("idIntervention") Long idIntervention) {
         return ResponseEntity.ok().body(appointmentService.getAppointmentByInterventionId(idIntervention));
     }
 
@@ -172,4 +191,83 @@ public class AppointmentRestController {
     public List<Appointment> searchUsersByNameOrLastName(@RequestParam String query) {
         return appointmentService.findAppointmentsByUserDetails(query, query, query);
     }
+
+    // @PostMapping("/check-availability")
+    // public ResponseEntity<Boolean> checkAppointmentAvailability(@RequestBody
+    // AvailabilityCheckRequest request) {
+    // boolean isAvailable =
+    // appointmentService.isAppointmentAvailable(request.getBookDate(),
+    // request.getFromDate(),
+    // request.getToDate());
+    // return ResponseEntity.ok(isAvailable);
+    // }
+
+    @PostMapping("/check-availability")
+    public ResponseEntity<Boolean> checkAppointmentAvailability(@RequestBody AvailabilityCheckRequest request) {
+        List<Appointment> appointments = appointmentService
+                .findAllAppointmentsByDoctorAsignatedId(request.getDoctorId());
+        boolean isDoctorAvailable = true;
+        for (Appointment appointment : appointments) {
+            if (appointment.getBookDate().isEqual(request.getBookDate()) &&
+                    !(appointment.getFromDate().isAfter(request.getToDate()) ||
+                            appointment.getToDate().isBefore(request.getFromDate()))) {
+                // Si hay una superposición, el doctor no está disponible
+                return ResponseEntity.ok(false);
+            }
+        }
+
+        return ResponseEntity.ok(isDoctorAvailable);
+    }
+
+    @GetMapping("/all-description")
+    public ResponseEntity<List<Description>> getAllDescriptions() {
+        List<Description> descriptions = descriptionService.findAll();
+        return ResponseEntity.ok(descriptions);
+    }
+
+    @GetMapping("/appointment/{codEntity}")
+    public ResponseEntity<List<Appointment>> getAppointmentByCodEntity(@PathVariable("codEntity") Long codEntity) {
+        List<Appointment> appointments = appointmentService.getAllAppointmentsByCodEntity(codEntity);
+        return new ResponseEntity<>(appointments, HttpStatus.OK);
+    }
+}
+
+class AvailabilityCheckRequest {
+    private LocalDate bookDate;
+    private LocalTime fromDate;
+    private LocalTime toDate;
+    private Long doctorId;
+
+    public LocalTime getFromDate() {
+        return fromDate;
+    }
+
+    public void setFromDate(LocalTime fromDate) {
+        this.fromDate = fromDate;
+    }
+
+    public LocalTime getToDate() {
+        return toDate;
+    }
+
+    public void setToDate(LocalTime toDate) {
+        this.toDate = toDate;
+    }
+
+    public LocalDate getBookDate() {
+        return bookDate;
+    }
+
+    public void setBookDate(LocalDate bookDate) {
+        this.bookDate = bookDate;
+    }
+
+    public Long getDoctorId() {
+        return doctorId;
+    }
+
+    public void setDoctorId(Long doctorId) {
+        this.doctorId = doctorId;
+    }
+
 }

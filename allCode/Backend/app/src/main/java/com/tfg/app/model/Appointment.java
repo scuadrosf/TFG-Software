@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tfg.app.controller.DTOS.AppointmentDTO;
 
 @Entity(name = "appointmentTable")
@@ -31,6 +32,10 @@ public class Appointment {
     private String description;
     private String additionalNote;
 
+    @ManyToOne
+    private User doctorAsignated;
+
+    @JsonIgnore
     @OneToMany(mappedBy = "appointment", cascade = CascadeType.ALL)
     private List<Intervention> interventions;
 
@@ -39,8 +44,11 @@ public class Appointment {
 
     private boolean completed;
 
+    private Long codEntity;
+
+
     public Appointment(Long id, LocalDate bookDate, LocalTime from, LocalTime to, String description, List<Intervention> interventions,
-            User user, boolean completed) {
+            User user, boolean completed, User doctorAsignated) {
         this.id = id;
         this.bookDate = bookDate;
         this.fromDate = from;
@@ -49,6 +57,7 @@ public class Appointment {
         this.interventions = interventions;
         this.user = user;
         this.completed = completed;
+        this.doctorAsignated = doctorAsignated;
     }
 
     public Appointment() {
@@ -62,6 +71,8 @@ public class Appointment {
         this.description = appointmentDTO.getDescription();
         this.additionalNote = appointmentDTO.getAdditionalNote();
         this.completed = appointmentDTO.getCompleted();
+        this.doctorAsignated = appointmentDTO.getDoctorAsignated();
+        this.codEntity = appointmentDTO.getCodEntity();
     }
 
     public Long getId() {
@@ -139,6 +150,22 @@ public class Appointment {
 
     public void setCompleted(boolean completed) {
         this.completed = completed;
+    }
+
+    public User getDoctorAsignated() {
+        return doctorAsignated;
+    }
+
+    public void setDoctorAsignated(User doctorAsignated) {
+        this.doctorAsignated = doctorAsignated;
+    }
+
+    public Long getCodEntity() {
+        return codEntity;
+    }
+
+    public void setCodEntity(Long codEntity) {
+        this.codEntity = codEntity;
     }
 
     

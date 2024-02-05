@@ -55,6 +55,18 @@ export class AuthService {
       );
   }
 
+  registerDoctor(userData: any): Observable<any> {
+    return this.httpClient.post("/api/users/doctor", userData)
+      .pipe(
+        map((response: any) => {
+          return response;
+        }),
+        catchError((error: any) => {
+          return throwError('Register Error');
+        })
+      );
+  }
+
   logIn(user: string, pass: string): Observable<any> {
     return this.httpClient.post(BASE_URL + "login", { username: user, password: pass }, { withCredentials: true })
       .pipe(
@@ -86,10 +98,13 @@ export class AuthService {
   isAdmin() {
     return this.isLogged() && this.user?.roles.indexOf('ADMIN') !== -1;
   }
+  isDoctor(){
+    return this.isLogged() && this.user?.roles.indexOf('DOCTOR') !== -1;
+  }
 
-  isUser(){
+  isUser() {
     return !this.userService.checkAdmin(this.userId);
-  // CheckAdmin returns false if is USER and returns true if is ADMIN
+    // CheckAdmin returns false if is USER and returns true if is ADMIN
   }
 
   currentUser() {

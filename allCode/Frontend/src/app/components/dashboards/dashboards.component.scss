@@ -1,0 +1,59 @@
+h2 {
+    font-family: 'Arial', sans-serif;
+    color: #333;
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+  
+  .title {
+    // Estilos del marco redondeado
+    border: 2px solid #3498db;
+    /* Color del borde */
+    border-radius: 8px;
+    /* Radio de la esquina para hacerlo redondeado */
+    padding: 10px;
+    /* Relleno interno para separar el texto del borde */
+    display: block;
+    /* Asegura que el marco se ajuste al contenido */
+    margin-top: 20px; /* Agrega margen superior para separarse del componente de arriba */
+  }
+
+
+// Define colores personalizados
+$color-fondo: #3498db;
+$color-texto: #ffffff;
+
+// Estilos para el botón
+// Define colores personalizados
+$color-fondo: #3498db;
+$color-texto: #ffffff;
+
+// Estilos para el botón
+.btn-atractivo {
+  background-color: $color-fondo;
+  color: $color-texto;
+  border: 2px;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  height: 50px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px; /* Agrega margen superior para separarse del componente de arriba */
+
+
+  &:hover {
+    background-color: darken($color-fondo, 15%);
+  }
+}
+
+
+  

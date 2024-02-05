@@ -54,6 +54,16 @@ public class UserService {
         return users.findByNameContainingOrLastNameContainingOrUsernameContaining(name, lastName, username);
     }
 
+    public List<User> findAllUsersByDoctorAsignatedId(Long id){
+        return users.findAllUsersByDoctorAsignatedId(id);
+    }
 
+    public Optional<User> findDoctorAsignatedByUserId(Long id){
+        return users.getDoctorAsignatedById(id);
+    }
+
+    public List<User> findByCodEntity(Long codEntity){
+        return users.findByCodEntity(codEntity);
+    }
 
 }
