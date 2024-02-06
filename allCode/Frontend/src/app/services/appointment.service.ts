@@ -3,9 +3,9 @@ import { Injectable } from '@angular/core';
 import { Observable, catchError, map, throwError } from 'rxjs';
 import { Appointment } from '../models/appointment.model';
 import { Description } from '../models/description.model';
+import { environment } from 'src/environments/environment.prod';
 
-
-const baseUrl = '/api/appointments/';
+const baseUrl = environment.baseUrl+'appointments/';
 
 
 @Injectable({

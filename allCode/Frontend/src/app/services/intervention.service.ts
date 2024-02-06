@@ -4,8 +4,9 @@ import { Intervention } from '../models/intervention.model';
 import { Observable } from 'rxjs';
 import { Appointment } from '../models/appointment.model';
 import { Document } from '../models/document.model';
+import { environment } from 'src/environments/environment.prod';
 
-const baseUrl = '/api/interventions/';
+const baseUrl = environment.baseUrl+'/interventions/';
 
 
 @Injectable({

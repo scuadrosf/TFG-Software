@@ -2,9 +2,10 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { User } from '../models/user.model';
 import { Observable, catchError, map, throwError } from 'rxjs';
+import { environment } from 'src/environments/environment.prod';
 
 
-const baseUrl = '/api/users/';
+const baseUrl = environment.baseUrl+'/users/';
 
 @Injectable({
   providedIn: 'root'

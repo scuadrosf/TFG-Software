@@ -5,9 +5,10 @@ import { catchError, map } from 'rxjs/operators';
 import { User } from '../models/user.model';
 import { UserService } from './user.service';
 import { ActivatedRoute } from '@angular/router';
+import { environment } from 'src/environments/environment.prod';
 
 
-const BASE_URL = '/api/auth/';
+const BASE_URL = environment.baseUrl+'/auth/';
 
 @Injectable({
   providedIn: 'root'
