@@ -45,7 +45,7 @@ public class InitDatabase {
         user.setBirth(LocalDate.now());
         user.setGender("Masculino");
         user.setCodEntity(100L);
-        String avatarUrlAdmin = "/static/assets/predAdminAvatar.png";
+        String avatarUrlAdmin = "/static/avatar/predAdminAvatar.png";
         try {
             setProfileAvatarContent(user, avatarUrlAdmin);
         } catch (IOException e) {
@@ -68,7 +68,7 @@ public class InitDatabase {
         user3.setRoles(List.of("USER", "ADMIN"));
         user3.setBirth(LocalDate.now());
         user3.setGender("Masculino");
-        avatarUrlAdmin = "/static/assets/predAdminAvatar.png";
+        avatarUrlAdmin = "/static/avatar/predAdminAvatar.png";
         try {
             setProfileAvatarContent(user3, avatarUrlAdmin);
         } catch (IOException e) {
@@ -92,7 +92,7 @@ public class InitDatabase {
         user2.setCountry("España");
         user2.setPostalCode("28220");
         user2.setCodEntity(200L);
-        String avatarUrlUser = "/static/assets/predAvatar.png";
+        String avatarUrlUser = "/static/avatar/predAvatar.png";
         try {
             setProfileAvatarContent(user2, avatarUrlUser);
         } catch (IOException e) {
@@ -169,8 +169,8 @@ public class InitDatabase {
     }
 
     public void createUsers(int numberOfUsers) {
-        String avatarUrlAdmin = "/static/assets/predAdminAvatar.png";
-        String avatarUrlUser = "/static/assets/predAvatar.png";
+        String avatarUrlAdmin = "/static/avatar/predAdminAvatar.png";
+        String avatarUrlUser = "/static/avatar/predAvatar.png";
 
         for (int i = 0; i < numberOfUsers; i++) {
 
