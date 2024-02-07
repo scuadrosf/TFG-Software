@@ -29,11 +29,11 @@ export class InterventionService {
   }
 
   getAppointmentList(): Observable<Appointment[]> {
-    return this.httpClient.get<Appointment[]>('/api/appointments/all')
+    return this.httpClient.get<Appointment[]>(environment.baseUrl + '/appointments/all')
   }
 
   getAllAppointmentsByUser(id: number): Observable<Appointment[]> {
-    return this.httpClient.get<Appointment[]>("/api/appointments/all/" + id);
+    return this.httpClient.get<Appointment[]>(environment.baseUrl + '/appointments/all/' + id);
   }
 
   addIntervention(idAppointment: number, idUser: number, formData: FormData): Observable<any> {

@@ -5,8 +5,8 @@ WORKDIR /project
 COPY Frontend/ .
 
 RUN npm install
-# RUN npm run build -- --prod --base-href=/new/
-RUN npm run build -- --configuration production --base-href=/new/
+
+RUN npm run build -- --configuration production
 
 
 FROM maven:3-openjdk-17 as backend
@@ -17,7 +17,7 @@ COPY Backend/app/pom.xml /project
 
 COPY Backend/app/src /project/src
 
-COPY --from=builder /project/dist/* /project/src/main/resources/public/new
+COPY --from=builder /project/dist/* /project/src/main/resources/static/
 
 RUN mvn package -DskipTests
 
@@ -29,6 +29,6 @@ WORKDIR /usr/src/app/
 
 COPY --from=backend /project/target/*.jar /usr/src/app/
 
-EXPOSE 8080
+EXPOSE 443
 
 CMD ["java", "-jar", "app-0.0.1-SNAPSHOT.jar" ]

@@ -79,28 +79,28 @@ export class UserService {
   }
 
   deleteUser(user: User) {
-    return this.httpClient.delete('/api/users/' + user.id).subscribe();
+    return this.httpClient.delete(baseUrl + user.id).subscribe();
   }
 
   checkAdmin(id: number): Observable<boolean> {
-    return this.httpClient.get<boolean>('/api/users/rol/' + id);
+    return this.httpClient.get<boolean>(baseUrl + 'rol/' + id);
   }
 
   checkDoctor(id: number): Observable<boolean> {
-    return this.httpClient.get<boolean>('/api/users/rolD/' + id);
+    return this.httpClient.get<boolean>(baseUrl + 'rolD/' + id);
   }
 
 
   getUsersByNameOrLastNameOrUsername(query: string): Observable<User[]> {
-    return this.httpClient.get<User[]>(baseUrl + "/search?query=" + query);
+    return this.httpClient.get<User[]>(baseUrl + "search?query=" + query);
   }
   
   getDoctorAsignated(id: number){
-    return this.httpClient.get<User>(baseUrl+"/doctorAsignated/"+id);
+    return this.httpClient.get<User>(baseUrl+"doctorAsignated/"+id);
   }
 
   getUsersByCodEntity(codEntity: number): Observable<User[]> {
-    return this.httpClient.get<User[]>(baseUrl+"/cod/"+codEntity)
+    return this.httpClient.get<User[]>(baseUrl+"cod/"+codEntity)
   }
 
 

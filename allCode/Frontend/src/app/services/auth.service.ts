@@ -28,7 +28,7 @@ export class AuthService {
   private loggedIn = new BehaviorSubject<boolean>(false);
 
   reqIsLogged() {
-    this.httpClient.get('/api/users/me', { withCredentials: true }).subscribe(
+    this.httpClient.get(environment.baseUrl+'/users/me', { withCredentials: true }).subscribe(
       response => {
         this.user = response as User;
         this.userAux = response as User;
@@ -45,7 +45,7 @@ export class AuthService {
 
 
   register(userData: any): Observable<any> {
-    return this.httpClient.post("/api/users/", userData)
+    return this.httpClient.post(environment.baseUrl+"/users/", userData)
       .pipe(
         map((response: any) => {
           return response;
@@ -57,7 +57,7 @@ export class AuthService {
   }
 
   registerDoctor(userData: any): Observable<any> {
-    return this.httpClient.post("/api/users/doctor", userData)
+    return this.httpClient.post(environment.baseUrl + "/users/doctor", userData)
       .pipe(
         map((response: any) => {
           return response;

@@ -5,7 +5,7 @@ import { Appointment } from '../models/appointment.model';
 import { Description } from '../models/description.model';
 import { environment } from 'src/environments/environment.prod';
 
-const baseUrl = environment.baseUrl+'appointments/';
+const baseUrl = environment.baseUrl+'/appointments/';
 
 
 @Injectable({
@@ -31,7 +31,7 @@ export class AppointmentService {
     return this.httpClient.get<Appointment[]>(baseUrl + "all");
   }
   getAllAppointmentsByCodEntity(codEntity: number): Observable<Appointment[]> {
-    return this.httpClient.get<Appointment[]>(baseUrl + "/appointment/"+ codEntity)
+    return this.httpClient.get<Appointment[]>(baseUrl + "appointment/"+ codEntity)
   }
 
   getAllAppointmentsByUser(id: number): Observable<Appointment[]> {
@@ -68,7 +68,7 @@ export class AppointmentService {
   }
 
   findAppointmentsByUserDetails(query: string): Observable<Appointment[]> {
-    return this.httpClient.get<Appointment[]>(baseUrl + "/search?query=" + query);
+    return this.httpClient.get<Appointment[]>(baseUrl + "search?query=" + query);
   }
 
   checkAppointmentAvailability(doctorId: number, bookDate: string, fromDate: string, toDate: string): Observable<boolean> {
@@ -77,7 +77,7 @@ export class AppointmentService {
   }
 
   getAllDescriptions(){
-    return this.httpClient.get<Description[]>(baseUrl+"/all-description");
+    return this.httpClient.get<Description[]>(baseUrl+"all-description");
   }
 
 }
