@@ -4,9 +4,9 @@ docker build -t scuadrosf/smilelink:v1 -f Docker/Dockerfile .
 
 docker push scuadrosf/smilelink:v1
 
-Set-Location ./Docker
+# Set-Location ./Docker
 
-docker compose down
+# docker compose down
 
-docker compose up
+# docker compose up
 

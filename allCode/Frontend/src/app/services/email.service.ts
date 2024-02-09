@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { User } from '../models/user.model';
+import { environment } from 'src/environments/environment.prod';
 
-const baseUrl = '/api/email/';
+const baseUrl = environment.baseUrl+'/email/';
 
 
 @Injectable({
