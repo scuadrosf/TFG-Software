@@ -32,6 +32,25 @@ public class InitDatabase {
 
     @PostConstruct
     public void init() {
+        
+
+        User userSuperAdmin = new User();
+
+        userSuperAdmin.setName("Administrador");
+        userSuperAdmin.setLastName("Administrador");
+        userSuperAdmin.setUsername("");
+        userSuperAdmin.setEmail("admin@gmail.com");
+        // userSuperAdmin.setPasswordEncoded(passwordEncoder.encode("superpassword12345"));
+        userSuperAdmin.setPasswordEncoded(passwordEncoder.encode("12345"));
+        userSuperAdmin.setRoles(List.of("ADMIN"));
+        String avatarUrlAdmin = "/static/avatar/predAdminAvatar.png";
+        try {
+            setProfileAvatarContent(userSuperAdmin, avatarUrlAdmin);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        users.save(userSuperAdmin);
+
 
         User user = new User();
 
@@ -39,13 +58,13 @@ public class InitDatabase {
         user.setLastName("Doctor");
         user.setUsername("33W");
         user.setPhone("444444444");
-        user.setEmail("admin@gmail.com");
+        user.setEmail("admin100@gmail.com");
         user.setPasswordEncoded(passwordEncoder.encode("12345"));
         user.setRoles(List.of("USER", "ADMIN"));
         user.setBirth(LocalDate.now());
         user.setGender("Masculino");
         user.setCodEntity(100L);
-        String avatarUrlAdmin = "/static/avatar/predAdminAvatar.png";
+        avatarUrlAdmin = "/static/avatar/predAdminAvatar.png";
         try {
             setProfileAvatarContent(user, avatarUrlAdmin);
         } catch (IOException e) {
@@ -62,7 +81,7 @@ public class InitDatabase {
         user3.setLastName("Doctor2");
         user3.setUsername("332W");
         user3.setPhone("444444444");
-        user3.setEmail("admin2@gmail.com");
+        user3.setEmail("admin200@gmail.com");
         user3.setCodEntity(200L);
         user3.setPasswordEncoded(passwordEncoder.encode("12345"));
         user3.setRoles(List.of("USER", "ADMIN"));

@@ -71,6 +71,7 @@ public class User {
     @ManyToOne
     private User doctorAsignated;
 
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long codEntity;
 
 

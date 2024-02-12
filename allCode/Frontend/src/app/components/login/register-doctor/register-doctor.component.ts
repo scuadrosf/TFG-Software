@@ -35,12 +35,11 @@ export class RegisterDoctorComponent implements OnInit {
       this.user = response;
       this.codEntity = response.codEntity;
     })
-    console.log(this.codEntity)
   }
 
 
   addDoctor() {
-    if (this.authService.isAdmin() || this.authService.isDoctor()) {
+    if ((this.authService.isAdmin() || this.authService.isDoctor()) && !this.authService.isSuperAdmin()) {
       const userData = {
         name: this.name,
         lastName: this.lastName,
@@ -73,7 +72,34 @@ export class RegisterDoctorComponent implements OnInit {
       } else {
         Swal.fire('Todos los campos son obligatorios', '', 'warning');
       }
-    } else {
+    }else if (this.authService.isSuperAdmin()) {
+      const userData = {
+        name: this.name,
+        lastName: this.lastName,
+        email: this.email,
+        username: this.username,
+        passwordEncoded: this.username,
+        codEntity: this.codEntity
+      }
+      console.log(userData)
+      if (Object.values(userData).every(value => value !== '')) {
+        this.authService.registerEntity(userData).subscribe(
+          (_) => {
+            Swal.fire("Entidad dada de alta", "", "success");
+            window.history.back();
+          },
+          (_) => {
+            Swal.fire("Probablemente este doctor ya exista, sino vuelva a intentarlo", "", "error");
+            console.error("error");
+            this.router.navigate(['/error-page'])
+          }
+        );
+      } else {
+        Swal.fire('Todos los campos son obligatorios', '', 'warning');
+      }
+    }
+    
+    else {
       console.error(this.authService.currentUser())
     }
   }
