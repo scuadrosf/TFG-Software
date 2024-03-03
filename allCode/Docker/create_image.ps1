@@ -1,8 +1,8 @@
 Set-Location ../
 
-docker build -t scuadrosf/smilelink:v1 -f Docker/Dockerfile .
+docker build -t scuadrosf/smilelink:latest -f Docker/Dockerfile .
 
-docker push scuadrosf/smilelink:v1
+docker push scuadrosf/smilelink:latest
 
 # Set-Location ./Docker
 
