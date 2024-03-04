@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Appointment } from 'src/app/models/appointment.model';
+import { Description } from 'src/app/models/description.model';
 import { User } from 'src/app/models/user.model';
 import { AppointmentService } from 'src/app/services/appointment.service';
 import { UserService } from 'src/app/services/user.service';
@@ -13,6 +14,7 @@ import Swal from 'sweetalert2';
 export class EditAppointmentComponent {
 
   userId!: number;
+  userMe!: User;
   appointmentId!: number;
   appointment!: Appointment
   user!: User;
@@ -22,8 +24,11 @@ export class EditAppointmentComponent {
   description: string = '';
   additionalNote: string = '';
   doctorList!: User[];
+  descriptionList!: Description[];
   doctorName: string = '';
   doctorAsignated!: User;
+  groupedDescriptions: any = {};
+
 
   constructor(private activatedRoute: ActivatedRoute, private userService: UserService, private appointmentService: AppointmentService) { }
 
@@ -38,14 +43,35 @@ export class EditAppointmentComponent {
         this.user = patient;
       })
     });
-    this.getDoctorList();
+    this.userService.getMe().subscribe(response => {
+      this.userMe = response;
+      this.getDoctorList(this.userMe);
+    });
     this.onDescriptionChange();
+
+    this.appointmentService.getAllDescriptions().subscribe(response => {
+      this.descriptionList = response;
+      this.groupDescriptions();
+    });
+
   }
 
-  getDoctorList() {
+  groupDescriptions() {
+    // Agrupar las descripciones por nameDescription
+    this.descriptionList.forEach((description) => {
+      const groupName = description.nameDescription;
+      if (!this.groupedDescriptions[groupName]) {
+        this.groupedDescriptions[groupName] = [];
+      }
+      this.groupedDescriptions[groupName].push(description);
+    });
+  }
+
+
+  getDoctorList(userMe: User) {
     this.userService.getUserList().subscribe((list) => {
       this.doctorList = list.filter(user =>
-        user.roles.length === 1 && user.roles.includes('DOCTOR'));
+        user.roles.length >= 1 && user.roles.includes('DOCTOR') && user.codEntity == userMe.codEntity);
     });
   }
 
@@ -90,35 +116,40 @@ export class EditAppointmentComponent {
     });
   }
 
+  objectKeys(obj: any) {
+    return Object.keys(obj);
+  }
+
   onDescriptionChange() {
     if (!this.fromDate) {
+      Swal.fire("Seleccione la hora de inicio", "", "warning");
       return;
     }
-    const fromDate = new Date(1970, 0, 1, parseInt(this.fromDate.substr(0, 2)), parseInt(this.fromDate.substr(3, 2)));
-    switch (this.description) {
-      case "Mantenimiento y Prevención":
-        fromDate.setMinutes(fromDate.getMinutes() + 30);
-        break;
-      case "Problemas Comunes y Tratamientos de Rutina":
-        fromDate.setMinutes(fromDate.getMinutes() + 45);
-        break;
-      case "Ortodoncia y Estética Dental":
-        fromDate.setMinutes(fromDate.getMinutes() + 45);
-        break;
-      case "Procedimientos Quirúrgicos y Restauradores":
-        fromDate.setMinutes(fromDate.getMinutes() + 45);
-        break;
-      case "Problemas Específicos y Emergencias":
-        fromDate.setMinutes(fromDate.getMinutes() + 45);
-        break;
-      case "Otros":
-        fromDate.setMinutes(fromDate.getMinutes() + 30);
-        break;
-      default:
-        break;
+
+    const fromDateParts = this.fromDate.split(':');
+    const fromDateObj = new Date();
+    fromDateObj.setHours(parseInt(fromDateParts[0], 10), parseInt(fromDateParts[1], 10), 0, 0);
+
+    let selectedDescription = this.descriptionList.find(descriptionItem => descriptionItem.nameIntervention === this.description);
+
+    if (selectedDescription && selectedDescription.timeToIntervention) {
+      const timeToInterventionString = selectedDescription.timeToIntervention;
+      const timeParts = timeToInterventionString.split(':');
+      const durationHours = parseInt(timeParts[0], 10);
+      const durationMinutes = parseInt(timeParts[1], 10);
+
+      if (!isNaN(durationHours) && !isNaN(durationMinutes)) {
+        fromDateObj.setHours(fromDateObj.getHours() + durationHours);
+        fromDateObj.setMinutes(fromDateObj.getMinutes() + durationMinutes);
+      } else {
+        console.error('Invalid timeToIntervention format:', timeToInterventionString);
+        // Manejo de error o valor predeterminado
+      }
     }
-    // Formatea toDate como 'HH:mm'
-    this.toDate = fromDate.toTimeString().substr(0, 5);
+
+    // Formateo de la hora para asegurar el formato correcto
+    this.toDate = fromDateObj.getHours().toString().padStart(2, '0') + ':' +
+      fromDateObj.getMinutes().toString().padStart(2, '0');
   }
 
   onDoctorChange() {
