@@ -1,14 +1,27 @@
 package com.tfg.app.service;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URL;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.net.http.HttpResponse.BodyHandlers;
+import java.sql.Blob;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
+import javax.sql.rowset.serial.SerialBlob;
 
 import org.hibernate.engine.jdbc.BlobProxy;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -32,97 +45,165 @@ public class InitDatabase {
 
     @PostConstruct
     public void init() {
-        
+        createSuperAdmin(new User());
+        createEntities();
+        createDoctors();
+        createUsers();
+        // createAppointmentToUser();
+        createDescriptionsAndInterventionsType();
+    }
 
-        User userSuperAdmin = new User();
+    private void createUsers() {
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(
+                        "https://randomuser.me/api/?results=10&inc=gender,name,location,email,dob,phone,cell,id,picture,nat"))
+                .header("accept", "application/json")
+                .build();
 
+        try {
+            HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
+            JSONObject obj = new JSONObject(response.body());
+
+            JSONArray array = obj.getJSONArray("results");
+
+            for (int i = 0; i < array.length(); i++) {
+                JSONObject person = array.getJSONObject(i);
+                JSONObject nameObject = person.getJSONObject("name");
+                JSONObject locationObject = person.getJSONObject("location");
+                JSONObject dobObject = person.getJSONObject("dob");
+
+                User user = new User();
+                user.setName(nameObject.getString("first"));
+                user.setLastName(nameObject.getString("last"));
+                user.setUsername(person.getJSONObject("id").optString("value", person.getString("phone")));
+                LocalDate birthDate = LocalDate.parse(dobObject.getString("date").substring(0, 10));
+                user.setBirth(birthDate);
+                user.setCodEntity(i % 2 == 0 ? 100L : 200L);
+                user.setPhone(person.getString("phone"));
+                user.setEmail(person.getString("email"));
+                user.setCity(locationObject.getString("city"));
+                user.setAddress(locationObject.getJSONObject("street").getInt("number") + " "
+                        + locationObject.getJSONObject("street").getString("name"));
+                String postalCode = String.valueOf(locationObject.optInt("postcode", 28820));
+                user.setPostalCode(postalCode);
+                user.setGender("male".equals(person.getString("gender")) ? "Masculino" : "Femenino");
+                user.setCountry(locationObject.getString("country"));
+                user.setProfileAvatarFile(downloadImage(person.getJSONObject("picture").getString("large")));
+                user.setPasswordEncoded(passwordEncoder
+                        .encode(person.getJSONObject("id").optString("value", person.getString("phone"))));
+                user.setRoles(List.of("USER"));
+                users.save(user);
+
+            }
+
+            User user2 = new User();
+            user2.setName("Sergio");
+            user2.setLastName("Cuadros Flores");
+            user2.setUsername("54362066W");
+            user2.setPhone("444444444");
+            user2.setEmail("sercua.flores@gmail.com");
+            user2.setPasswordEncoded(passwordEncoder.encode("pass"));
+            user2.setRoles(List.of("USER"));
+            user2.setBirth(LocalDate.of(2002, 12, 24));
+            user2.setGender("Masculino");
+            user2.setAddress("Calle Benito Perez");
+            user2.setCity("Madrid");
+            user2.setCountry("España");
+            user2.setPostalCode("28220");
+            user2.setCodEntity(200L);
+            String avatarUrlUser = "/static/avatar/predAvatar.png";
+            try {
+                setProfileAvatarContent(user2, avatarUrlUser);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            users.save(user2);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Util util = new Util(0, 0, 11);
+        utilService.save(util);
+    }
+
+    public Blob downloadImage(String urlString) throws Exception {
+        URL url = new URL(urlString);
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
+        connection.connect();
+
+        try (InputStream inputStream = connection.getInputStream();
+                ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+            byte[] buffer = new byte[4096];
+            int n;
+            while ((n = inputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, n);
+            }
+            Blob blob = new SerialBlob(outputStream.toByteArray());
+            return blob;
+        } finally {
+            connection.disconnect();
+        }
+    }
+
+    private void createEntities() {
+        User entity1 = new User();
+        entity1.setName("Fernando");
+        entity1.setLastName("Ane");
+        entity1.setUsername("33W");
+        entity1.setPhone("711548969");
+        entity1.setEmail("admin100@smilelink.com");
+        entity1.setPasswordEncoded(passwordEncoder.encode("12345"));
+        entity1.setRoles(List.of("USER", "DOCTOR", "ADMIN"));
+        entity1.setBirth(LocalDate.now());
+        entity1.setGender("Masculino");
+        entity1.setCodEntity(100L);
+        String avatarUrlAdmin = "/static/avatar/predAdminAvatar.png";
+        try {
+            setProfileAvatarContent(entity1, avatarUrlAdmin);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        users.save(entity1);
+
+        Util util = new Util(0, 0, 0);
+        utilService.save(util);
+
+        User entity2 = new User();
+
+        entity2.setName("Jose Luis");
+        entity2.setLastName("Rodriguez");
+        entity2.setUsername("332W");
+        entity2.setPhone("785264122");
+        entity2.setEmail("admin200@smilelink.com");
+        entity2.setCodEntity(200L);
+        entity2.setPasswordEncoded(passwordEncoder.encode("12345"));
+        entity2.setRoles(List.of("USER", "DOCTOR", "ADMIN"));
+        entity2.setBirth(LocalDate.now());
+        entity2.setGender("Masculino");
+        avatarUrlAdmin = "/static/avatar/predAdminAvatar.png";
+        try {
+            setProfileAvatarContent(entity2, avatarUrlAdmin);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        users.save(entity2);
+    }
+
+    private void createSuperAdmin(User userSuperAdmin) {
         userSuperAdmin.setName("Administrador");
         userSuperAdmin.setLastName("Administrador");
         userSuperAdmin.setUsername("");
-        userSuperAdmin.setEmail("admin@gmail.com");
-        // userSuperAdmin.setPasswordEncoded(passwordEncoder.encode("superpassword12345"));
-        userSuperAdmin.setPasswordEncoded(passwordEncoder.encode("12345"));
+        userSuperAdmin.setEmail("admin@smilelink.com");
+        userSuperAdmin.setPasswordEncoded(passwordEncoder.encode("superpassword12345"));
         userSuperAdmin.setRoles(List.of("ADMIN"));
-        String avatarUrlAdmin = "/static/avatar/predAdminAvatar.png";
+        String avatarUrlAdmin = "/static/avatar/administrador.png";
         try {
             setProfileAvatarContent(userSuperAdmin, avatarUrlAdmin);
         } catch (IOException e) {
             e.printStackTrace();
         }
         users.save(userSuperAdmin);
-
-
-        User user = new User();
-
-        user.setName("Admin");
-        user.setLastName("Doctor");
-        user.setUsername("33W");
-        user.setPhone("444444444");
-        user.setEmail("admin100@gmail.com");
-        user.setPasswordEncoded(passwordEncoder.encode("12345"));
-        user.setRoles(List.of("USER", "ADMIN"));
-        user.setBirth(LocalDate.now());
-        user.setGender("Masculino");
-        user.setCodEntity(100L);
-        avatarUrlAdmin = "/static/avatar/predAdminAvatar.png";
-        try {
-            setProfileAvatarContent(user, avatarUrlAdmin);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        users.save(user);
-
-        Util util = new Util(0, 0, 0);
-        utilService.save(util);
-
-        User user3 = new User();
-
-        user3.setName("Admin2");
-        user3.setLastName("Doctor2");
-        user3.setUsername("332W");
-        user3.setPhone("444444444");
-        user3.setEmail("admin200@gmail.com");
-        user3.setCodEntity(200L);
-        user3.setPasswordEncoded(passwordEncoder.encode("12345"));
-        user3.setRoles(List.of("USER", "ADMIN"));
-        user3.setBirth(LocalDate.now());
-        user3.setGender("Masculino");
-        avatarUrlAdmin = "/static/avatar/predAdminAvatar.png";
-        try {
-            setProfileAvatarContent(user3, avatarUrlAdmin);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        users.save(user3);
-
-        User user2 = new User();
-
-        user2.setName("Sergio");
-        user2.setLastName("Cuadros Flores");
-        user2.setUsername("54362066W");
-        user2.setPhone("444444444");
-        user2.setEmail("sercua.flores@gmail.com");
-        user2.setPasswordEncoded(passwordEncoder.encode("pass"));
-        user2.setRoles(List.of("USER"));
-        user2.setBirth(LocalDate.of(2002, 12, 24));
-        user2.setGender("Masculino");
-        user2.setAddress("Calle Benito Perez");
-        user2.setCity("Madrid");
-        user2.setCountry("España");
-        user2.setPostalCode("28220");
-        user2.setCodEntity(200L);
-        String avatarUrlUser = "/static/avatar/predAvatar.png";
-        try {
-            setProfileAvatarContent(user2, avatarUrlUser);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        users.save(user2);
-
-        createUsers(10);
-        createDescriptionsAndInterventionsType();
-
     }
 
     private LocalTime convertDurationToLocalTime(String duration) {
@@ -187,61 +268,71 @@ public class InitDatabase {
         user.setProfileAvatarFile(BlobProxy.generateProxy(image.getInputStream(), image.contentLength()));
     }
 
-    public void createUsers(int numberOfUsers) {
-        String avatarUrlAdmin = "/static/avatar/predAdminAvatar.png";
-        String avatarUrlUser = "/static/avatar/predAvatar.png";
+    public void createDoctors() {
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(
+                        "https://randomuser.me/api/?results=6&inc=gender,name,location,email,dob,phone,cell,id,picture,nat"))
+                .header("accept", "application/json")
+                .build();
 
-        for (int i = 0; i < numberOfUsers; i++) {
+        try {
+            HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
+            JSONObject obj = new JSONObject(response.body());
 
-            User user = new User();
-            user.setName("User" + i);
-            user.setLastName("LastName" + i);
-            user.setUsername("Username" + i);
-            user.setPhone("444444444");
-            user.setEmail("user" + i + "@gmail.com");
-            user.setPasswordEncoded(passwordEncoder.encode("pass" + i));
-            user.setRoles(i % 2 == 0 ? List.of("USER", "ADMIN", "DOCTOR") : List.of("USER"));
-            user.setBirth(LocalDate.now().minusYears(20 + i));
-            user.setGender(i % 2 == 0 ? "Masculino" : "Femenino");
-            if (i <= 5)
-                user.setCodEntity(100L);
-            else
-                user.setCodEntity(200L);
+            JSONArray array = obj.getJSONArray("results");
 
-            if (i % 2 != 0) {
-                user.setAddress("Calle " + i);
-                user.setCity("Ciudad " + i);
-                user.setCountry("País " + i);
-                user.setPostalCode("CodigoPostal" + i);
+            for (int i = 0; i < array.length(); i++) {
+                JSONObject person = array.getJSONObject(i);
+                JSONObject nameObject = person.getJSONObject("name");
+                JSONObject locationObject = person.getJSONObject("location");
+                JSONObject dobObject = person.getJSONObject("dob");
+
+                User user = new User();
+                user.setName(nameObject.getString("first"));
+                user.setLastName(nameObject.getString("last"));
+                user.setUsername(person.getJSONObject("id").optString("value", person.getString("phone")));
+                LocalDate birthDate = LocalDate.parse(dobObject.getString("date").substring(0, 10));
+                user.setBirth(birthDate);
+                user.setCodEntity(i % 2 == 0 ? 100L : 200L);
+                user.setPhone(person.getString("phone"));
+                user.setEmail(nameObject.getString("first")+"."+nameObject.getString("last")+"@smilelink.com");
+                user.setCity(locationObject.getString("city"));
+                user.setAddress(locationObject.getJSONObject("street").getInt("number") + " "
+                        + locationObject.getJSONObject("street").getString("name"));
+                String postalCode = String.valueOf(locationObject.optInt("postcode", 28820));
+                user.setPostalCode(postalCode);
+                user.setGender("male".equals(person.getString("gender")) ? "Masculino" : "Femenino");
+                user.setCountry(locationObject.getString("country"));
+                user.setProfileAvatarFile(downloadImage(person.getJSONObject("picture").getString("large")));
+                user.setPasswordEncoded(passwordEncoder
+                        .encode(person.getJSONObject("id").optString("value", person.getString("phone"))));
+                user.setRoles(List.of("DOCTOR"));
+                users.save(user);
+
             }
-
-            String avatarUrl = i % 2 == 0 ? avatarUrlAdmin : avatarUrlUser;
-            try {
-                setProfileAvatarContent(user, avatarUrl);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            users.save(user);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         User user = new User();
-        user.setName("User" + 11);
-        user.setLastName("LastName" + 11);
-        user.setUsername("Username" + 11);
+        user.setName("Jaime");
+        user.setLastName("Flores");
+        user.setUsername("37W");
         user.setPhone("444444444");
-        user.setEmail("user" + 11 + "@gmail.com");
+        user.setEmail("jaime.flores@smilelink.com");
         user.setPasswordEncoded(passwordEncoder.encode("pass"));
         user.setRoles(List.of("DOCTOR"));
         user.setBirth(LocalDate.now().minusYears(20 + 11));
-        user.setGender("Femenino");
+        user.setGender("Masculino");
         user.setCodEntity(200L);
         user.setAddress("Calle " + 11);
         user.setCity("Ciudad " + 11);
         user.setCountry("País " + 11);
         user.setPostalCode("CodigoPostal" + 11);
 
-        String avatarUrl = avatarUrlAdmin;
+        String avatarUrl = "/static/avatar/predAdminAvatar.png";
+        
         try {
             setProfileAvatarContent(user, avatarUrl);
         } catch (IOException e) {
@@ -249,6 +340,5 @@ public class InitDatabase {
         }
 
         users.save(user);
-
     }
 }
