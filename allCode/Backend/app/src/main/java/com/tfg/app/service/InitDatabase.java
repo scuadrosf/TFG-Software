@@ -15,6 +15,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import javax.annotation.PostConstruct;
 import javax.sql.rowset.serial.SerialBlob;
@@ -28,6 +29,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.tfg.app.model.Appointment;
 import com.tfg.app.model.Description;
 import com.tfg.app.model.User;
 import com.tfg.app.model.Util;
@@ -36,6 +38,8 @@ import com.tfg.app.model.Util;
 public class InitDatabase {
     @Autowired
     private UserService users;
+    @Autowired
+    private AppointmentService appointments;
     @Autowired
     private UtilService utilService;
     @Autowired
@@ -49,8 +53,45 @@ public class InitDatabase {
         createEntities();
         createDoctors();
         createUsers();
-        // createAppointmentToUser();
-        createDescriptionsAndInterventionsType();
+        createAppointmentToUser();
+        // createDescriptionsAndInterventionsType();
+    }
+
+    private void createAppointmentToUser() {
+        List<LocalDate> bookDateList = List.of(
+                LocalDate.parse("2024-02-12"),
+                LocalDate.parse("2023-12-23"),
+                LocalDate.parse("2024-03-05"),
+                LocalDate.parse("2023-07-25"),
+                LocalDate.parse("2024-04-19"));
+        List<LocalTime> fromTimeList = List.of(
+                LocalTime.parse("09:30"),
+                LocalTime.parse("11:45"),
+                LocalTime.parse("13:00"),
+                LocalTime.parse("14:00"),
+                LocalTime.parse("15:33"));
+
+        List<String> descriptionList = List.of("Mantenimiento y Prevención",
+                "Problemas Comunes y Tratamientos de Rutina", "Ortodoncia y Estética Dental",
+                "Procedimientos Quirúrgicos y Restauradores", "Problemas Específicos y Emergencias");
+
+        
+        User patient = users.findById(22L).orElseThrow();
+        Random random = new Random();
+        for (int i = 0; i < 5; i++) {
+            Appointment appointment = new Appointment();
+            appointment.setUser(patient);
+            appointment.setBookDate(bookDateList.get(random.nextInt(bookDateList.size())));
+            LocalTime fromDate = fromTimeList.get(random.nextInt(fromTimeList.size()));
+            appointment.setFromDate(fromDate);
+            appointment.setToDate(fromDate.plusMinutes(20));
+            appointment.setCompleted(false);
+            appointment.setCodEntity(200L);
+            appointment.setDoctorAsignated(users.findById(11L).orElseThrow());
+            appointment.setDescription(descriptionList.get(random.nextInt(descriptionList.size())));
+            appointments.save(appointment);
+        }
+
     }
 
     private void createUsers() {
@@ -93,6 +134,13 @@ public class InitDatabase {
                 user.setPasswordEncoded(passwordEncoder
                         .encode(person.getJSONObject("id").optString("value", person.getString("phone"))));
                 user.setRoles(List.of("USER"));
+                List<Long> lista1 = List.of(2L, 5L, 7L, 9L);
+                List<Long> lista2 = List.of(4L, 6L, 8L, 10L, 11L);
+                Random random = new Random();
+                Long doctorId = i % 2 == 0 ? lista1.get(random.nextInt(lista1.size()))
+                        : lista2.get(random.nextInt(lista2.size()));
+                User doctor = users.findById(doctorId).orElseThrow();
+                user.setDoctorAsignated(doctor);
                 users.save(user);
 
             }
@@ -118,6 +166,8 @@ public class InitDatabase {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            User doctor = users.findById(11L).orElseThrow();
+            user2.setDoctorAsignated(doctor);
             users.save(user2);
         } catch (Exception e) {
             e.printStackTrace();
@@ -285,7 +335,6 @@ public class InitDatabase {
             for (int i = 0; i < array.length(); i++) {
                 JSONObject person = array.getJSONObject(i);
                 JSONObject nameObject = person.getJSONObject("name");
-                JSONObject locationObject = person.getJSONObject("location");
                 JSONObject dobObject = person.getJSONObject("dob");
 
                 User user = new User();
@@ -296,14 +345,8 @@ public class InitDatabase {
                 user.setBirth(birthDate);
                 user.setCodEntity(i % 2 == 0 ? 100L : 200L);
                 user.setPhone(person.getString("phone"));
-                user.setEmail(nameObject.getString("first")+"."+nameObject.getString("last")+"@smilelink.com");
-                user.setCity(locationObject.getString("city"));
-                user.setAddress(locationObject.getJSONObject("street").getInt("number") + " "
-                        + locationObject.getJSONObject("street").getString("name"));
-                String postalCode = String.valueOf(locationObject.optInt("postcode", 28820));
-                user.setPostalCode(postalCode);
+                user.setEmail(nameObject.getString("first") + "." + nameObject.getString("last") + "@smilelink.com");
                 user.setGender("male".equals(person.getString("gender")) ? "Masculino" : "Femenino");
-                user.setCountry(locationObject.getString("country"));
                 user.setProfileAvatarFile(downloadImage(person.getJSONObject("picture").getString("large")));
                 user.setPasswordEncoded(passwordEncoder
                         .encode(person.getJSONObject("id").optString("value", person.getString("phone"))));
@@ -326,13 +369,9 @@ public class InitDatabase {
         user.setBirth(LocalDate.now().minusYears(20 + 11));
         user.setGender("Masculino");
         user.setCodEntity(200L);
-        user.setAddress("Calle " + 11);
-        user.setCity("Ciudad " + 11);
-        user.setCountry("País " + 11);
-        user.setPostalCode("CodigoPostal" + 11);
 
         String avatarUrl = "/static/avatar/predAdminAvatar.png";
-        
+
         try {
             setProfileAvatarContent(user, avatarUrl);
         } catch (IOException e) {
