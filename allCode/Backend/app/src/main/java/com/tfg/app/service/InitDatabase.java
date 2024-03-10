@@ -1,6 +1,8 @@
 package com.tfg.app.service;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -11,6 +13,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.sql.Blob;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -31,6 +34,8 @@ import org.springframework.stereotype.Service;
 
 import com.tfg.app.model.Appointment;
 import com.tfg.app.model.Description;
+import com.tfg.app.model.Document;
+import com.tfg.app.model.Intervention;
 import com.tfg.app.model.User;
 import com.tfg.app.model.Util;
 
@@ -40,6 +45,10 @@ public class InitDatabase {
     private UserService users;
     @Autowired
     private AppointmentService appointments;
+    @Autowired
+    private InterventionService interventions;
+    @Autowired
+    private DocumentService documents;
     @Autowired
     private UtilService utilService;
     @Autowired
@@ -54,7 +63,63 @@ public class InitDatabase {
         createDoctors();
         createUsers();
         createAppointmentToUser();
-        // createDescriptionsAndInterventionsType();
+        createInterventionToAppointment();
+        createDescriptionsAndInterventionsType();
+    }
+
+    private void createInterventionToAppointment() {
+        // ID appointment: 29
+        Intervention intervention = new Intervention();
+        Appointment appointment = appointments.findById(29L).orElseThrow();
+        intervention.setAppointment(appointment);
+        intervention.setInterventionDate(LocalDate.now());
+        intervention.setUser(users.findById(22L).orElseThrow());
+        intervention.setType(appointment.getDescription());
+        Document document = new Document();
+        byte[] bytes = convertToByte("Backend/app/src/main/resources/static/avatar/pdf-ejemplo.pdf");
+        document.setFile(bytes);
+        document.setFileName("pdf-ejemplo.pdf");
+        document.setUser(users.findById(22L).orElseThrow());
+        intervention.setDocument(document);
+        interventions.save(intervention);
+        document.setIntervention(interventions.findById(31L).orElseThrow());
+        document.setCreationDate(LocalDate.now());
+        documents.save(document);
+
+        // ID appointment: 30 (Sin documento)
+        Intervention intervention2 = new Intervention();
+        Appointment appointment2 = appointments.findById(30L).orElseThrow();
+        intervention2.setAppointment(appointment2);
+        intervention2.setInterventionDate(LocalDate.now());
+        intervention2.setUser(users.findById(22L).orElseThrow());
+        intervention2.setType(appointment2.getDescription());
+        interventions.save(intervention2);
+
+    }
+
+    private byte[] convertToByte(String filePath){
+        try {
+            // Leer el archivo PDF y convertirlo en un arreglo de bytes
+            File file = new File("Backend/app/src/main/resources/static/avatar/pdf-ejemplo.pdf");
+            
+            FileInputStream fis = new FileInputStream(file);
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            byte[] buf = new byte[1024];
+
+            for (int readNum; (readNum = fis.read(buf)) != -1;) {
+                bos.write(buf, 0, readNum); // No se preocupe por IOException aquí
+            }
+
+            byte[] bytes = bos.toByteArray();
+
+            // Cierra los streams para evitar leaks
+            fis.close();
+            bos.close();
+            return bytes;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private void createAppointmentToUser() {
@@ -75,7 +140,6 @@ public class InitDatabase {
                 "Problemas Comunes y Tratamientos de Rutina", "Ortodoncia y Estética Dental",
                 "Procedimientos Quirúrgicos y Restauradores", "Problemas Específicos y Emergencias");
 
-        
         User patient = users.findById(22L).orElseThrow();
         Random random = new Random();
         for (int i = 0; i < 5; i++) {
@@ -91,6 +155,29 @@ public class InitDatabase {
             appointment.setDescription(descriptionList.get(random.nextInt(descriptionList.size())));
             appointments.save(appointment);
         }
+        Appointment appointment = new Appointment();
+        appointment.setUser(patient);
+        appointment.setBookDate(bookDateList.get(random.nextInt(bookDateList.size())));
+        LocalTime fromDate = fromTimeList.get(random.nextInt(fromTimeList.size()));
+        appointment.setFromDate(fromDate);
+        appointment.setToDate(fromDate.plusMinutes(20));
+        appointment.setCompleted(true);
+        appointment.setCodEntity(200L);
+        appointment.setDoctorAsignated(users.findById(11L).orElseThrow());
+        appointment.setDescription(descriptionList.get(random.nextInt(descriptionList.size())));
+        appointments.save(appointment);
+
+        Appointment appointment2 = new Appointment();
+        appointment2.setUser(patient);
+        appointment2.setBookDate(bookDateList.get(random.nextInt(bookDateList.size())));
+        LocalTime fromDate2 = fromTimeList.get(random.nextInt(fromTimeList.size()));
+        appointment2.setFromDate(fromDate2);
+        appointment2.setToDate(fromDate2.plusMinutes(20));
+        appointment2.setCompleted(true);
+        appointment2.setCodEntity(200L);
+        appointment2.setDoctorAsignated(users.findById(11L).orElseThrow());
+        appointment2.setDescription(descriptionList.get(random.nextInt(descriptionList.size())));
+        appointments.save(appointment2);
 
     }
 
