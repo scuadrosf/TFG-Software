@@ -24,7 +24,7 @@
                         <div *ngIf="authService.isSuperAdmin()">
                             <span>Administrador</span>
                         </div>
-                        <div *ngIf="authService.isAdmin() && authService.isDoctor() && !authService.isSuperAdmin()">
+                        <div *ngIf="(authService.isAdmin() || authService.isDoctor()) && !authService.isSuperAdmin()">
                             <span>Doctor</span>
                         </div>
                         <div *ngIf="!authService.isAdmin() && !authService.isDoctor()">

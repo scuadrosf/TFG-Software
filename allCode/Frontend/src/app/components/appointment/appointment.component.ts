@@ -47,10 +47,30 @@ export class AppointmentComponent implements OnInit {
 
   getAllAppointments(): void {
     this.loading = true;
-
     this.appointmentService.getAllAppointmentsByCodEntity(this.codEntity).subscribe(list => {
       this.originalAppointmentList = list;
-      this.appointmentList = [...list];
+      // Ordena primero por fecha y luego por hora y minutos
+      this.appointmentList = this.originalAppointmentList.slice().sort((a, b) => {
+        const dateA = new Date(a.bookDate);
+        const dateB = new Date(b.bookDate);
+
+        if (dateA < dateB) return -1;
+        if (dateA > dateB) return 1;
+
+        // Si las fechas son iguales, ordena por hora y minutos
+        const timeA = a.fromDate.split(':').map(Number);
+        const timeB = b.fromDate.split(':').map(Number);
+
+        if (timeA[0] < timeB[0]) return -1;
+        if (timeA[0] > timeB[0]) return 1;
+        // Si las horas son iguales, comparar los minutos
+        if (timeA[1] < timeB[1]) return -1;
+        if (timeA[1] > timeB[1]) return 1;
+        // Si las horas y los minutos son iguales, retornar 0
+        return 0;
+      });
+
+      // Obtiene los avatares para los usuarios filtrados
       this.appointmentList.forEach(appointment => {
         this.userService.getProfileAvatar(appointment.user.id).subscribe(blob => {
           const objectUrl = URL.createObjectURL(blob);
@@ -58,12 +78,11 @@ export class AppointmentComponent implements OnInit {
         });
       });
       this.loading = false;
-    })
+    });
   }
 
   getAllAppointmentsByDoctor(doctorId: number, codEntity: number): void {
     this.loading = true;
-
     this.appointmentService.getAllAppointments().subscribe(list => {
       /* Filtra las citas para incluir solo aquellas cuyo usuario tiene el doctorAsignated igual a doctorId 
       o se le ha asignado dicha cita en específico */
@@ -72,7 +91,27 @@ export class AppointmentComponent implements OnInit {
           appointment.user.doctorAsignated.id === doctorId) ||
         (appointment.doctorAsignated && appointment.doctorAsignated.id === doctorId)) && (appointment.user && appointment.user.codEntity === codEntity)
       );
-      this.appointmentList = [...this.originalAppointmentList];
+
+      // Ordena primero por fecha y luego por hora y minutos
+      this.appointmentList = this.originalAppointmentList.slice().sort((a, b) => {
+        const dateA = new Date(a.bookDate);
+        const dateB = new Date(b.bookDate);
+
+        if (dateA < dateB) return -1;
+        if (dateA > dateB) return 1;
+
+        // Si las fechas son iguales, ordena por hora y minutos
+        const timeA = a.fromDate.split(':').map(Number);
+        const timeB = b.fromDate.split(':').map(Number);
+
+        if (timeA[0] < timeB[0]) return -1;
+        if (timeA[0] > timeB[0]) return 1;
+        // Si las horas son iguales, comparar los minutos
+        if (timeA[1] < timeB[1]) return -1;
+        if (timeA[1] > timeB[1]) return 1;
+        // Si las horas y los minutos son iguales, retornar 0
+        return 0;
+      });
 
       // Obtiene los avatares para los usuarios filtrados
       this.appointmentList.forEach(appointment => {

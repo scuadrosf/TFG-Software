@@ -104,8 +104,8 @@
                                     </div>
                                 </div>
                                 <div class="main-limit">
-                                    <p>Next Appointment in</p>
-                                    <h4>02h:12m</h4>
+                                    <p>Siguiente cita en</p>
+                                    <h4>{{nextAppointment}}</h4>
                                 </div>
                             </div>
                             <div class="card patient-structure">
@@ -164,7 +164,7 @@
                                                                     appointment.fromDate | slice:0:5 }}
                                                                     <span>{{ appointment.user.name }}
                                                                         {{appointment.user.lastName}}</span>
-                                                                    <span class="ongoing-drapt">Ongoing <i
+                                                                    <span class="ongoing-drapt">En curso <i
                                                                             class="feather-chevron-down ms-2"></i></span>
                                                                 </a>
                                                                 <ul class="doctor-sub-list dropdown-menu">

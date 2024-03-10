@@ -21,6 +21,7 @@ export class DashboardsComponent implements OnInit {
   currentUser!: User
   appointmentsUser: Appointment[] = [];
   appointmentsToday: Appointment[] = [];
+  appointmentsTodays: Appointment[] = [];
   interventionsUser: Intervention[] = [];
   numAppointmentsNoCompleted: number = 0;
   numAppointmentsCompleted: number = 0;
@@ -29,6 +30,7 @@ export class DashboardsComponent implements OnInit {
   appointmentsComYest: number = 0;
   numPatientsYesterday: number = 0;
   numPatientsTotal: number = 0;
+  nextAppointment: string = '';
   newPatients: number = 0;
   incrementRate: number = 0;
   differenceTime: string = '';
@@ -45,7 +47,7 @@ export class DashboardsComponent implements OnInit {
 
       this.loadInterventionsUser(this.currentUser.id);
       this.loadAppointmentsUser(this.currentUser.id);
-      
+
     })
 
     this.isAdmin = this.authService.isAdmin();
@@ -70,8 +72,8 @@ export class DashboardsComponent implements OnInit {
     // });
   }
 
-  loadAppointmentsUser(id: number){
-    this.appointmentService.getAllAppointmentsByUser(id).subscribe(list => 
+  loadAppointmentsUser(id: number) {
+    this.appointmentService.getAllAppointmentsByUser(id).subscribe(list =>
       this.appointmentsUser = list)
   }
 
@@ -100,13 +102,51 @@ export class DashboardsComponent implements OnInit {
         this.numAppointmentsNoCompleted = this.countAppointmentsNoCompleted(appointments, this.today);
         this.numAppointmentsCompleted = this.countAppointmentsCompleted(appointments, this.today);
         this.totalAppointmentsToday = appointments.filter(appointment => this.isSameDate(new Date(appointment.bookDate), this.today)).length;
-        this.appointmentsToday = appointments.filter(appointment => this.isSameDate(new Date(appointment.bookDate), this.today));
+        this.appointmentsToday = appointments
+          .filter(appointment => this.isSameDate(new Date(appointment.bookDate), this.today))
+          .sort((a, b) => {
+            const timeA = a.fromDate.split(':').map(Number);
+            const timeB = b.fromDate.split(':').map(Number);
+
+            if (timeA[0] < timeB[0]) return -1;
+            if (timeA[0] > timeB[0]) return 1;
+            // Si las horas son iguales, comparar los minutos
+            if (timeA[1] < timeB[1]) return -1;
+            if (timeA[1] > timeB[1]) return 1;
+            // Si las horas y los minutos son iguales, retornar 0
+            return 0;
+          });
+
+
+
+        // Calcula el tiempo para la próxima cita
+        const now = new Date();
+        const futureAppointments = this.appointmentsToday.filter(appointment => new Date(appointment.bookDate) > now);
+        futureAppointments.sort((a, b) => new Date(a.bookDate).getTime() - new Date(b.bookDate).getTime());
+
+        if (futureAppointments.length > 0) {
+          const nextAppointmentDate = new Date(futureAppointments[0].bookDate);
+          const timeDifference = nextAppointmentDate.getTime() - now.getTime();
+
+          // Convierte la diferencia de tiempo en horas y minutos
+          const hours = Math.floor(timeDifference / (1000 * 60 * 60));
+          const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+          console.log(`La próxima cita es en ${hours} horas y ${minutes} minutos.`);
+          this.nextAppointment = hours.toString();
+        } else {
+          console.log("No hay citas futuras para hoy.");
+          this.nextAppointment = "NaNd"
+        }
       },
       (error) => {
         console.error("Error al cargar los appointments:", error)
       }
     );
   }
+
+  // calculateNextAppointmentTime(): string {
+
+  // }
 
   loadInterventions() {
     this.interventionService.getAllInterventions().subscribe(
