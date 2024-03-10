@@ -13,7 +13,6 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.sql.Blob;
-import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -27,6 +26,7 @@ import org.hibernate.engine.jdbc.BlobProxy;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -56,15 +56,23 @@ public class InitDatabase {
     @Autowired
     private DescriptionService descriptionService;
 
+    @Value("${app.initialize-data:false}")
+    private boolean initializeData;
+
     @PostConstruct
     public void init() {
-        createSuperAdmin(new User());
-        createEntities();
-        createDoctors();
-        createUsers();
-        createAppointmentToUser();
-        createInterventionToAppointment();
-        createDescriptionsAndInterventionsType();
+        if (!initializeData){
+            return;
+        }else{
+            createSuperAdmin(new User());
+            createEntities();
+            createDoctors();
+            createUsers();
+            createAppointmentToUser();
+            createInterventionToAppointment();
+            createDescriptionsAndInterventionsType();
+        }
+       
     }
 
     private void createInterventionToAppointment() {
@@ -97,11 +105,11 @@ public class InitDatabase {
 
     }
 
-    private byte[] convertToByte(String filePath){
+    private byte[] convertToByte(String filePath) {
         try {
             // Leer el archivo PDF y convertirlo en un arreglo de bytes
             File file = new File("Backend/app/src/main/resources/static/avatar/pdf-ejemplo.pdf");
-            
+
             FileInputStream fis = new FileInputStream(file);
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             byte[] buf = new byte[1024];

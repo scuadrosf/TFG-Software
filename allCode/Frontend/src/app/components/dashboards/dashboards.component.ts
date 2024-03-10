@@ -68,7 +68,7 @@ export class DashboardsComponent implements OnInit {
 
     // timer(0, 10000).subscribe(() => {
     //   utilUpdt: Util
-    //   this.utilService.updateUtil()
+    // this.utilService.updateUtil()
     // });
   }
 
@@ -117,36 +117,42 @@ export class DashboardsComponent implements OnInit {
             return 0;
           });
 
-
-
-        // Calcula el tiempo para la próxima cita
-        const now = new Date();
-        const futureAppointments = this.appointmentsToday.filter(appointment => new Date(appointment.bookDate) > now);
-        futureAppointments.sort((a, b) => new Date(a.bookDate).getTime() - new Date(b.bookDate).getTime());
+        // Filtrar citas futuras y ordenar por fecha ascendente
+        const futureAppointments = this.appointmentsToday
+          .filter(appointment => this.isSameDate(new Date(appointment.bookDate), this.today) && !appointment.completed)
+          .sort((a, b) => {
+            return new Date(a.fromDate).getTime() - new Date(b.fromDate).getTime();
+          });
 
         if (futureAppointments.length > 0) {
-          const nextAppointmentDate = new Date(futureAppointments[0].bookDate);
-          const timeDifference = nextAppointmentDate.getTime() - now.getTime();
+          // Obtener la fecha y hora de la próxima cita
+          const nextAppointmentDateTime = new Date(`${futureAppointments[0].bookDate}T${futureAppointments[0].fromDate}`);
 
-          // Convierte la diferencia de tiempo en horas y minutos
-          const hours = Math.floor(timeDifference / (1000 * 60 * 60));
-          const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
-          console.log(`La próxima cita es en ${hours} horas y ${minutes} minutos.`);
-          this.nextAppointment = hours.toString();
+          // Obtener la fecha y hora actuales
+          const currentDateTime = new Date();
+
+          // Calcular la diferencia de tiempo entre la fecha y hora de la próxima cita y la fecha y hora actuales
+          const timeDifference = nextAppointmentDateTime.getTime() - currentDateTime.getTime();
+
+          if (timeDifference > 0) {
+            // Convertir la diferencia de tiempo en horas y minutos
+            const hours = Math.floor(timeDifference / (1000 * 60 * 60));
+            const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+
+            this.nextAppointment = `${hours} horas y ${minutes} minutos`;
+          } else {
+            this.nextAppointment = 'La cita está en curso o ya ha pasado';
+          }
         } else {
-          console.log("No hay citas futuras para hoy.");
-          this.nextAppointment = "NaNd"
+          this.nextAppointment = 'No hay citas futuras';
         }
       },
       (error) => {
         console.error("Error al cargar los appointments:", error)
       }
     );
+
   }
-
-  // calculateNextAppointmentTime(): string {
-
-  // }
 
   loadInterventions() {
     this.interventionService.getAllInterventions().subscribe(
