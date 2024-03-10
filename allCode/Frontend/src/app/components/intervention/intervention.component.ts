@@ -27,7 +27,23 @@ export class InterventionComponent implements OnInit {
       this.user = response;
     })
     this.interventionService.getAllAppointmentsByUser(this.userId).subscribe(list => {
-      this.appointmentList = list;
+      this.appointmentList = list.slice().sort((a, b) => {
+        // Ordenar por día
+        const dateA = new Date(a.bookDate);
+        const dateB = new Date(b.bookDate);
+        if (dateA < dateB) return -1;
+        if (dateA > dateB) return 1;
+
+        // Si las fechas son iguales, ordenar por hora
+        const timeA = a.fromDate.split(':').map(Number);
+        const timeB = b.fromDate.split(':').map(Number);
+        if (timeA[0] < timeB[0]) return -1;
+        if (timeA[0] > timeB[0]) return 1;
+        // Si las horas son iguales, comparar los minutos
+        if (timeA[1] < timeB[1]) return -1;
+        if (timeA[1] > timeB[1]) return 1;
+        return 0;
+      });
     });
   }
 

@@ -47,16 +47,46 @@ export class MyprofileComponent {
       });
 
       this.interventionService.getUserInterventions(this.user.id).subscribe((list: Intervention[]) => {
-        this.interventions = list;
-      });
+        this.interventions = list.slice().sort((a, b) => {
+          const dateA = new Date(a.interventionDate);
+          const dateB = new Date(b.interventionDate);
+
+          if (dateA < dateB) return -1;
+          if (dateA > dateB) return 1;
+          return 0;
+        });      });
 
       this.documentService.getAllDocumentsByUserId(this.user.id).subscribe((list: Document[]) => {
-        this.documents = list;
+        this.documents = list.slice().sort((a, b) => {
+          const dateA = new Date(a.creationDate);
+          const dateB = new Date(b.creationDate);
+
+          if (dateA < dateB) return -1;
+          if (dateA > dateB) return 1;
+          return 0;
+        });
       });
 
       this.appointmentService.getAllAppointmentsByUser(this.user.id).subscribe(list => {
-        this.appointmentsUser = list
-      });
+        this.appointmentsUser = list.slice().sort((a, b) => {
+          const dateA = new Date(a.bookDate);
+          const dateB = new Date(b.bookDate);
+
+          if (dateA < dateB) return -1;
+          if (dateA > dateB) return 1;
+
+          // Si las fechas son iguales, ordena por hora y minutos
+          const timeA = a.fromDate.split(':').map(Number);
+          const timeB = b.fromDate.split(':').map(Number);
+
+          if (timeA[0] < timeB[0]) return -1;
+          if (timeA[0] > timeB[0]) return 1;
+          // Si las horas son iguales, comparar los minutos
+          if (timeA[1] < timeB[1]) return -1;
+          if (timeA[1] > timeB[1]) return 1;
+          // Si las horas y los minutos son iguales, retornar 0
+          return 0;
+        });      });
 
       this.userService.getDoctorAsignated(this.user.id).subscribe(doctor => {
         this.doctorAsignated = doctor;
@@ -65,21 +95,21 @@ export class MyprofileComponent {
   }
 
   exportPDF() {
-      this.utilService.exportInterventionsPDF(this.user.id).subscribe((data) => {
-        const blob = new Blob([data], { type: 'application/pdf' });
-        const link = document.createElement("a");
-        link.href = window.URL.createObjectURL(blob);
-        link.download = "Intervenciones_" + format(Date.now(), "yyyy-MM-dd") + ".pdf";
-        link.click();
-      });
-    }
+    this.utilService.exportInterventionsPDF(this.user.id).subscribe((data) => {
+      const blob = new Blob([data], { type: 'application/pdf' });
+      const link = document.createElement("a");
+      link.href = window.URL.createObjectURL(blob);
+      link.download = "Intervenciones_" + format(Date.now(), "yyyy-MM-dd") + ".pdf";
+      link.click();
+    });
+  }
 
   download(documentId: number) {
-      this.documentService.downloadDocument(documentId).subscribe(blob => {
-        const link = document.createElement('a');
-        link.href = window.URL.createObjectURL(blob);
-        link.target = '_blank';
-        link.click();
-      });
-    }
+    this.documentService.downloadDocument(documentId).subscribe(blob => {
+      const link = document.createElement('a');
+      link.href = window.URL.createObjectURL(blob);
+      link.target = '_blank';
+      link.click();
+    });
+  }
 }
