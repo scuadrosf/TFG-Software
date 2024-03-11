@@ -16,4 +16,5 @@ public interface UserRepository extends JpaRepository<User, Long>{
     List<User> findAllUsersByDoctorAsignatedId(Long id);
     Optional<User> getDoctorAsignatedById(Long id);
     List<User> findByCodEntity(Long codEntity);
+    boolean existsByCodEntity(Long codEntity);
 }

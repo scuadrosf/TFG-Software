@@ -11,7 +11,7 @@
             <a href="javascript:void(0)" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><img
                     src="assets/img/icons/bar-icon.svg" alt=""></a>
             <div class="dropdown-menu dropdown-menu-end">
-                    <app-sidebar-mobile></app-sidebar-mobile>
+                <app-sidebar-mobile></app-sidebar-mobile>
             </div>
         </div>
 
@@ -21,7 +21,10 @@
                 <a href="javascript:void(0)" class="dropdown-toggle nav-link user-link" data-bs-toggle="dropdown">
                     <div *ngIf="authService.isLogged()" class="user-names">
                         <h5>{{currentUser().name}}</h5>
-                        <div *ngIf="authService.isAdmin() || authService.isDoctor()">
+                        <div *ngIf="authService.isSuperAdmin()">
+                            <span>Administrador</span>
+                        </div>
+                        <div *ngIf="(authService.isAdmin() || authService.isDoctor()) && !authService.isSuperAdmin()">
                             <span>Doctor</span>
                         </div>
                         <div *ngIf="!authService.isAdmin() && !authService.isDoctor()">
@@ -38,10 +41,6 @@
                     <a class="dropdown-item" style="cursor: pointer;" (click)="logout()">Cerrar sesión</a>
                 </div>
             </li>
-            <!-- <li class="nav-item ">
-                <a style="cursor: pointer;" (click)="settings()" class="hasnotifications nav-link"><img
-                        src="assets/img/icons/setting-icon-01.svg" alt=""> </a>
-            </li> -->
         </ul>
     </div>
 

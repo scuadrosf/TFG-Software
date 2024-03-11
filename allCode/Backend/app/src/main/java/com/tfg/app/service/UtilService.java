@@ -38,7 +38,7 @@ public class UtilService {
     }
 
     public Util partialUpdate(Long id, Util utilupd) {
-        Util util = findById(2L).get();
+        Util util = findById(3L).get();
         if (utilupd.getAppointmentsCompletedYesterday() != 0){
             util.setAppointmentsCompletedYesterday(utilupd.getAppointmentsCompletedYesterday());
         }

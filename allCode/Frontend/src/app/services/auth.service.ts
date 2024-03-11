@@ -67,6 +67,17 @@ export class AuthService {
         })
       );
   }
+  registerEntity(userData: any): Observable<any> {
+    return this.httpClient.post(environment.baseUrl + "/users/admin", userData)
+      .pipe(
+        map((response: any) => {
+          return response;
+        }),
+        catchError((error: any) => {
+          return throwError('Register Error');
+        })
+      );
+  }
 
   logIn(user: string, pass: string): Observable<any> {
     return this.httpClient.post(BASE_URL + "login", { username: user, password: pass }, { withCredentials: true })
@@ -98,6 +109,9 @@ export class AuthService {
 
   isAdmin() {
     return this.isLogged() && this.user?.roles.indexOf('ADMIN') !== -1;
+  }
+  isSuperAdmin() {
+    return this.isLogged() && this.user?.roles.indexOf('ADMIN') !== -1 && this.user?.roles.length === 1;
   }
   isDoctor(){
     return this.isLogged() && this.user?.roles.indexOf('DOCTOR') !== -1;

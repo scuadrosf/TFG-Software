@@ -1,502 +1,291 @@
-<div class="page-wrapper">
-    <div class="content">
+<div *ngIf="authService.isLogged()">
+    <div class="page-wrapper">
+        <div class="content">
 
-        <!-- Page Header -->
-        <div class="page-header">
-            <div class="row">
-                <div class="col-sm-12">
-                    <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a routerLink="/dashboard">Inicio </a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <!-- /Page Header -->
-
-        <div class="good-morning-blk">
-            <div class="row">
-                <div class="col-md-6">
-                    <div *ngIf="authService.isAdmin() || authService.isDoctor()" class="morning-user">
-                        <h2 *ngIf="currentUser.gender === 'Masculino'">Bienvenido de nuevo, <span>Dr.
-                                {{currentUser.lastName}}</span></h2>
-                        <h2 *ngIf="currentUser.gender === 'Femenino'">Bienvenida de nuevo, <span>Dr.
-                                {{currentUser.lastName}}</span></h2>
-                    </div>
-                    <div *ngIf="!authService.isAdmin() && !authService.isDoctor()" class="morning-user">
-                        <h2 *ngIf="currentUser.gender === 'Masculino'">Bienvenido de nuevo, <span>{{currentUser.name}}
-                                {{currentUser.lastName}}</span></h2>
-                        <h2 *ngIf="currentUser.gender === 'Femenino'">Bienvenida de nuevo, <span>{{currentUser.name}}
-                                {{currentUser.lastName}}</span></h2>
-                        <p>¿Qué podemos hacer por ti?</p>
-                    </div>
-                </div>
-                <div class="col-md-6 position-blk">
-                    <div class="morning-img">
-                        <img src="assets/img/morning-img-02.png" alt="">
+            <!-- Page Header -->
+            <div class="page-header">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <ul class="breadcrumb">
+                            <li class="breadcrumb-item"><a routerLink="/dashboard">Inicio </a></li>
+                        </ul>
                     </div>
                 </div>
             </div>
-        </div>
+            <!-- /Page Header -->
 
-        <div class="doctor-list-blk" *ngIf="authService.isAdmin() || authService.isDoctor()">
-            <div class="row">
-                <div class="col-xl-4 col-md-6">
-                    <div class="doctor-widget border-right-bg">
-                        <div class="doctor-box-icon flex-shrink-0">
-                            <img src="assets/img/icons/doctor-dash-01.svg" alt="">
+            <div class="good-morning-blk">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div *ngIf="authService.isAdmin() || authService.isDoctor()" class="morning-user">
+                            <h2 *ngIf="currentUser.gender === 'Masculino'">Bienvenido de nuevo, <span>Dr.
+                                    {{currentUser.lastName}}</span></h2>
+                            <h2 *ngIf="currentUser.gender === 'Femenino'">Bienvenida de nuevo, <span>Dr.
+                                    {{currentUser.lastName}}</span></h2>
                         </div>
-                        <div class="doctor-content dash-count flex-grow-1">
-                            <h4><span
-                                    class="counter-up">{{numAppointmentsNoCompleted}}</span><span>/{{totalAppointmentsToday}}</span>
-                                <span *ngIf="numAppointmentsNoCompleted <= 4 && numAppointmentsNoCompleted != 0"
-                                    class="status-green">¡SIGUE ASÍ, NO QUEDA NADA!</span>
-                                <span *ngIf="numAppointmentsNoCompleted > 4" class="status-pink">¡A POR ELLO!</span>
-                                <span *ngIf="numAppointmentsNoCompleted == 0" class="status-green">TERMINAMOS POR
-                                    HOY</span>
-                            </h4>
-                            <h5>Citas pendientes para hoy</h5>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-4 col-md-6">
-                    <div class="doctor-widget border-right-bg">
-                        <div class="doctor-box-icon flex-shrink-0">
-                            <img src="assets/img/icons/doctor-dash-02.svg" alt="">
-                        </div>
-                        <div class="doctor-content dash-count flex-grow-1">
-                            <h4><span class="counter-up">{{numAppointmentsCompleted}}</span><span></span>
-                            </h4>
-                            <h5>Consultas realizadas hoy</h5>
+                        <div *ngIf="!authService.isAdmin() && !authService.isDoctor()" class="morning-user">
+                            <h2 *ngIf="currentUser.gender === 'Masculino'">Bienvenido de nuevo,
+                                <span>{{currentUser.name}}
+                                    {{currentUser.lastName}}</span>
+                            </h2>
+                            <h2 *ngIf="currentUser.gender === 'Femenino'">Bienvenida de nuevo,
+                                <span>{{currentUser.name}}
+                                    {{currentUser.lastName}}</span>
+                            </h2>
+                            <p>¿Qué podemos hacer por ti?</p>
                         </div>
                     </div>
-                </div>
-                <div class="col-xl-4 col-md-6">
-                    <div class="doctor-widget border-right-bg">
-                        <div class="doctor-box-icon flex-shrink-0">
-                            <img src="assets/img/icons/doctor-dash-03.svg" alt="">
-                        </div>
-                        <div class="doctor-content dash-count flex-grow-1">
-                            <h4><span
-                                    class="counter-up">{{numInterventions}}</span><span>/{{totalAppointmentsToday}}</span><span
-                                    *ngIf="numInterventions>totalAppointmentsToday" class="status-green">¡WOW TE
-                                    SUPERASTE!</span>
-                            </h4>
-                            <h5>Intervenciones realizadas hoy</h5>
+                    <div class="col-md-6 position-blk">
+                        <div class="morning-img">
+                            <img src="assets/img/morning-img-02.png" alt="">
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div *ngIf="authService.isAdmin() || authService.isDoctor()">
-            <div class="row">
-                <div class="col-12 col-md-12 col-lg-6 col-xl-2 d-flex">
 
-                    <div class="struct-point">
-                        <div class="card wallet-widget">
-                            <div class="circle-bar circle-bar2">
-                                <div class="circle-graph2" data-percent="66">
-                                    <b><img src="assets/img/icons/timer.svg" alt=""></b>
+            <div class="doctor-list-blk" *ngIf="authService.isAdmin() || authService.isDoctor()">
+                <div class="row">
+                    <div class="col-xl-4 col-md-6">
+                        <div class="doctor-widget border-right-bg">
+                            <div class="doctor-box-icon flex-shrink-0">
+                                <img src="assets/img/icons/doctor-dash-01.svg" alt="">
+                            </div>
+                            <div class="doctor-content dash-count flex-grow-1">
+                                <h4><span
+                                        class="counter-up">{{numAppointmentsNoCompleted}}</span><span>/{{totalAppointmentsToday}}</span>
+                                    <span *ngIf="numAppointmentsNoCompleted <= 4 && numAppointmentsNoCompleted != 0"
+                                        class="status-green">¡SIGUE ASÍ, NO QUEDA NADA!</span>
+                                    <span *ngIf="numAppointmentsNoCompleted > 4" class="status-pink">¡A POR ELLO!</span>
+                                    <span *ngIf="numAppointmentsNoCompleted == 0" class="status-green">TERMINAMOS POR
+                                        HOY</span>
+                                </h4>
+                                <h5>Citas pendientes para hoy</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-md-6">
+                        <div class="doctor-widget border-right-bg">
+                            <div class="doctor-box-icon flex-shrink-0">
+                                <img src="assets/img/icons/doctor-dash-02.svg" alt="">
+                            </div>
+                            <div class="doctor-content dash-count flex-grow-1">
+                                <h4><span class="counter-up">{{numAppointmentsCompleted}}</span><span></span>
+                                </h4>
+                                <h5>Consultas realizadas hoy</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-md-6">
+                        <div class="doctor-widget border-right-bg">
+                            <div class="doctor-box-icon flex-shrink-0">
+                                <img src="assets/img/icons/doctor-dash-03.svg" alt="">
+                            </div>
+                            <div class="doctor-content dash-count flex-grow-1">
+                                <h4><span
+                                        class="counter-up">{{numInterventions}}</span><span>/{{totalAppointmentsToday}}</span><span
+                                        *ngIf="numInterventions>totalAppointmentsToday" class="status-green">¡WOW TE
+                                        SUPERASTE!</span>
+                                </h4>
+                                <h5>Intervenciones realizadas hoy</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="authService.isAdmin() || authService.isDoctor()">
+                <div class="row">
+                    <div class="col-12 col-md-12 col-lg-6 col-xl-2 d-flex">
+
+                        <div class="struct-point">
+                            <div class="card wallet-widget">
+                                <div class="circle-bar circle-bar2">
+                                    <div class="circle-graph2" data-percent="66">
+                                        <b><img src="assets/img/icons/timer.svg" alt=""></b>
+                                    </div>
+                                </div>
+                                <div class="main-limit">
+                                    <p>Siguiente cita en</p>
+                                    <h4>{{nextAppointment}}</h4>
                                 </div>
                             </div>
-                            <div class="main-limit">
-                                <p>Next Appointment in</p>
-                                <h4>02h:12m</h4>
+                            <div class="card patient-structure">
+                                <div class="card-body">
+                                    <h5>Nuevos pacientes</h5>
+                                    <h3>{{newPatients}}<span class="status-green"><img
+                                                src="assets/img/icons/sort-icon-01.svg" alt=""
+                                                class="me-1">{{incrementRate}}%</span></h3>
+                                </div>
                             </div>
-                        </div>
-                        <div class="card patient-structure">
-                            <div class="card-body">
-                                <h5>Nuevos pacientes</h5>
-                                <h3>{{newPatients}}<span class="status-green"><img
-                                            src="assets/img/icons/sort-icon-01.svg" alt=""
-                                            class="me-1">{{incrementRate}}%</span></h3>
+                            <div class="card patient-structure">
+                                <div class="card-body">
+                                    <h5>Pacientes</h5>
+                                    <h3>{{numPatientsTotal}}<span class="status-pink"><img
+                                                src="assets/img/icons/sort-icon-02.svg" alt="" class="me-1">-20%</span>
+                                    </h3>
+                                </div>
                             </div>
-                        </div>
-                        <div class="card patient-structure">
-                            <div class="card-body">
-                                <h5>Pacientes</h5>
-                                <h3>{{numPatientsTotal}}<span class="status-pink"><img
-                                            src="assets/img/icons/sort-icon-02.svg" alt="" class="me-1">-20%</span></h3>
-                            </div>
+
                         </div>
 
                     </div>
+                    <div class="col-12 col-md-12 col-lg-6 col-xl-10 d-flex">
+                        <div class="card flex-fill comman-shadow">
+                            <div class="card-header">
+                                <h4 class="card-title d-inline-block">Próximas citas</h4> <a
+                                    routerLink="/appointment-list" class="patient-views float-end">Ver todas</a>
+                            </div>
+                            <div class="card-body">
+                                <div class="teaching-card">
+                                    <ul class="steps-history">
+                                        <li>08:00</li>
+                                        <li>10:00</li>
+                                        <li>12:00</li>
+                                        <li>14:00</li>
+                                        <li>16:00</li>
+                                        <li>18:00</li>
+                                        <li>20:00</li>
+                                    </ul>
+                                    <ul class="activity-feed">
+                                        <li class="feed-item d-flex align-items-center">
+                                            <div class="dolor-activity hide-activity">
+                                                <ul class="doctor-date-list mb-2">
+                                                    <li *ngFor="let appointment of appointmentsToday"
+                                                        [ngClass]="{'stick-line':appointment.completed}"><i
+                                                            class="fas fa-circle me-2"></i>{{appointment.fromDate |
+                                                        slice:0:5 }}
+                                                        <span>{{appointment.user.name}}
+                                                            {{appointment.user.lastName}}</span>
+
+                                                        <ng-container *ngIf="isCurrentAppointment(appointment)">
+                                                            <div class="dropdown ongoing-blk">
+                                                                <a href="#" class="dropdown-toggle active-doctor"
+                                                                    data-bs-toggle="dropdown">
+                                                                    <i class="fas fa-circle me-2 active-circles"></i>{{
+                                                                    appointment.fromDate | slice:0:5 }}
+                                                                    <span>{{ appointment.user.name }}
+                                                                        {{appointment.user.lastName}}</span>
+                                                                    <span class="ongoing-drapt">En curso <i
+                                                                            class="feather-chevron-down ms-2"></i></span>
+                                                                </a>
+                                                                <ul class="doctor-sub-list dropdown-menu">
+                                                                    <!-- Contenido del dropdown aquí -->
+                                                                    <li class="dropdown-item">
+                                                                        Hora<span>{{appointment.fromDate | slice:0:5}} -
+                                                                            {{appointment.toDate | slice:0:5}}
+                                                                            ({{timeOn(appointment)}}min) </span></li>
+                                                                    <li class="dropdown-item">
+                                                                        Motivo<span>{{appointment.description}}</span>
+                                                                    </li>
+                                                                    <li class="schedule-blk mb-0 pt-2 dropdown-item">
+                                                                        <ul class="nav schedule-time">
+                                                                            <li><a
+                                                                                    (click)="deleteAppointment(appointment.id)"><img
+                                                                                        src="assets/img/icons/trash.svg"
+                                                                                        alt=""></a>
+                                                                            </li>
+                                                                            <li><a
+                                                                                    routerLink="/profile/{{appointment.user.id}}"><img
+                                                                                        src="assets/img/icons/profile.svg"
+                                                                                        alt=""></a>
+                                                                            </li>
+                                                                            <li><a
+                                                                                    routerLink="/edit-appointment/{{appointment.id}}"><img
+                                                                                        src="assets/img/icons/edit.svg"
+                                                                                        alt=""></a>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </ng-container>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="!authService.isAdmin() && !authService.isDoctor()">
+                <div class="row">
+                    <div class="col-12 col-xl-6 col-xs-12">
+                        <a type="button" class="btn btn-block btn-atractivo"
+                            routerLink="/add-appointment/{{this.authService.currentUser().id}}">Pedir cita </a>
+                    </div>
+                    <br><br>
+                    <div class="col-12 col-xl-6 col-xs-12">
+                        <a type="button" class="btn btn-block btn-atractivo"
+                            routerLink="/appointment-list/{{this.authService.currentUser().id}}">Cambiar cita </a>
+                    </div>
 
                 </div>
-                <div class="col-12 col-md-12 col-lg-6 col-xl-10 d-flex">
-                    <div class="card flex-fill comman-shadow">
-                        <div class="card-header">
-                            <h4 class="card-title d-inline-block">Próximas citas</h4> <a routerLink="/appointment-list"
-                                class="patient-views float-end">Ver todas</a>
-                        </div>
-                        <div class="card-body">
-                            <div class="teaching-card">
-                                <ul class="steps-history">
-                                    <li>08:00</li>
-                                    <li>10:00</li>
-                                    <li>12:00</li>
-                                    <li>14:00</li>
-                                    <li>16:00</li>
-                                    <li>18:00</li>
-                                    <li>20:00</li>
-                                </ul>
-                                <ul class="activity-feed">
-                                    <li class="feed-item d-flex align-items-center">
-                                        <div class="dolor-activity hide-activity">
-                                            <ul class="doctor-date-list mb-2">
-                                                <li *ngFor="let appointment of appointmentsToday"
-                                                    [ngClass]="{'stick-line':appointment.completed}"><i
-                                                        class="fas fa-circle me-2"></i>{{appointment.fromDate |
-                                                    slice:0:5 }}
-                                                    <span>{{appointment.user.name}} {{appointment.user.lastName}}</span>
-
-                                                    <ng-container *ngIf="isCurrentAppointment(appointment)">
-                                                        <div class="dropdown ongoing-blk">
-                                                            <a href="#" class="dropdown-toggle active-doctor"
-                                                                data-bs-toggle="dropdown">
-                                                                <i class="fas fa-circle me-2 active-circles"></i>{{
-                                                                appointment.fromDate | slice:0:5 }}
-                                                                <span>{{ appointment.user.name }}
-                                                                    {{appointment.user.lastName}}</span>
-                                                                <span class="ongoing-drapt">Ongoing <i
-                                                                        class="feather-chevron-down ms-2"></i></span>
-                                                            </a>
-                                                            <ul class="doctor-sub-list dropdown-menu">
-                                                                <!-- Contenido del dropdown aquí -->
-                                                                <li class="dropdown-item">
-                                                                    Hora<span>{{appointment.fromDate | slice:0:5}} -
-                                                                        {{appointment.toDate | slice:0:5}}
-                                                                        ({{timeOn(appointment)}}min) </span></li>
-                                                                <li class="dropdown-item">
-                                                                    Motivo<span>{{appointment.description}}</span></li>
-                                                                <li class="schedule-blk mb-0 pt-2 dropdown-item">
-                                                                    <ul class="nav schedule-time">
-                                                                        <li><a
-                                                                                (click)="deleteAppointment(appointment.id)"><img
-                                                                                    src="assets/img/icons/trash.svg"
-                                                                                    alt=""></a>
-                                                                        </li>
-                                                                        <li><a
-                                                                                routerLink="/profile/{{appointment.user.id}}"><img
-                                                                                    src="assets/img/icons/profile.svg"
-                                                                                    alt=""></a>
-                                                                        </li>
-                                                                        <li><a
-                                                                                routerLink="/edit-appointment/{{appointment.id}}"><img
-                                                                                    src="assets/img/icons/edit.svg"
-                                                                                    alt=""></a>
-                                                                        </li>
-                                                                    </ul>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                    </ng-container>
-                                                </li>
-                                            </ul>
+                <div class="row">
+                    <div class="col-12 col-xl-6 col-md-12">
+                        <h2 class="title"> Intervenciones </h2>
+                        <div class="accordion" id="accordionExample">
+                            <div class="accordion-item"
+                                *ngFor="let intervention of interventionsUser | paginate: { itemsPerPage: 2, currentPage: page }">
+                                <div *ngIf="interventionsUser.length != 0">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button contenido" type="button"
+                                            data-bs-toggle="collapse" data-bs-target="#collapseOne"
+                                            aria-expanded="false" aria-controls="collapseOne">
+                                            {{intervention.type}}
+                                        </button>
+                                    </h2>
+                                    <div id="collapseOne" class="accordion-collapse collapse"
+                                        data-bs-parent="#accordionExample">
+                                        <div class="accordion-body">
+                                            <span><strong>Fecha de intervención:
+                                                </strong></span>{{intervention.interventionDate | date:
+                                            "dd/MM/YYYY"}}<br>
+                                            <span><strong>Documento: </strong></span><a
+                                                routerLink="/documents/{{intervention.id}}">Archivo adjunto</a>
                                         </div>
-                                    </li>
-                                </ul>
+                                    </div>
+                                </div>
+                                <div *ngIf="interventionsUser.length == 0">
+                                    <p> No tiene intervenciones </p>
+                                </div>
                             </div>
+                            <pagination-controls (pageChange)="page = $event" previousLabel="Anterior"
+                                nextLabel="Siguiente">
+                            </pagination-controls>
                         </div>
+                        <br>
                     </div>
-                </div>
-            </div>
-        </div>
-        <div *ngIf="!authService.isAdmin() && !authService.isDoctor()">
-            <div class="row">
-                <div class="col-12 col-xl-6 col-xs-12">
-                    <a type="button" class="btn btn-block btn-atractivo"
-                        routerLink="/add-appointment/{{this.authService.currentUser().id}}">Pedir cita </a>
-                </div>
-                <br><br>
-                <div class="col-12 col-xl-6 col-xs-12">
-                    <a type="button" class="btn btn-block btn-atractivo"
-                        routerLink="/appointment-list/{{this.authService.currentUser().id}}">Cambiar cita </a>
-                </div>
-
-            </div>
-            <div class="row">
-                <div class="col-12 col-xl-6 col-md-12">
-                    <h2 class="title"> Intervenciones </h2>
-                    <div class="accordion" id="accordionExample">
-                        <div class="accordion-item"
-                            *ngFor="let intervention of interventionsUser | paginate: { itemsPerPage: 2, currentPage: page }">
-                            <div *ngIf="interventionsUser.length != 0">
+                    <div class="col-12 col-xl-6 col-md-12">
+                        <h2 class="title"> Citas </h2>
+                        <div class="accordion" id="accordionExampleTwo">
+                            <div class="accordion-item" *ngFor="let appointment of appointmentsUser">
                                 <h2 class="accordion-header">
-                                    <button class="accordion-button contenido" type="button" data-bs-toggle="collapse"
-                                        data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                                        {{intervention.type}}
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                        {{appointment.description}}
                                     </button>
                                 </h2>
-                                <div id="collapseOne" class="accordion-collapse collapse"
-                                    data-bs-parent="#accordionExample">
+                                <div id="collapseTwo" class="accordion-collapse collapse"
+                                    data-bs-parent="#accordionExampleTwo">
                                     <div class="accordion-body">
-                                        <span><strong>Fecha de intervención:
-                                            </strong></span>{{intervention.interventionDate | date: "dd/MM/YYYY"}}<br>
-                                        <span><strong>Documento: </strong></span><a
-                                            routerLink="/documents/{{intervention.id}}">Archivo adjunto</a>
+                                        <span><strong>Fecha: </strong></span>{{appointment.bookDate | date:
+                                        "dd/MM/YYYY"}}<br>
+                                        <span><strong>Hora: </strong></span>{{appointment.fromDate | slice:0:5}}<br>
+                                        <span><strong>Nota adicional: </strong></span>{{appointment.additionalNote}}<br>
+                                        <span><strong>Realizada: </strong></span><span
+                                            *ngIf="appointment.completed">Sí</span><span
+                                            *ngIf="!appointment.completed">No</span>
                                     </div>
-                                </div>
-                            </div>
-                            <div *ngIf="interventionsUser.length == 0">
-                                <p> No tiene intervenciones </p>
-                            </div>
-                        </div>
-                        <pagination-controls (pageChange)="page = $event" previousLabel="Anterior"
-                            nextLabel="Siguiente">
-                        </pagination-controls>
-                    </div>
-                    <br>
-                </div>
-                <div class="col-12 col-xl-6 col-md-12">
-                    <h2 class="title"> Citas </h2>
-                    <div class="accordion" id="accordionExampleTwo">
-                        <div class="accordion-item" *ngFor="let appointment of appointmentsUser">
-                            <h2 class="accordion-header">
-                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                    {{appointment.description}}
-                                </button>
-                            </h2>
-                            <div id="collapseTwo" class="accordion-collapse collapse"
-                                data-bs-parent="#accordionExampleTwo">
-                                <div class="accordion-body">
-                                    <span><strong>Fecha: </strong></span>{{appointment.bookDate | date:
-                                    "dd/MM/YYYY"}}<br>
-                                    <span><strong>Hora: </strong></span>{{appointment.fromDate | slice:0:5}}<br>
-                                    <span><strong>Nota adicional: </strong></span>{{appointment.additionalNote}}<br>
-                                    <span><strong>Realizada: </strong></span><span
-                                        *ngIf="appointment.completed">Sí</span><span
-                                        *ngIf="!appointment.completed">No</span>
                                 </div>
                             </div>
                         </div>
+                        <br>
                     </div>
-                    <br>
-                </div>
-                <br><br><br>
-            </div>
-        </div>
-
-        <div class="notification-box">
-            <div class="msg-sidebar notifications msg-noti">
-                <div class="topnav-dropdown-header">
-                    <span>Messages</span>
-                </div>
-                <div class="drop-scroll msg-list-scroll" id="msg_list">
-                    <ul class="list-box">
-                        <li>
-                            <a href="chat.html">
-                                <div class="list-item">
-                                    <div class="list-left">
-                                        <span class="avatar">R</span>
-                                    </div>
-                                    <div class="list-body">
-                                        <span class="message-author">Richard Miles </span>
-                                        <span class="message-time">12:28 AM</span>
-                                        <div class="clearfix"></div>
-                                        <span class="message-content">Lorem ipsum dolor sit amet, consectetur
-                                            adipiscing</span>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="chat.html">
-                                <div class="list-item new-message">
-                                    <div class="list-left">
-                                        <span class="avatar">J</span>
-                                    </div>
-                                    <div class="list-body">
-                                        <span class="message-author">John Doe</span>
-                                        <span class="message-time">1 Aug</span>
-                                        <div class="clearfix"></div>
-                                        <span class="message-content">Lorem ipsum dolor sit amet, consectetur
-                                            adipiscing</span>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="chat.html">
-                                <div class="list-item">
-                                    <div class="list-left">
-                                        <span class="avatar">T</span>
-                                    </div>
-                                    <div class="list-body">
-                                        <span class="message-author"> Tarah Shropshire </span>
-                                        <span class="message-time">12:28 AM</span>
-                                        <div class="clearfix"></div>
-                                        <span class="message-content">Lorem ipsum dolor sit amet, consectetur
-                                            adipiscing</span>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="chat.html">
-                                <div class="list-item">
-                                    <div class="list-left">
-                                        <span class="avatar">M</span>
-                                    </div>
-                                    <div class="list-body">
-                                        <span class="message-author">Mike Litorus</span>
-                                        <span class="message-time">12:28 AM</span>
-                                        <div class="clearfix"></div>
-                                        <span class="message-content">Lorem ipsum dolor sit amet, consectetur
-                                            adipiscing</span>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="chat.html">
-                                <div class="list-item">
-                                    <div class="list-left">
-                                        <span class="avatar">C</span>
-                                    </div>
-                                    <div class="list-body">
-                                        <span class="message-author"> Catherine Manseau </span>
-                                        <span class="message-time">12:28 AM</span>
-                                        <div class="clearfix"></div>
-                                        <span class="message-content">Lorem ipsum dolor sit amet, consectetur
-                                            adipiscing</span>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="chat.html">
-                                <div class="list-item">
-                                    <div class="list-left">
-                                        <span class="avatar">D</span>
-                                    </div>
-                                    <div class="list-body">
-                                        <span class="message-author"> Domenic Houston </span>
-                                        <span class="message-time">12:28 AM</span>
-                                        <div class="clearfix"></div>
-                                        <span class="message-content">Lorem ipsum dolor sit amet, consectetur
-                                            adipiscing</span>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="chat.html">
-                                <div class="list-item">
-                                    <div class="list-left">
-                                        <span class="avatar">B</span>
-                                    </div>
-                                    <div class="list-body">
-                                        <span class="message-author"> Buster Wigton </span>
-                                        <span class="message-time">12:28 AM</span>
-                                        <div class="clearfix"></div>
-                                        <span class="message-content">Lorem ipsum dolor sit amet, consectetur
-                                            adipiscing</span>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="chat.html">
-                                <div class="list-item">
-                                    <div class="list-left">
-                                        <span class="avatar">R</span>
-                                    </div>
-                                    <div class="list-body">
-                                        <span class="message-author"> Rolland Webber </span>
-                                        <span class="message-time">12:28 AM</span>
-                                        <div class="clearfix"></div>
-                                        <span class="message-content">Lorem ipsum dolor sit amet, consectetur
-                                            adipiscing</span>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="chat.html">
-                                <div class="list-item">
-                                    <div class="list-left">
-                                        <span class="avatar">C</span>
-                                    </div>
-                                    <div class="list-body">
-                                        <span class="message-author"> Claire Mapes </span>
-                                        <span class="message-time">12:28 AM</span>
-                                        <div class="clearfix"></div>
-                                        <span class="message-content">Lorem ipsum dolor sit amet, consectetur
-                                            adipiscing</span>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="chat.html">
-                                <div class="list-item">
-                                    <div class="list-left">
-                                        <span class="avatar">M</span>
-                                    </div>
-                                    <div class="list-body">
-                                        <span class="message-author">Melita Faucher</span>
-                                        <span class="message-time">12:28 AM</span>
-                                        <div class="clearfix"></div>
-                                        <span class="message-content">Lorem ipsum dolor sit amet, consectetur
-                                            adipiscing</span>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="chat.html">
-                                <div class="list-item">
-                                    <div class="list-left">
-                                        <span class="avatar">J</span>
-                                    </div>
-                                    <div class="list-body">
-                                        <span class="message-author">Jeffery Lalor</span>
-                                        <span class="message-time">12:28 AM</span>
-                                        <div class="clearfix"></div>
-                                        <span class="message-content">Lorem ipsum dolor sit amet, consectetur
-                                            adipiscing</span>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="chat.html">
-                                <div class="list-item">
-                                    <div class="list-left">
-                                        <span class="avatar">L</span>
-                                    </div>
-                                    <div class="list-body">
-                                        <span class="message-author">Loren Gatlin</span>
-                                        <span class="message-time">12:28 AM</span>
-                                        <div class="clearfix"></div>
-                                        <span class="message-content">Lorem ipsum dolor sit amet, consectetur
-                                            adipiscing</span>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="chat.html">
-                                <div class="list-item">
-                                    <div class="list-left">
-                                        <span class="avatar">T</span>
-                                    </div>
-                                    <div class="list-body">
-                                        <span class="message-author">Tarah Shropshire</span>
-                                        <span class="message-time">12:28 AM</span>
-                                        <div class="clearfix"></div>
-                                        <span class="message-content">Lorem ipsum dolor sit amet, consectetur
-                                            adipiscing</span>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="topnav-dropdown-footer">
-                    <a href="chat.html">See all messages</a>
+                    <br><br><br>
                 </div>
             </div>
         </div>
     </div>
+</div>

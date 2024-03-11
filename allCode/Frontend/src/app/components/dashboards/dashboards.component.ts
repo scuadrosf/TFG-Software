@@ -21,6 +21,7 @@ export class DashboardsComponent implements OnInit {
   currentUser!: User
   appointmentsUser: Appointment[] = [];
   appointmentsToday: Appointment[] = [];
+  appointmentsTodays: Appointment[] = [];
   interventionsUser: Intervention[] = [];
   numAppointmentsNoCompleted: number = 0;
   numAppointmentsCompleted: number = 0;
@@ -29,6 +30,7 @@ export class DashboardsComponent implements OnInit {
   appointmentsComYest: number = 0;
   numPatientsYesterday: number = 0;
   numPatientsTotal: number = 0;
+  nextAppointment: string = '';
   newPatients: number = 0;
   incrementRate: number = 0;
   differenceTime: string = '';
@@ -45,7 +47,7 @@ export class DashboardsComponent implements OnInit {
 
       this.loadInterventionsUser(this.currentUser.id);
       this.loadAppointmentsUser(this.currentUser.id);
-      
+
     })
 
     this.isAdmin = this.authService.isAdmin();
@@ -66,12 +68,12 @@ export class DashboardsComponent implements OnInit {
 
     // timer(0, 10000).subscribe(() => {
     //   utilUpdt: Util
-    //   this.utilService.updateUtil()
+    // this.utilService.updateUtil()
     // });
   }
 
-  loadAppointmentsUser(id: number){
-    this.appointmentService.getAllAppointmentsByUser(id).subscribe(list => 
+  loadAppointmentsUser(id: number) {
+    this.appointmentService.getAllAppointmentsByUser(id).subscribe(list =>
       this.appointmentsUser = list)
   }
 
@@ -100,12 +102,56 @@ export class DashboardsComponent implements OnInit {
         this.numAppointmentsNoCompleted = this.countAppointmentsNoCompleted(appointments, this.today);
         this.numAppointmentsCompleted = this.countAppointmentsCompleted(appointments, this.today);
         this.totalAppointmentsToday = appointments.filter(appointment => this.isSameDate(new Date(appointment.bookDate), this.today)).length;
-        this.appointmentsToday = appointments.filter(appointment => this.isSameDate(new Date(appointment.bookDate), this.today));
+        this.appointmentsToday = appointments
+          .filter(appointment => this.isSameDate(new Date(appointment.bookDate), this.today))
+          .sort((a, b) => {
+            const timeA = a.fromDate.split(':').map(Number);
+            const timeB = b.fromDate.split(':').map(Number);
+
+            if (timeA[0] < timeB[0]) return -1;
+            if (timeA[0] > timeB[0]) return 1;
+            // Si las horas son iguales, comparar los minutos
+            if (timeA[1] < timeB[1]) return -1;
+            if (timeA[1] > timeB[1]) return 1;
+            // Si las horas y los minutos son iguales, retornar 0
+            return 0;
+          });
+
+        // Filtrar citas futuras y ordenar por fecha ascendente
+        const futureAppointments = this.appointmentsToday
+          .filter(appointment => this.isSameDate(new Date(appointment.bookDate), this.today) && !appointment.completed)
+          .sort((a, b) => {
+            return new Date(a.fromDate).getTime() - new Date(b.fromDate).getTime();
+          });
+
+        if (futureAppointments.length > 0) {
+          // Obtener la fecha y hora de la próxima cita
+          const nextAppointmentDateTime = new Date(`${futureAppointments[0].bookDate}T${futureAppointments[0].fromDate}`);
+
+          // Obtener la fecha y hora actuales
+          const currentDateTime = new Date();
+
+          // Calcular la diferencia de tiempo entre la fecha y hora de la próxima cita y la fecha y hora actuales
+          const timeDifference = nextAppointmentDateTime.getTime() - currentDateTime.getTime();
+
+          if (timeDifference > 0) {
+            // Convertir la diferencia de tiempo en horas y minutos
+            const hours = Math.floor(timeDifference / (1000 * 60 * 60));
+            const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+
+            this.nextAppointment = `${hours} horas y ${minutes} minutos`;
+          } else {
+            this.nextAppointment = 'La cita está en curso o ya ha pasado';
+          }
+        } else {
+          this.nextAppointment = 'No hay citas futuras';
+        }
       },
       (error) => {
         console.error("Error al cargar los appointments:", error)
       }
     );
+
   }
 
   loadInterventions() {

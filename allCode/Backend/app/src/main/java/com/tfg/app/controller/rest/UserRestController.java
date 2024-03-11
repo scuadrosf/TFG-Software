@@ -99,7 +99,7 @@ public class UserRestController {
         User user = new User(userDTO);
 
         if (!userService.existUsername(user.getUsername())) {
-            String imageUrl = "/static/assets/predAvatar.png";
+            String imageUrl = "/static/avatar/predAvatar.png";
             try {
                 Resource image = new ClassPathResource(imageUrl);
                 user.setProfileAvatarFile(BlobProxy.generateProxy(image.getInputStream(), image.contentLength()));
@@ -108,7 +108,8 @@ public class UserRestController {
             }
             user.setPasswordEncoded(passwordEncoder.encode(user.getPasswordEncoded()));
             user.setDoctorAsignated(currentUser);
-            user.setRoles(List.of("USER"));;
+            user.setRoles(List.of("USER"));
+            user.setCodEntity(currentUser.getCodEntity());
 
             userService.save(user);
             int totalAux = utilService.getNumPatientsTotal() + 1;
@@ -122,13 +123,14 @@ public class UserRestController {
             return new ResponseEntity<User>(HttpStatus.FORBIDDEN);
         }
     }
+
     @PostMapping("/doctor")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<User> registerDoctor(@RequestBody UserDoctorDTO UserDoctorDTO) throws NotFoundException {
         User user = new User(UserDoctorDTO);
 
         if (!userService.existUsername(user.getUsername())) {
-            String imageUrl = "/static/assets/predAdminAvatar.png";
+            String imageUrl = "/static/avatar/predAdminAvatar.png";
             try {
                 Resource image = new ClassPathResource(imageUrl);
                 user.setProfileAvatarFile(BlobProxy.generateProxy(image.getInputStream(), image.contentLength()));
@@ -137,6 +139,38 @@ public class UserRestController {
             }
             user.setPasswordEncoded(passwordEncoder.encode(user.getPasswordEncoded()));
             user.setRoles(List.of("DOCTOR"));
+            user.setCodEntity(currentUser.getCodEntity());
+
+            userService.save(user);
+            URI location = fromCurrentRequest().path("/{id}").buildAndExpand(user.getId()).toUri();
+
+            return ResponseEntity.created(location).body(user);
+        } else {
+            return new ResponseEntity<User>(HttpStatus.FORBIDDEN);
+        }
+    }
+
+    @PostMapping("/admin")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<User> registerEntity(@RequestBody UserDoctorDTO UserDoctorDTO) throws NotFoundException {
+        User user = new User(UserDoctorDTO);
+
+        if (!userService.existUsername(user.getUsername())) {
+            String imageUrl = "/static/avatar/predAdminAvatar.png";
+            try {
+                Resource image = new ClassPathResource(imageUrl);
+                user.setProfileAvatarFile(BlobProxy.generateProxy(image.getInputStream(), image.contentLength()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            user.setPasswordEncoded(passwordEncoder.encode(user.getPasswordEncoded()));
+            user.setRoles(List.of("ADMIN", "DOCTOR"));
+
+            // Verificar si el codEntity está presente, si no, generar uno nuevo
+            if (user.getCodEntity() == null || user.getCodEntity().equals("")) {
+                Long generatedCodEntity = userService.generateUniqueCodEntity();
+                user.setCodEntity(generatedCodEntity);
+            } 
 
             userService.save(user);
             URI location = fromCurrentRequest().path("/{id}").buildAndExpand(user.getId()).toUri();
@@ -196,7 +230,8 @@ public class UserRestController {
     }
 
     @PostMapping("/check-password/{id}")
-    public ResponseEntity<Boolean> checkPassword(@PathVariable Long id, @RequestParam(value = "password") String currentPassword ) {
+    public ResponseEntity<Boolean> checkPassword(@PathVariable Long id,
+            @RequestParam(value = "password") String currentPassword) {
         User currentUser = userService.findById(id).orElseThrow();
         boolean matches = passwordEncoder.matches(currentPassword, currentUser.getEncodedPassword());
         return ResponseEntity.ok(matches);
@@ -336,7 +371,7 @@ public class UserRestController {
     public List<User> searchUsersByNameOrLastName(@RequestParam String query) {
         return userService.findUsersByNameOrLastNameOrUsername(query, query, query);
     }
-    
+
     @GetMapping("/doctorAsignated/{id}")
     public User getDoctorAsignated(@PathVariable Long id) {
         User patient = userService.findById(id).orElseThrow();
@@ -344,7 +379,7 @@ public class UserRestController {
     }
 
     @GetMapping("/cod/{codEntity}")
-    public ResponseEntity<List<User>> getUsersByCodEntity (@PathVariable("codEntity") Long codEntity){
+    public ResponseEntity<List<User>> getUsersByCodEntity(@PathVariable("codEntity") Long codEntity) {
         List<User> users = userService.findByCodEntity(codEntity);
         return new ResponseEntity<>(users, HttpStatus.OK);
     }

@@ -97,17 +97,11 @@
                                         <select class="form-control" [(ngModel)]="description"
                                             (ngModelChange)="onDescriptionChange()" name="description" required>
                                             <option value="">Seleccione un motivo</option>
-                                            <option value="Mantenimiento y Prevención">Mantenimiento y Prevención
-                                            </option>
-                                            <option value="Problemas Comunes y Tratamientos de Rutina">Problemas Comunes
-                                                y Tratamientos de Rutina</option>
-                                            <option value="Ortodoncia y Estética Dental">Ortodoncia y Estética Dental
-                                            </option>
-                                            <option value="Procedimientos Quirúrgicos y Restauradores">Procedimientos
-                                                Quirúrgicos y Restauradores</option>
-                                            <option value="Problemas Específicos y Emergencias">Problemas Específicos y
-                                                Emergencias</option>
-                                            <option value="Otros">Otros</option>
+                                            <ng-container *ngFor="let groupName of objectKeys(groupedDescriptions)">
+                                                <optgroup label="{{groupName}}">
+                                                  <option *ngFor="let item of groupedDescriptions[groupName]" [value]="item.nameIntervention">{{item.nameIntervention}}</option>
+                                                </optgroup>
+                                              </ng-container>
                                         </select>
                                     </div>
                                 </div>
