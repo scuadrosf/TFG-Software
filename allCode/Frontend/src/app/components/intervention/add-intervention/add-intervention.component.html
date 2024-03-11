@@ -51,7 +51,7 @@
                                         <span type="text" class="form-control floating">{{user.phone}}</span>
                                     </div>
                                 </div>
-                                <div class="col-12 col-md-6 col-xl-6">
+                                <div class="col-12 col-md-12 col-xl-6">
                                     <div class="form-group local-forms">
                                         <label>Correo electrónico <span class="login-danger">*</span></label>
                                         <span type="text" class="form-control floating">{{user.email}}</span>
@@ -71,10 +71,12 @@
                                 </div>
                                 <div class="col-12 col-md-6 col-xl-6">
                                     <div class="form-group local-forms">
-                                        <label>Tipo de intervención<span class="login-danger">*</span></label>
-                                        <input class="form-control" type="text" [(ngModel)]="type" name="type">
+                                        <label>Motivo de la cita <span class="login-danger">*</span></label>
+                                        <input type="text" class="form-control" [ngModel]="descriptionAppointment" name="descriptionAppointment"
+                                            required readonly disabled>
                                     </div>
                                 </div>
+                                
 
                                 <div class="col-12 col-md-6 col-xl-6">
                                     <div class="form-group local-top-form">
@@ -89,6 +91,14 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <div class="col-12 col-md-12 col-xl-12">
+                                    <div class="form-group local-forms">
+                                        <label>Informe de la intervención <span class="login-danger">*</span></label>
+                                        <textarea class="form-control" rows="3" cols="30" [(ngModel)]="type" name="type"></textarea>
+                                    </div>
+                                </div>
+                                
                                 <div class="col-12">
                                     <div class="doctor-submit text-end">
                                         <button type="submit" class="btn btn-primary submit-form me-2">Guardar</button>

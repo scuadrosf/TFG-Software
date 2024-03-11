@@ -19,7 +19,7 @@
         <div class="card-box profile-header">
             <div class="row">
                 <div class="col-md-12">
-                    <div *ngIf="!isAdmin" class="profile-view">
+                    <div *ngIf="!isAdmin && !authService.isDoctor()" class="profile-view">
                         <div class="profile-img-wrap">
                             <div class="profile-img">
                                 <a href="javascript:void(0);"><img class="avatar" [src]="profileAvatarUrls" alt=""></a>
@@ -59,12 +59,17 @@
                                             <span class="title">Género:</span>
                                             <span class="text">{{user.gender}}</span>
                                         </li>
+                                        <li>
+                                            <span class="title">Doctor asignado:</span>
+                                            <span class="text" *ngIf="doctorAsignated != null">{{doctorAsignated.name}} {{doctorAsignated.lastName}}</span>
+                                            <span class="text" *ngIf="doctorAsignated == null">No tiene doctor asignado</span>
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div *ngIf="isAdmin" class="profile-view">
+                    <div *ngIf="isAdmin || authService.isDoctor()" class="profile-view">
                         <div class="user-img">
                             <div class="profile-img">
                                 <a href="javascript:void(0);"><img class="avatar" [src]="profileAvatarUrls" alt=""></a>
@@ -95,13 +100,16 @@
         </div>
         <div class="profile-tabs">
             <ul class="nav nav-tabs nav-tabs-bottom">
-                <li class="nav-item"><a class="nav-link active" href="#history" data-bs-toggle="tab">Historial
+                <li class="nav-item"><a class="nav-link active" href="#historyIntervention"
+                        data-bs-toggle="tab">Historial
                         médico</a></li>
                 <li class="nav-item"><a class="nav-link" href="#documents" data-bs-toggle="tab">Documentos</a></li>
+                <li class="nav-item"><a class="nav-link" href="#historyAppointment" data-bs-toggle="tab">Historial de
+                        citas</a></li>
             </ul>
 
             <div class="tab-content">
-                <div class="tab-pane show active" id="history">
+                <div class="tab-pane show active" id="historyIntervention">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card-box">
@@ -109,18 +117,16 @@
                                 <div *ngIf="(interventions.length === 0)">
                                     <p>{{user.name}} {{user.lastName}} no ha tenido intervenciones</p>
                                 </div>
-                                <div class="experience-box" *ngFor="let intervention of interventions">
+                                <div class="experience-box"
+                                    *ngFor="let intervention of interventions | paginate: { itemsPerPage: 5, currentPage: page }">
                                     <ul class="experience-list">
                                         <li>
                                             <div class="experience-user">
-                                                <div class="before-circle"></div>
+                                                <div class="before-circle int"></div>
                                             </div>
                                             <div class="experience-content">
                                                 <div class="timeline-content">
-                                                    <a *ngIf="intervention.document"
-                                                        routerLink="/documents/{{intervention.id}}">{{intervention.type}}</a>
-                                                    <p *ngIf="!intervention.document" style="color: black;">
-                                                        {{intervention.type}}</p>
+                                                    <a routerLink="/documents/{{intervention.id}}">{{intervention.appointment.description}}</a>
                                                     <!-- Esto llevará justamente los documentos de esa intervención -->
                                                     <span class="time">{{intervention.interventionDate |
                                                         date:'dd-MM-yyyy'}}</span>
@@ -130,6 +136,9 @@
                                     </ul>
                                 </div>
                             </div>
+                            <pagination-controls (pageChange)="page = $event" previousLabel="Anterior"
+                                nextLabel="Siguiente">
+                            </pagination-controls>
                             <p> ** Para visualizar más detalles sobre la intervención haga click en la intervención
                                 deseada </p>
                         </div>
@@ -147,16 +156,55 @@
                                     <ul class="experience-list">
                                         <li>
                                             <div class="experience-user">
-                                                <div class="before-circle"></div>
+                                                <div class="before-circle doc"></div>
                                             </div>
                                             <div class="experience-content">
                                                 <div class="timeline-content">
-                                                    <span class="">{{document.intervention.type}} - </span>
+                                                    <span class="">{{document.intervention.appointment.description}} - </span>
                                                     <a style="cursor: pointer;"
                                                         (click)="download(document.id)">{{document.fileName}}</a>
                                                     <span class="time">{{document.creationDate|
                                                         date:'dd-MM-yyyy'}}</span>
 
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <p> ** Para visualizar más detalles sobre la intervención haga click en la intervención
+                                deseada </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="historyAppointment">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card-box">
+                                <h3 class="card-title">Registro de citas</h3>
+                                <div *ngIf="(appointmentsUser.length === 0)">
+                                    <p>{{user.name}} {{user.lastName}} no tiene historial de citas</p>
+                                </div>
+                                <div class="experience-box" *ngFor="let appointment of appointmentsUser">
+                                    <ul class="experience-list">
+                                        <li>
+                                            <div class="experience-user">
+                                                <div class="before-circle appoi"></div>
+                                            </div>
+                                            <div style="color: black;" class="experience-content">
+                                                <div class="timeline-content">
+                                                    <span class="">{{appointment.description}} - </span><span
+                                                        *ngIf="appointment.completed">REALIZADA </span><img
+                                                        style="width: 25px;" *ngIf="appointment.completed"
+                                                        src="../../../../assets/icons/tick.png" alt="Completed">
+                                                    <span style="color: red;" *ngIf="!appointment.completed">NO
+                                                        REALIZADA </span><img style="width: 25px;"
+                                                        *ngIf="!appointment.completed"
+                                                        src="../../../../assets/icons/reloj-de-arena.png"
+                                                        alt="not Completed">
+                                                    <span class="time">{{appointment.bookDate |
+                                                        date:'dd/MM/yyyy'}} - {{appointment.fromDate |
+                                                        slice:0:5}}</span>
                                                 </div>
                                             </div>
                                         </li>
@@ -174,3 +222,5 @@
     <button class="btn btn-success" style="position: fixed; bottom: 20px; right: 20px" (click)="exportPDF()">
         Descargar intervenciones</button>
 </div>
+
+<!-- <a href="https://www.flaticon.es/iconos-gratis/garrapata" title="garrapata iconos">Garrapata iconos creados por Octopocto - Flaticon</a> -->

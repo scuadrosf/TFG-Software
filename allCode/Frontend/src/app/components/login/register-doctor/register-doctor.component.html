@@ -1,0 +1,163 @@
+<div class="page-wrapper">
+    <div class="content">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="row">
+                <div class="col-sm-12">
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a routerLink="/dashboard">Inicio </a></li>
+                        <li class="breadcrumb-item"><i class="feather icon-chevron-right"></i></li>
+                        <li class="breadcrumb-item active">Dar de alta doctor</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- /Page Header -->
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card-box">
+                    <h4 class="card-title">Datos personales</h4>
+                    <br>
+                    <form action="#">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-md-3 col-form-label">Nombre</label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control" [(ngModel)]="name" name="name" required>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-3 col-form-label">Apellidos</label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control" [(ngModel)]="lastName" name="lastName"
+                                            required>
+                                    </div>
+                                </div>
+                                <div *ngIf="!authService.isSuperAdmin()" class="form-group row">
+                                    <label class="col-md-3 col-form-label">Género</label>
+                                    <div class="col-md-9">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="gender" id="gender_male"
+                                                value="Masculino" checked [(ngModel)]="gender" name="gender" required>
+                                            <label class="form-check-label" for="gender_male">
+                                                Masculino
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="gender"
+                                                id="gender_female" value="Femenino" [(ngModel)]="gender" name="gender"
+                                                required>
+                                            <label class="form-check-label" for="gender_female">
+                                                Femenino
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div *ngIf="!authService.isSuperAdmin()" class="form-group row">
+                                    <label class="col-md-3 col-form-label">Teléfono</label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control" [(ngModel)]="phone" name="phone"
+                                            #phoneInput="ngModel" required pattern=".{9}">
+                                        <div *ngIf="phoneInput.errors && (phoneInput.dirty || phoneInput.touched)"
+                                            class="alert alert-danger">
+                                            El teléfono debe tener 9 caracteres.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div *ngIf="!authService.isSuperAdmin()" class="form-group row">
+                                    <label class="col-md-3 col-form-label">Especialidad</label>
+                                    <div class="col-md-9">
+                                        <select class="form-control" [(ngModel)]="speciality" name="speciality"
+                                            required>
+                                            <option value="">Seleccione una especialidad</option>
+                                            <option value="General">General</option>
+                                            <option value="Ortodoncia y Estética">Ortodoncia y Estética</option>
+                                            <option value="Cirugías y Restauraciones">Cirugías y Restauraciones</option>
+                                            <option value="Emergencias">Emergencias</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-md-3 col-form-label">Documento Nacional de Identidad (DNI)</label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control" [(ngModel)]="username" name="username"
+                                            #dniInput="ngModel" required pattern=".{9}">
+                                        <div *ngIf="dniInput.errors && (dniInput.dirty || dniInput.touched)"
+                                            class="alert alert-danger">
+                                            El DNI debe tener 9 caracteres.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-3 col-form-label">Correo electrónico</label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control" [(ngModel)]="email" name="email"
+                                            #emailInput="ngModel" required
+                                            pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}">
+                                        <div *ngIf="emailInput.errors && (emailInput.dirty || emailInput.touched)"
+                                            class="alert alert-danger">
+                                            El formato del correo electrónico es incorrecto.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div *ngIf="!authService.isSuperAdmin()" class="form-group row">
+                                    <label class="col-md-3 col-form-label">Fecha de nacimiento</label>
+                                    <div class="col-md-9">
+                                        <input type="date" class="form-control" [(ngModel)]="birth" name="birth"
+                                            required>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <hr>
+                        <br>
+                        <div *ngIf="!authService.isSuperAdmin()" class="row">
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-md-3 col-form-label">Dirección</label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control" [(ngModel)]="address" name="address"
+                                            required>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-3 col-form-label">Ciudad</label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control" [(ngModel)]="city" name="city" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-md-3 col-form-label">País</label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control" [(ngModel)]="country" name="country"
+                                            required>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-3 col-form-label">Código postal</label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control" [(ngModel)]="postalCode"
+                                            name="postalCode" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-end">
+                            <button *ngIf="authService.isSuperAdmin()" type="submit" class="btn btn-primary" (click)="addDoctor()">Añadir entidad</button>
+                            <button *ngIf="authService.isAdmin() && !authService.isSuperAdmin()" type="submit" class="btn btn-primary" (click)="addDoctor()">Añadir doctor</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

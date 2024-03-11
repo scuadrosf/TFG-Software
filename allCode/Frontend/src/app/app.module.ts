@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -13,7 +12,6 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { DashboardsComponent } from './components/dashboards/dashboards.component';
 import { HeaderComponent } from './components/common-components/header/header.component';
 import { ProfileComponent } from './components/profile/profile.component';
-import { SettingsComponent } from './components/settings/settings.component';
 import { SidebarComponent } from './components/common-components/sidebar/sidebar.component';
 import { EditProfileComponent } from './components/profile/edit-profile/edit-profile.component';
 import { PatientComponent } from './components/patient/patient.component';
@@ -35,6 +33,9 @@ import { MatListModule } from '@angular/material/list';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { SidebarMobileComponent } from './components/common-components/sidebar-mobile/sidebar-mobile.component';
+import {NgxPaginationModule} from 'ngx-pagination';
+import { RegisterDoctorComponent } from './components/login/register-doctor/register-doctor.component';
+
 
 
 @NgModule({
@@ -45,7 +46,6 @@ import { SidebarMobileComponent } from './components/common-components/sidebar-m
     HeaderComponent,
     SidebarComponent,
     ProfileComponent,
-    SettingsComponent,
     EditProfileComponent,
     PatientComponent,
     AddPatientComponent,
@@ -62,7 +62,8 @@ import { SidebarMobileComponent } from './components/common-components/sidebar-m
     AddInterventionComponent,
     EditInterventionComponent,
     ForgotPasswordComponent,
-    SidebarMobileComponent
+    SidebarMobileComponent,
+    RegisterDoctorComponent
   ],
   imports: [
     BrowserModule,
@@ -75,7 +76,8 @@ import { SidebarMobileComponent } from './components/common-components/sidebar-m
     NgbModule,
     MatListModule,
     PdfViewerModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    NgxPaginationModule
   ],
   providers: [],
   bootstrap: [AppComponent]

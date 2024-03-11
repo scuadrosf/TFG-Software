@@ -141,19 +141,11 @@ public class UtilRestController {
         return utilService.getNumPatientsTotal();
     }
 
-    // @PutMapping("/update")
-    // public ResponseEntity<Util> updateUtil(@RequestBody Util partialUtil) throws
-    // NotFoundException {
-    // Util updatedUtil = utilService.partialUpdate(2L, partialUtil);
-    // return ResponseEntity.ok(updatedUtil);
-    // }
-
     @PutMapping("/update")
     public ResponseEntity<?> updateUtil(@RequestParam(value = "appointmentsCompletedYesterday") int aptComplYest,
             @RequestParam(value = "numPatientsYesterday") int numPatientsYesterday,
             @RequestParam(value = "numPatientsTotal") int numPatientsTotal) {
 
-        // Util util = utilService.findById(2L).get();
         Util utiltoUpdt = new Util();
 
         if (aptComplYest != 0) {
@@ -165,9 +157,8 @@ public class UtilRestController {
         if (numPatientsYesterday != 0) {
             utiltoUpdt.setNumPatientsYesterday(numPatientsYesterday);
         }
-        Util updatedUtil = utilService.partialUpdate(2L, utiltoUpdt);
+        Util updatedUtil = utilService.partialUpdate(3L, utiltoUpdt);
 
-        // utilRepository.save(updatedUtil);
         return ResponseEntity.ok(updatedUtil);
     }
 

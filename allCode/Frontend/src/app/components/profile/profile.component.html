@@ -11,7 +11,6 @@
             </div>
 
             <div class="col-sm-5 col-6 text-end m-b-30 btn-group mb-3" role="group">
-                <!-- <a routerLink="/editprofile/{{user.id}}" class="btn btn-primary btn-rounded"><i class="fa fa-plus"></i> Editar -->
                 <a routerLink="/edit-patient/{{idUser}}" class="btn btn-outline-primary btn-rounded mr-2"><i
                         class="fa fa-pen-to-square"></i> Editar
                     perfil</a>
@@ -64,6 +63,13 @@
                                             <span class="title">Género:</span>
                                             <span class="text">{{user.gender}}</span>
                                         </li>
+                                        <li>
+                                            <span class="title">Doctor asignado:</span>
+                                            <span class="text" *ngIf="doctorAsignated != null">{{doctorAsignated.name}}
+                                                {{doctorAsignated.lastName}}</span>
+                                            <span class="text" *ngIf="doctorAsignated == null">No tiene doctor
+                                                asignado</span>
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
@@ -100,13 +106,16 @@
         </div>
         <div class="profile-tabs">
             <ul class="nav nav-tabs nav-tabs-bottom">
-                <li class="nav-item"><a class="nav-link active" href="#history" data-bs-toggle="tab">Historial
+                <li class="nav-item"><a class="nav-link active" href="#historyIntervention"
+                        data-bs-toggle="tab">Historial
                         médico</a></li>
                 <li class="nav-item"><a class="nav-link" href="#documents" data-bs-toggle="tab">Documentos</a></li>
+                <li class="nav-item"><a class="nav-link" href="#historyAppointment" data-bs-toggle="tab">Historial de
+                        citas</a></li>
             </ul>
 
             <div class="tab-content">
-                <div class="tab-pane show active" id="history">
+                <div class="tab-pane show active" id="historyIntervention">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card-box">
@@ -114,11 +123,12 @@
                                 <div *ngIf="(interventions.length === 0)">
                                     <p>{{user.name}} {{user.lastName}} no ha tenido intervenciones</p>
                                 </div>
-                                <div class="experience-box" *ngFor="let intervention of interventions">
+                                <div class="experience-box"
+                                    *ngFor="let intervention of interventions | paginate: { itemsPerPage: 5, currentPage: page }">
                                     <ul class="experience-list">
                                         <li>
                                             <div class="experience-user">
-                                                <div class="before-circle"></div>
+                                                <div class="before-circle int"></div>
                                             </div>
                                             <div class="experience-content">
                                                 <div class="timeline-content">
@@ -139,7 +149,7 @@
                                                                 intervención</a>
                                                         </div>
                                                     </div>
-                                                    <a routerLink="/documents/{{intervention.id}}">{{intervention.type}}</a>
+                                                    <a routerLink="/documents/{{intervention.id}}">{{intervention.appointment.description}}</a>
                                                     <!-- Esto llevará justamente los documentos de esa intervención -->
                                                     <span class="time">{{intervention.interventionDate |
                                                         date:'dd-MM-yyyy'}}</span>
@@ -148,7 +158,13 @@
                                         </li>
                                     </ul>
                                 </div>
+
+                                <pagination-controls (pageChange)="page = $event" previousLabel="Anterior"
+                                    nextLabel="Siguiente">
+                                </pagination-controls>
                             </div>
+                            <p> ** Para visualizar más detalles sobre la intervención haga click en la intervención
+                                deseada </p>
                         </div>
                     </div>
                 </div>
@@ -160,11 +176,12 @@
                                 <div *ngIf="(documents.length === 0)">
                                     <p>{{user.name}} {{user.lastName}} no tiene documentos</p>
                                 </div>
-                                <div class="experience-box" *ngFor="let document of documents">
+                                <div class="experience-box"
+                                    *ngFor="let document of documents | paginate: { itemsPerPage: 5, currentPage: page2 }">
                                     <ul class="experience-list">
                                         <li>
                                             <div class="experience-user">
-                                                <div class="before-circle"></div>
+                                                <div class="before-circle doc"></div>
                                             </div>
                                             <div class="experience-content">
                                                 <div class="timeline-content">
@@ -187,7 +204,8 @@
                                                                 documento</a>
                                                         </div>
                                                     </div>
-                                                    <span class="">{{document.intervention.type}} - </span>
+                                                    <span class="">{{document.intervention.appointment.description}} -
+                                                    </span>
                                                     <a style="cursor: pointer;"
                                                         (click)="download(document.id)">{{document.fileName}}</a>
                                                     <span class="time">{{document.creationDate|
@@ -199,8 +217,67 @@
                                     </ul>
                                 </div>
                             </div>
-                            <p> ** Para visualizar más detalles sobre la intervención haga click en la intervención
-                                deseada </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="historyAppointment">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card-box">
+                                <h3 class="card-title">Registro de citas</h3>
+                                <div *ngIf="(appointmentsUser.length === 0)">
+                                    <p>{{user.name}} {{user.lastName}} no tiene historial de citas</p>
+                                </div>
+                                <div class="experience-box" *ngFor="let appointment of appointmentsUser">
+                                    <ul class="experience-list">
+                                        <li>
+                                            <div class="experience-user">
+                                                <div class="before-circle doc"></div>
+                                            </div>
+                                            <div class="experience-content">
+                                                <div class="timeline-content">
+                                                    <div class="dropdown dropdown-action">
+                                                        <a href="javascript:void(0);"
+                                                            class="action-icon dropdown-toggle"
+                                                            data-bs-toggle="dropdown" aria-expanded="false"><i
+                                                                class="fa fa-ellipsis-v"></i></a>
+                                                        <div class="dropdown-menu dropdown-menu-end">
+                                                            <a class="dropdown-item"
+                                                                routerLink="/edit-appointment/{{appointment.id}}">
+                                                                <i class="fa-solid fa-pen-to-square m-r-5"></i> Cambiar
+                                                                cita
+                                                            </a>
+                                                            <a class="dropdown-item" style="cursor: pointer;"
+                                                                (click)="deleteAppointment(appointment)"
+                                                                data-bs-toggle="modal"><i
+                                                                    class="fa fa-trash-alt m-r-5"></i> Eliminar
+                                                                cita</a>
+                                                            <a class="dropdown-item" style="cursor: pointer;"
+                                                                (click)="completeAppointment(appointment, appointment.completed)"
+                                                                data-bs-toggle="modal"><img style="width:20px"
+                                                                    src="../../../assets/icons/tick-i.png"> Cambiar
+                                                                estado</a>
+                                                        </div>
+                                                    </div>
+                                                    <span class="">{{appointment.description}} - </span><span
+                                                        *ngIf="appointment.completed">REALIZADA </span><img
+                                                        style="width: 25px;" *ngIf="appointment.completed"
+                                                        src="../../../../assets/icons/tick.png" alt="Completed">
+                                                    <span style="color: red;" *ngIf="!appointment.completed">NO
+                                                        REALIZADA </span><img style="width: 25px;"
+                                                        *ngIf="!appointment.completed"
+                                                        src="../../../../assets/icons/reloj-de-arena.png"
+                                                        alt="not Completed">
+                                                    <span class="time">{{appointment.bookDate |
+                                                        date:'dd/MM/yyyy'}} - {{appointment.fromDate |
+                                                        slice:0:5}}</span>
+
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -225,7 +302,7 @@
                         <label class="local-top">Fichero adjunto <span class="login-danger">*</span></label>
                         <div class="settings-btn upload-files-avator">
                             <div *ngIf="selectedFileName">{{ selectedFileName }}</div>
-                            <input type="file" name="file" id="file"  (change)="onFileSelected($event)"
+                            <input type="file" name="file" id="file" (change)="onFileSelected($event)"
                                 class="hide-input" accept="application/pdf">
                             <label for="file" class="upload">Elegir fichero</label>
 

@@ -1,0 +1,13 @@
+version: "3.9"
+
+services:
+  web:
+    image: scuadrosf/smilelink:v1
+    restart: on-failure
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://smilelinkdb.cjo0myeg40ey.eu-west-1.rds.amazonaws.com:3306/smilelink
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=password.12345
+      - SPRING_JPA_HIBERNATE_DDL-AUTO=create-drop
+    ports:
+      - 443:443

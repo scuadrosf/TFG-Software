@@ -3,20 +3,26 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/internal/Observable';
 import { timer } from 'rxjs/internal/observable/timer';
 import { Appointment } from 'src/app/models/appointment.model';
+import { Intervention } from 'src/app/models/intervention.model';
 import { User } from 'src/app/models/user.model';
 import { AppointmentService } from 'src/app/services/appointment.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { InterventionService } from 'src/app/services/intervention.service';
+import { UserService } from 'src/app/services/user.service';
 import { UtilService } from 'src/app/services/util.service';
 
 @Component({
   selector: 'app-dashboards',
-  templateUrl: './dashboards.component.html'
+  templateUrl: './dashboards.component.html',
+  styleUrls: ['./dashboards.component.scss']
 })
 export class DashboardsComponent implements OnInit {
   isAdmin: boolean = false
   currentUser!: User
+  appointmentsUser: Appointment[] = [];
   appointmentsToday: Appointment[] = [];
+  appointmentsTodays: Appointment[] = [];
+  interventionsUser: Intervention[] = [];
   numAppointmentsNoCompleted: number = 0;
   numAppointmentsCompleted: number = 0;
   totalAppointmentsToday: number = 0;
@@ -24,19 +30,26 @@ export class DashboardsComponent implements OnInit {
   appointmentsComYest: number = 0;
   numPatientsYesterday: number = 0;
   numPatientsTotal: number = 0;
+  nextAppointment: string = '';
   newPatients: number = 0;
   incrementRate: number = 0;
   differenceTime: string = '';
-
+  page!: number;
   today = new Date();
 
 
-  constructor(public authService: AuthService, private appointmentService: AppointmentService, private interventionService: InterventionService, private utilService: UtilService) {
-    this.currentUser = this.authService.currentUser()
-
+  constructor(private userService: UserService, public authService: AuthService, private appointmentService: AppointmentService, private interventionService: InterventionService, private utilService: UtilService) {
   }
 
   ngOnInit(): void {
+    this.userService.getMe().subscribe((response) => {
+      this.currentUser = response;
+
+      this.loadInterventionsUser(this.currentUser.id);
+      this.loadAppointmentsUser(this.currentUser.id);
+
+    })
+
     this.isAdmin = this.authService.isAdmin();
     this.loadAppointment();
     this.loadInterventions();
@@ -55,23 +68,26 @@ export class DashboardsComponent implements OnInit {
 
     // timer(0, 10000).subscribe(() => {
     //   utilUpdt: Util
-    //   this.utilService.updateUtil()
+    // this.utilService.updateUtil()
     // });
   }
 
+  loadAppointmentsUser(id: number) {
+    this.appointmentService.getAllAppointmentsByUser(id).subscribe(list =>
+      this.appointmentsUser = list)
+  }
+
+  loadInterventionsUser(id: number) {
+    this.interventionService.getUserInterventions(id).subscribe(list =>
+      this.interventionsUser = list
+
+    )
+  }
+
   deleteAppointment(id: number) {
-    // const confirmation = window.confirm('Esta seguro de eliminar la cita');
-    // if (confirmation) {
-    // this.appointmentService.deleteAppointment(id).subscribe();
     this.appointmentService.deleteAppointment(id).subscribe();
     this.ngOnInit();
-    // this.ngOnInit();
     console.log("Cita eliminada")
-    //   this.ngOnInit();
-    // }
-    // else{
-    // console.log("Confirmación de eliminado cancelada")
-    // }
     this.ngOnInit();
   }
 
@@ -86,14 +102,56 @@ export class DashboardsComponent implements OnInit {
         this.numAppointmentsNoCompleted = this.countAppointmentsNoCompleted(appointments, this.today);
         this.numAppointmentsCompleted = this.countAppointmentsCompleted(appointments, this.today);
         this.totalAppointmentsToday = appointments.filter(appointment => this.isSameDate(new Date(appointment.bookDate), this.today)).length;
-        this.appointmentsToday = appointments.filter(appointment => this.isSameDate(new Date(appointment.bookDate), this.today));
-        // console.log("Appoitnments today: "+ this.appointmentsToday);
-        // console.log("Citas pendientes: " + this.numAppointmentsNoCompleted + "/" + this.totalAppointments);
+        this.appointmentsToday = appointments
+          .filter(appointment => this.isSameDate(new Date(appointment.bookDate), this.today))
+          .sort((a, b) => {
+            const timeA = a.fromDate.split(':').map(Number);
+            const timeB = b.fromDate.split(':').map(Number);
+
+            if (timeA[0] < timeB[0]) return -1;
+            if (timeA[0] > timeB[0]) return 1;
+            // Si las horas son iguales, comparar los minutos
+            if (timeA[1] < timeB[1]) return -1;
+            if (timeA[1] > timeB[1]) return 1;
+            // Si las horas y los minutos son iguales, retornar 0
+            return 0;
+          });
+
+        // Filtrar citas futuras y ordenar por fecha ascendente
+        const futureAppointments = this.appointmentsToday
+          .filter(appointment => this.isSameDate(new Date(appointment.bookDate), this.today) && !appointment.completed)
+          .sort((a, b) => {
+            return new Date(a.fromDate).getTime() - new Date(b.fromDate).getTime();
+          });
+
+        if (futureAppointments.length > 0) {
+          // Obtener la fecha y hora de la próxima cita
+          const nextAppointmentDateTime = new Date(`${futureAppointments[0].bookDate}T${futureAppointments[0].fromDate}`);
+
+          // Obtener la fecha y hora actuales
+          const currentDateTime = new Date();
+
+          // Calcular la diferencia de tiempo entre la fecha y hora de la próxima cita y la fecha y hora actuales
+          const timeDifference = nextAppointmentDateTime.getTime() - currentDateTime.getTime();
+
+          if (timeDifference > 0) {
+            // Convertir la diferencia de tiempo en horas y minutos
+            const hours = Math.floor(timeDifference / (1000 * 60 * 60));
+            const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+
+            this.nextAppointment = `${hours} horas y ${minutes} minutos`;
+          } else {
+            this.nextAppointment = 'La cita está en curso o ya ha pasado';
+          }
+        } else {
+          this.nextAppointment = 'No hay citas futuras';
+        }
       },
       (error) => {
         console.error("Error al cargar los appointments:", error)
       }
     );
+
   }
 
   loadInterventions() {
@@ -159,21 +217,16 @@ export class DashboardsComponent implements OnInit {
     const fromDateTime = new Date();
     fromDateTime.setHours(parseInt(fromTimeParts[0], 10));
     fromDateTime.setMinutes(parseInt(fromTimeParts[1], 10));
-    // fromDateTime.setSeconds(parseInt(fromTimeParts[2], 10));
 
     const toDateTime = new Date();
     toDateTime.setHours(parseInt(toTimeParts[0], 10));
     toDateTime.setMinutes(parseInt(toTimeParts[1], 10));
-    // toDateTime.setSeconds(parseInt(toTimeParts[2], 10));
 
     const timeDifferenceInMilliseconds = toDateTime.getTime() - fromDateTime.getTime();
 
     // Convierte la diferencia de tiempo a horas y minutos
     const hoursDifference = Math.floor(timeDifferenceInMilliseconds / (1000 * 60 * 60));
     const minutesDifference = Math.floor((timeDifferenceInMilliseconds % (1000 * 60 * 60)) / (1000 * 60));
-
-    // Ahora, hoursDifference y minutesDifference contienen la diferencia de tiempo en horas y minutos
-    console.log(`Diferencia de tiempo: ${hoursDifference} horas y ${minutesDifference} minutos`);
 
     return minutesDifference.toString();
 

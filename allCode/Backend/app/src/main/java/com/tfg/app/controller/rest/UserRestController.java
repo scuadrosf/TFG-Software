@@ -8,7 +8,6 @@ import java.net.URISyntaxException;
 import java.security.Principal;
 import java.sql.Blob;
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,6 +41,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.tfg.app.controller.DTOS.UserDTO;
+import com.tfg.app.controller.DTOS.UserDoctorDTO;
 import com.tfg.app.controller.DTOS.UserEditDTO;
 import com.tfg.app.model.Appointment;
 import com.tfg.app.model.User;
@@ -99,7 +99,7 @@ public class UserRestController {
         User user = new User(userDTO);
 
         if (!userService.existUsername(user.getUsername())) {
-            String imageUrl = "/static/assets/predAvatar.png";
+            String imageUrl = "/static/avatar/predAvatar.png";
             try {
                 Resource image = new ClassPathResource(imageUrl);
                 user.setProfileAvatarFile(BlobProxy.generateProxy(image.getInputStream(), image.contentLength()));
@@ -107,13 +107,72 @@ public class UserRestController {
                 e.printStackTrace();
             }
             user.setPasswordEncoded(passwordEncoder.encode(user.getPasswordEncoded()));
-            user.setRoles(Arrays.asList("USER"));
+            user.setDoctorAsignated(currentUser);
+            user.setRoles(List.of("USER"));
+            user.setCodEntity(currentUser.getCodEntity());
 
             userService.save(user);
             int totalAux = utilService.getNumPatientsTotal() + 1;
-            System.out.println("//////////////////////////////////////"+totalAux);
-            Util utilAux = new Util(0,0,totalAux);
+            System.out.println("//////////////////////////////////////" + totalAux);
+            Util utilAux = new Util(0, 0, totalAux);
             utilService.partialUpdate(2L, utilAux);
+            URI location = fromCurrentRequest().path("/{id}").buildAndExpand(user.getId()).toUri();
+
+            return ResponseEntity.created(location).body(user);
+        } else {
+            return new ResponseEntity<User>(HttpStatus.FORBIDDEN);
+        }
+    }
+
+    @PostMapping("/doctor")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<User> registerDoctor(@RequestBody UserDoctorDTO UserDoctorDTO) throws NotFoundException {
+        User user = new User(UserDoctorDTO);
+
+        if (!userService.existUsername(user.getUsername())) {
+            String imageUrl = "/static/avatar/predAdminAvatar.png";
+            try {
+                Resource image = new ClassPathResource(imageUrl);
+                user.setProfileAvatarFile(BlobProxy.generateProxy(image.getInputStream(), image.contentLength()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            user.setPasswordEncoded(passwordEncoder.encode(user.getPasswordEncoded()));
+            user.setRoles(List.of("DOCTOR"));
+            user.setCodEntity(currentUser.getCodEntity());
+
+            userService.save(user);
+            URI location = fromCurrentRequest().path("/{id}").buildAndExpand(user.getId()).toUri();
+
+            return ResponseEntity.created(location).body(user);
+        } else {
+            return new ResponseEntity<User>(HttpStatus.FORBIDDEN);
+        }
+    }
+
+    @PostMapping("/admin")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<User> registerEntity(@RequestBody UserDoctorDTO UserDoctorDTO) throws NotFoundException {
+        User user = new User(UserDoctorDTO);
+
+        if (!userService.existUsername(user.getUsername())) {
+            String imageUrl = "/static/avatar/predAdminAvatar.png";
+            try {
+                Resource image = new ClassPathResource(imageUrl);
+                user.setProfileAvatarFile(BlobProxy.generateProxy(image.getInputStream(), image.contentLength()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            user.setPasswordEncoded(passwordEncoder.encode(user.getPasswordEncoded()));
+            user.setRoles(List.of("ADMIN", "DOCTOR"));
+
+            // Verificar si el codEntity está presente, si no, generar uno nuevo
+            if (user.getCodEntity() == null || user.getCodEntity().equals("")) {
+                Long generatedCodEntity = userService.generateUniqueCodEntity();
+                user.setCodEntity(generatedCodEntity);
+            } 
+
+            userService.save(user);
             URI location = fromCurrentRequest().path("/{id}").buildAndExpand(user.getId()).toUri();
 
             return ResponseEntity.created(location).body(user);
@@ -170,9 +229,23 @@ public class UserRestController {
         return ResponseEntity.ok(updatedUser);
     }
 
+    @PostMapping("/check-password/{id}")
+    public ResponseEntity<Boolean> checkPassword(@PathVariable Long id,
+            @RequestParam(value = "password") String currentPassword) {
+        User currentUser = userService.findById(id).orElseThrow();
+        boolean matches = passwordEncoder.matches(currentPassword, currentUser.getEncodedPassword());
+        return ResponseEntity.ok(matches);
+    }
+
     @GetMapping("/userList")
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> userList = userService.findAll();
+        return ResponseEntity.ok(userList);
+    }
+
+    @GetMapping("/userList/doctor={id}")
+    public ResponseEntity<List<User>> getAllUsersByDoctor(@PathVariable Long id) {
+        List<User> userList = userService.findAllUsersByDoctorAsignatedId(id);
         return ResponseEntity.ok(userList);
     }
 
@@ -189,6 +262,16 @@ public class UserRestController {
     @GetMapping("/email/{email}")
     public ResponseEntity<User> getUserByEmail(@PathVariable String email) {
         Optional<User> user = userService.findByEmail(email);
+        if (user.isPresent()) {
+            return ResponseEntity.ok(user.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/name/{name}")
+    public ResponseEntity<User> getUserByName(@PathVariable String name) {
+        Optional<User> user = userService.findByName(name);
         if (user.isPresent()) {
             return ResponseEntity.ok(user.get());
         } else {
@@ -289,4 +372,28 @@ public class UserRestController {
         return userService.findUsersByNameOrLastNameOrUsername(query, query, query);
     }
 
+    @GetMapping("/doctorAsignated/{id}")
+    public User getDoctorAsignated(@PathVariable Long id) {
+        User patient = userService.findById(id).orElseThrow();
+        return patient.getDoctorAsignated();
+    }
+
+    @GetMapping("/cod/{codEntity}")
+    public ResponseEntity<List<User>> getUsersByCodEntity(@PathVariable("codEntity") Long codEntity) {
+        List<User> users = userService.findByCodEntity(codEntity);
+        return new ResponseEntity<>(users, HttpStatus.OK);
+    }
+}
+
+class PasswordCheckRequest {
+    private String password;
+
+    // Getters y setters
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }

@@ -1,14 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { User } from 'src/app/models/user.model';
 import { AuthService } from 'src/app/services/auth.service';
 import { EmailService } from 'src/app/services/email.service';
+import { UserService } from 'src/app/services/user.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-add-patient',
   templateUrl: './add-patient.component.html',
   styleUrls: ['./add-patient.component.scss']
 })
-export class AddPatientComponent {
+export class AddPatientComponent implements OnInit {
   name: string = '';
   lastName: string = '';
   email: string = '';
@@ -21,40 +24,64 @@ export class AddPatientComponent {
   country: string = '';
   city: string = '';
   postalCode: string = '';
+  doctorAsignated!: User;
+  codEntity!: number;
 
 
-  constructor(public authService: AuthService, private router: Router, private emailService: EmailService) { }
+  constructor(private userService: UserService, public authService: AuthService, private router: Router, private emailService: EmailService) { }
 
+  ngOnInit(): void {
+    this.userService.getMe().subscribe(response => {
+      this.doctorAsignated = response;
+      this.codEntity = response.codEntity;
+      console.log(this.codEntity)
+    })
+  }
 
   addPatient() {
-    if (this.authService.isAdmin()) {
+    if (this.authService.isAdmin() || this.authService.isDoctor()) {
       const userData = {
         name: this.name,
         lastName: this.lastName,
-        email: this.email,
         username: this.username,
+        email: this.email,
         passwordEncoded: this.username,
-        gender: this.gender,
-        phone: this.phone,
-        birth: this.birth,
         address: this.address,
-        country: this.country,
         city: this.city,
+        country: this.country,
         postalCode: this.postalCode,
+        phone: this.phone,
+        gender: this.gender,
+        birth: this.birth,
+        doctorAsignated: this.doctorAsignated,
+        codEntity: this.codEntity
       }
-      console.log(this.gender);
-      this.authService.register(userData).subscribe(
-        (_) => {
-          alert('Paciente creado');
-          this.emailService.sendEmail(this.email, userData.passwordEncoded);
-          window.history.back();
-        },
-        (_) => {
-          console.error("error");
-          this.router.navigate(['/error-page'])
-        }
-      );
-    }else{
+      if (Object.values(userData).every(value => value !== '')) {
+        this.authService.register(userData).subscribe(
+          (_) => {
+            Swal.fire("Usuario registrado", "", "success");
+            try {
+              console.log("EMAIL:", this.email)
+              console.log("DNI:", this.username)
+              this.emailService.sendEmail(this.email, this.username);
+            } catch (error) {
+              console.log(error)
+              Swal.fire("NO SE HAN ENVIADO LAS CREDENCIALES", "", "error");
+
+            }
+            window.history.back();
+          },
+          (error) => {
+            Swal.fire("Probablemente este usuario ya exista, sino vuelva a intentarlo", "", "error");
+            console.log(error)
+            console.error("error");
+            this.router.navigate(['/error-page'])
+          }
+        );
+      } else {
+        Swal.fire('Todos los campos son obligatorios', '', 'warning');
+      }
+    } else {
       console.error(this.authService.currentUser())
     }
   }

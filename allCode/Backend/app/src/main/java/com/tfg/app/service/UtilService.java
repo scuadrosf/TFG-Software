@@ -37,25 +37,8 @@ public class UtilService {
         return utilRepository.getNumPatientsTotal();
     }
 
-    // public void updateUtilData(Util utilData) {
-    //     Util util = utilRepository.findById(2L).orElse(new Util(0, 0, 0)); // Suponiendo que el ID es 1
-
-    //     if (util.getId() == null) {
-    //         // Si no existe una fila en la tabla, crea una nueva instancia
-    //         util = new Util();
-    //     }
-    //     if (utilData.getAppointmentsCompletedYesterday() != 0)
-    //         util.setAppointmentsCompletedYesterday(utilData.getAppointmentsCompletedYesterday());
-    //     if(utilData.getNumPatientsYesterday() != 0)
-    //         util.setNumPatientsYesterday(utilData.getNumPatientsYesterday());
-    //     if (utilData.getNumPatientsTotal() != 0)
-    //         util.setNumPatientsTotal(utilData.getNumPatientsTotal());
-
-    //     utilRepository.save(util);
-    // }
-
     public Util partialUpdate(Long id, Util utilupd) {
-        Util util = findById(2L).get();
+        Util util = findById(3L).get();
         if (utilupd.getAppointmentsCompletedYesterday() != 0){
             util.setAppointmentsCompletedYesterday(utilupd.getAppointmentsCompletedYesterday());
         }

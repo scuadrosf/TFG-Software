@@ -5,6 +5,7 @@ import { User } from 'src/app/models/user.model';
 import { AppointmentService } from 'src/app/services/appointment.service';
 import { InterventionService } from 'src/app/services/intervention.service';
 import { UserService } from 'src/app/services/user.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-edit-intervention',
@@ -45,23 +46,31 @@ export class EditInterventionComponent implements OnInit {
 
   update() {
     const formData = new FormData();
-    if (confirm('Esta seguro de guardar los cambios')) {
-      if (this.intervention) {
-        if (this.type)
-          formData.append('type', this.type);
-        if (this.selectedFile)
-          formData.append('file', this.selectedFile);
+    Swal.fire({
+      title: "¿Está seguro/a de guardar los cambios?",
+      showDenyButton: true,
+      showCancelButton: false,
+      confirmButtonText: "Actualizar",
+      denyButtonText: `Cancelar`
+    }).then((result) => {
+      if (result.isConfirmed) {
+        if (this.intervention) {
+          if (this.type)
+            formData.append('type', this.type);
+          if (this.selectedFile)
+            formData.append('file', this.selectedFile);
+        }
+        this.interventionService.updateIntervention(this.interventionId, this.user.id, formData).subscribe(
+          (_) => {
+            console.log(this.intervention);
+            this.ngOnInit();
+            this.back();
+          },
+        );
+        Swal.fire("Intervención actualizada", "", "success");
+      } else if (result.isDenied) {
       }
-      this.interventionService.updateIntervention(this.interventionId, this.user.id, formData).subscribe(
-        (_) => {
-          console.log(this.intervention);
-          this.ngOnInit();
-          this.back();
-        },
-      );
-    } else {
-      console.log("Cancelado por el usuario");
-    }
+    });
   }
 
   back() {

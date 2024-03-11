@@ -12,8 +12,5 @@ export class SidebarComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // this.sidebarService.getSidebarState().subscribe(isOpen => {
-    //   this.isSidebarOpen = isOpen;
-    // });
   }
 }

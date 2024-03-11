@@ -203,5 +203,4 @@ public class InterventionRestController {
     public ResponseEntity<Document> getDocument(@PathVariable Long id) {
         return ResponseEntity.ok().body(interventionService.getDocumentByInterventionId(id).get());
     }
-
 }

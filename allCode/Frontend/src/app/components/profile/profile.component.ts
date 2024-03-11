@@ -5,11 +5,13 @@ import { Appointment } from 'src/app/models/appointment.model';
 import { Document } from 'src/app/models/document.model';
 import { Intervention } from 'src/app/models/intervention.model';
 import { User } from 'src/app/models/user.model';
+import { AppointmentService } from 'src/app/services/appointment.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { DocumentService } from 'src/app/services/document.service';
 import { InterventionService } from 'src/app/services/intervention.service';
 import { UserService } from 'src/app/services/user.service';
 import { UtilService } from 'src/app/services/util.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-profile',
@@ -19,20 +21,22 @@ export class ProfileComponent implements OnInit {
 
   selectedFile: File | null = null;
   selectedFileName: string = '';
+  page!: number;
+  page2!: number;
 
   user!: User;
   idUser!: number;
   profileAvatarUrls!: string;
   isAdmin: boolean = false;
+  doctorAsignated!: User;
 
-  apointment!: Appointment | null;
+  appointmentsUser: Appointment[] = [];
   interventions: Intervention[] = [];
   documents: Document[] = [];
 
   selectedDocumentId!: number;
 
-
-  constructor(private documentService: DocumentService, private utilService: UtilService, public authService: AuthService, private interventionService: InterventionService, private userService: UserService, private activatedRoute: ActivatedRoute) {
+  constructor(private appointmentService: AppointmentService, private documentService: DocumentService, private utilService: UtilService, public authService: AuthService, private interventionService: InterventionService, private userService: UserService, private activatedRoute: ActivatedRoute) {
     this.idUser = this.activatedRoute.snapshot.params['id'];
 
   }
@@ -55,14 +59,52 @@ export class ProfileComponent implements OnInit {
       });
 
       this.interventionService.getUserInterventions(this.idUser).subscribe((list: Intervention[]) => {
-        this.interventions = list;
+        this.interventions = list.slice().sort((a, b) => {
+          const dateA = new Date(a.interventionDate);
+          const dateB = new Date(b.interventionDate);
+
+          if (dateA < dateB) return -1;
+          if (dateA > dateB) return 1;
+          return 0;
+        });
       });
 
-      this.documentService.getAllDocumentsByUserId(this.user.id).subscribe((list: Document[]) => {
-        this.documents = list;
+      this.documentService.getAllDocumentsByUserId(this.idUser).subscribe((list: Document[]) => {
+        this.documents = list.slice().sort((a, b) => {
+          const dateA = new Date(a.creationDate);
+          const dateB = new Date(b.creationDate);
+  
+          if (dateA < dateB) return -1;
+          if (dateA > dateB) return 1;
+          return 0;
+        });
       })
-    });
 
+      this.appointmentService.getAllAppointmentsByUser(this.idUser).subscribe(list => {
+        this.appointmentsUser = list.slice().sort((a, b) => {
+          const dateA = new Date(a.bookDate);
+          const dateB = new Date(b.bookDate);
+
+          if (dateA < dateB) return -1;
+          if (dateA > dateB) return 1;
+
+          // Si las fechas son iguales, ordena por hora y minutos
+          const timeA = a.fromDate.split(':').map(Number);
+          const timeB = b.fromDate.split(':').map(Number);
+
+          if (timeA[0] < timeB[0]) return -1;
+          if (timeA[0] > timeB[0]) return 1;
+          // Si las horas son iguales, comparar los minutos
+          if (timeA[1] < timeB[1]) return -1;
+          if (timeA[1] > timeB[1]) return 1;
+          // Si las horas y los minutos son iguales, retornar 0
+          return 0;
+        });
+      });
+
+      this.userService.getDoctorAsignated(this.user.id).subscribe(doctor =>
+        this.doctorAsignated = doctor)
+    });
   }
 
   onFileSelected(event: any) {
@@ -70,17 +112,49 @@ export class ProfileComponent implements OnInit {
     this.selectedFileName = this.selectedFile?.name || '';
   }
 
-  deleteIntervention(intervention: Intervention) {
-    const confirmation = window.confirm('Esta seguro de eliminar la intervención');
-    if (confirmation) {
-      this.interventionService.deleteIntervention(intervention);
-      console.log("Intervention eliminado")
-      this.ngOnInit();
-    }
-    else {
-      console.log("Confirmación de eliminado cancelada")
-    }
+  completeAppointment(appointment: Appointment, status: boolean) {
+    this.appointmentService.updateAppointment(appointment.id, !status).subscribe();
     this.ngOnInit();
+  }
+
+  deleteAppointment(appointment: Appointment) {
+    Swal.fire({
+      title: "¿Esta seguro de eliminar la cita?",
+      showDenyButton: true,
+      showCancelButton: false,
+      confirmButtonText: "Eliminar",
+      denyButtonText: `Cancelar`
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.appointmentService.deleteAppointment(appointment.id).subscribe();
+        Swal.fire("Eliminado", "", "success");
+        console.log("Appointment eliminado")
+        this.ngOnInit();
+        this.ngOnInit();
+      } else if (result.isDenied) {
+        console.log("Confirmación de eliminado cancelada")
+      }
+    });
+  }
+
+  deleteIntervention(intervention: Intervention) {
+    Swal.fire({
+      title: "¿Esta seguro de eliminar la intervencion?",
+      showDenyButton: true,
+      showCancelButton: false,
+      confirmButtonText: "Eliminar",
+      denyButtonText: `Cancelar`
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.interventionService.deleteIntervention(intervention);
+        Swal.fire("Eliminado", "", "success");
+        console.log("Intervention eliminado")
+        this.ngOnInit();
+        this.ngOnInit();
+      } else if (result.isDenied) {
+        console.log("Confirmación de eliminado cancelada")
+      }
+    });
   }
 
   exportPDF() {
@@ -103,16 +177,23 @@ export class ProfileComponent implements OnInit {
   }
 
   deleteDocument(document: Document) {
-    const confirmation = window.confirm('Esta seguro de eliminar el documento');
-    if (confirmation) {
-      this.documentService.deleteDocument(document);
-      console.log("Document eliminado")
-      this.ngOnInit();
-    }
-    else {
-      console.log("Confirmación de eliminado cancelada")
-    }
-    this.ngOnInit();
+    Swal.fire({
+      title: "¿Esta seguro de eliminar el documento?",
+      showDenyButton: true,
+      showCancelButton: false,
+      confirmButtonText: "Eliminar",
+      denyButtonText: `Cancelar`
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.documentService.deleteDocument(document);
+        Swal.fire("Eliminado", "", "success");
+        console.log("Document eliminado")
+        this.ngOnInit();
+        this.ngOnInit();
+      } else if (result.isDenied) {
+        console.log("Confirmación de eliminado cancelada")
+      }
+    });
   }
 
   submit() {

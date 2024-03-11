@@ -2,9 +2,10 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Util } from '../models/util.model';
+import { environment } from 'src/environments/environment.prod';
 
 
-const baseUrl = "/api/util/"
+const baseUrl = environment.baseUrl+"/util/"
 @Injectable({
   providedIn: 'root'
 })

@@ -4,8 +4,9 @@ import { Intervention } from '../models/intervention.model';
 import { Observable } from 'rxjs';
 import { Appointment } from '../models/appointment.model';
 import { Document } from '../models/document.model';
+import { environment } from 'src/environments/environment.prod';
 
-const baseUrl = '/api/interventions/';
+const baseUrl = environment.baseUrl+'/interventions/';
 
 
 @Injectable({
@@ -28,11 +29,11 @@ export class InterventionService {
   }
 
   getAppointmentList(): Observable<Appointment[]> {
-    return this.httpClient.get<Appointment[]>('/api/appointments/all')
+    return this.httpClient.get<Appointment[]>(environment.baseUrl + '/appointments/all')
   }
 
   getAllAppointmentsByUser(id: number): Observable<Appointment[]> {
-    return this.httpClient.get<Appointment[]>("/api/appointments/all/" + id);
+    return this.httpClient.get<Appointment[]>(environment.baseUrl + '/appointments/all/' + id);
   }
 
   addIntervention(idAppointment: number, idUser: number, formData: FormData): Observable<any> {
@@ -40,7 +41,7 @@ export class InterventionService {
   }
 
   updateIntervention(interventionId: number, userId: number, formData: FormData): Observable<any> {
-    return this.httpClient.put(baseUrl + 'update/' + interventionId+"/user="+userId, formData);
+    return this.httpClient.put(baseUrl + 'update/' + interventionId + "/user=" + userId, formData);
   }
 
   deleteIntervention(intervention: Intervention) {
@@ -48,7 +49,7 @@ export class InterventionService {
   }
 
   getAllInterventions(): Observable<Intervention[]> {
-    return this.httpClient.get<Intervention[]>(baseUrl+"all")
+    return this.httpClient.get<Intervention[]>(baseUrl + "all")
   }
 
 }

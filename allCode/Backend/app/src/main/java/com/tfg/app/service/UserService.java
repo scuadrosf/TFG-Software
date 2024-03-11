@@ -2,6 +2,7 @@ package com.tfg.app.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -54,6 +55,24 @@ public class UserService {
         return users.findByNameContainingOrLastNameContainingOrUsernameContaining(name, lastName, username);
     }
 
+    public List<User> findAllUsersByDoctorAsignatedId(Long id){
+        return users.findAllUsersByDoctorAsignatedId(id);
+    }
+
+    public Optional<User> findDoctorAsignatedByUserId(Long id){
+        return users.getDoctorAsignatedById(id);
+    }
+
+    public List<User> findByCodEntity(Long codEntity){
+        return users.findByCodEntity(codEntity);
+    }
 
 
+    public Long generateUniqueCodEntity() {
+        Long codEntity;
+        do {
+            codEntity = Math.abs(new Random().nextLong());
+        } while (users.existsByCodEntity(codEntity));
+        return codEntity;
+    }
 }

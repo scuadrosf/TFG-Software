@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { User } from 'src/app/models/user.model';
 import { AuthService } from 'src/app/services/auth.service';
 import { UserService } from 'src/app/services/user.service';
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -20,6 +21,10 @@ export class EditProfileComponent implements OnInit {
   postalCode!: string
   phone!: string
   avatarFile!: File;
+  newPassword!: string;
+  confirmNewPassword!: string;
+  currentPassword!: string;
+  currentPasswordInDB!: string;
 
   constructor(private router: Router, private userService: UserService, public authService: AuthService, private activatedRoute: ActivatedRoute) { }
 
@@ -27,7 +32,6 @@ export class EditProfileComponent implements OnInit {
     this.userId = this.activatedRoute.snapshot.params['id'];
     this.userService.getMe().subscribe((response) => {
       this.user = response;
-
 
       this.userService.getProfileAvatar(response.id).subscribe(blob => {
         const objectUrl = URL.createObjectURL(blob);
@@ -40,8 +44,35 @@ export class EditProfileComponent implements OnInit {
     if (event.target.files && event.target.files.length > 0) {
       this.avatarFile = event.target.files[0];
     }
-    
   }
+
+  changePassword() {
+    if (this.newPassword !== this.confirmNewPassword) {
+      Swal.fire("Las contraseñas no coinciden", "", "warning");
+      return;
+    } else {
+      this.userService.checkCurrentPassword(this.currentPassword, this.user).subscribe(isCorrect => {
+        if (!isCorrect) {
+          Swal.fire("La contraseña actual es incorrecta", "", "error");
+          return;
+        } else {
+          this.user.encodedPassword = this.newPassword;
+          console.log(this.user.encodedPassword)
+          this.userService.updatePassword(this.user).subscribe(
+            (_) => {
+              Swal.fire("Contraseña actualizada", "", "success")
+              window.history.back();
+            },
+            (error) => {
+              Swal.fire("Error al actualizar la contraseña", "", "error");
+            }
+          );
+        }
+      });
+    }
+  }
+
+
 
   editUser() {
     if (this.user) {

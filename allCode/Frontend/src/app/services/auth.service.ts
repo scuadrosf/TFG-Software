@@ -5,9 +5,10 @@ import { catchError, map } from 'rxjs/operators';
 import { User } from '../models/user.model';
 import { UserService } from './user.service';
 import { ActivatedRoute } from '@angular/router';
+import { environment } from 'src/environments/environment.prod';
 
 
-const BASE_URL = '/api/auth/';
+const BASE_URL = environment.baseUrl+'/auth/';
 
 @Injectable({
   providedIn: 'root'
@@ -27,7 +28,7 @@ export class AuthService {
   private loggedIn = new BehaviorSubject<boolean>(false);
 
   reqIsLogged() {
-    this.httpClient.get('/api/users/me', { withCredentials: true }).subscribe(
+    this.httpClient.get(environment.baseUrl+'/users/me', { withCredentials: true }).subscribe(
       response => {
         this.user = response as User;
         this.userAux = response as User;
@@ -44,7 +45,30 @@ export class AuthService {
 
 
   register(userData: any): Observable<any> {
-    return this.httpClient.post("/api/users/", userData)
+    return this.httpClient.post(environment.baseUrl+"/users/", userData)
+      .pipe(
+        map((response: any) => {
+          return response;
+        }),
+        catchError((error: any) => {
+          return throwError('Register Error');
+        })
+      );
+  }
+
+  registerDoctor(userData: any): Observable<any> {
+    return this.httpClient.post(environment.baseUrl + "/users/doctor", userData)
+      .pipe(
+        map((response: any) => {
+          return response;
+        }),
+        catchError((error: any) => {
+          return throwError('Register Error');
+        })
+      );
+  }
+  registerEntity(userData: any): Observable<any> {
+    return this.httpClient.post(environment.baseUrl + "/users/admin", userData)
       .pipe(
         map((response: any) => {
           return response;
@@ -86,10 +110,16 @@ export class AuthService {
   isAdmin() {
     return this.isLogged() && this.user?.roles.indexOf('ADMIN') !== -1;
   }
+  isSuperAdmin() {
+    return this.isLogged() && this.user?.roles.indexOf('ADMIN') !== -1 && this.user?.roles.length === 1;
+  }
+  isDoctor(){
+    return this.isLogged() && this.user?.roles.indexOf('DOCTOR') !== -1;
+  }
 
-  isUser(){
+  isUser() {
     return !this.userService.checkAdmin(this.userId);
-  // CheckAdmin returns false if is USER and returns true if is ADMIN
+    // CheckAdmin returns false if is USER and returns true if is ADMIN
   }
 
   currentUser() {

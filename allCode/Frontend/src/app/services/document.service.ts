@@ -3,9 +3,10 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Document } from '../models/document.model';
 import { Intervention } from '../models/intervention.model';
+import { environment } from 'src/environments/environment.prod';
 
 
-const baseUrl = '/api/documents/';
+const baseUrl = environment.baseUrl+'/documents/';
 
 @Injectable({
   providedIn: 'root'
