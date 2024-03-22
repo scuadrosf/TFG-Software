@@ -30,7 +30,7 @@ public class UtilService {
     }
 
     public int getNumPatientsYesterday() {
-        return utilRepository.getNumPatientsYesterday();
+        return utilRepository.findNumPatientsYesterdayById(23L);
     }
 
     public int getNumPatientsTotal() {

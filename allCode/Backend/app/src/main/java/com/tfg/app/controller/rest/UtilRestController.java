@@ -157,7 +157,7 @@ public class UtilRestController {
         if (numPatientsYesterday != 0) {
             utiltoUpdt.setNumPatientsYesterday(numPatientsYesterday);
         }
-        Util updatedUtil = utilService.partialUpdate(3L, utiltoUpdt);
+        Util updatedUtil = utilService.partialUpdate(23L, utiltoUpdt);
 
         return ResponseEntity.ok(updatedUtil);
     }

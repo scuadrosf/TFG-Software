@@ -63,7 +63,12 @@ export class DashboardsComponent implements OnInit {
 
     this.utilService.getnumPatientsTotal().subscribe(num => {
       this.numPatientsTotal = num;
-      this.newPatients = this.loadRate(this.numPatientsTotal, this.numPatientsYesterday);
+      if (this.numPatientsYesterday == 0){
+        this.incrementRate = 0;
+      }else{
+        this.newPatients = this.loadRate(this.numPatientsTotal, this.numPatientsYesterday);
+        this.incrementRate = Math.round((this.newPatients / this.numPatientsYesterday) * 100); 
+      }
     });
 
     // timer(0, 10000).subscribe(() => {

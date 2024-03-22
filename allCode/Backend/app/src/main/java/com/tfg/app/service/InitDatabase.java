@@ -260,7 +260,7 @@ public class InitDatabase {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Util util = new Util(0, 0, 11);
+        Util util = new Util(0, 3, 11);
         utilService.save(util);
     }
 
