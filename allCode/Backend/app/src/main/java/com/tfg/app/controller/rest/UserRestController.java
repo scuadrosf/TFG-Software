@@ -115,7 +115,7 @@ public class UserRestController {
             int totalAux = utilService.getNumPatientsTotal() + 1;
             System.out.println("//////////////////////////////////////" + totalAux);
             Util utilAux = new Util(0, 0, totalAux);
-            utilService.partialUpdate(2L, utilAux);
+            utilService.partialUpdate(23L, utilAux);
             URI location = fromCurrentRequest().path("/{id}").buildAndExpand(user.getId()).toUri();
 
             return ResponseEntity.created(location).body(user);

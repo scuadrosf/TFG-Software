@@ -26,7 +26,6 @@ import org.hibernate.engine.jdbc.BlobProxy;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -56,23 +55,17 @@ public class InitDatabase {
     @Autowired
     private DescriptionService descriptionService;
 
-    @Value("${app.initialize-data:false}")
-    private boolean initializeData;
-
     @PostConstruct
     public void init() {
-        if (!initializeData){
-            return;
-        }else{
-            createSuperAdmin(new User());
-            createEntities();
-            createDoctors();
-            createUsers();
-            createAppointmentToUser();
-            createInterventionToAppointment();
-            createDescriptionsAndInterventionsType();
-        }
-       
+
+        createSuperAdmin(new User());
+        createEntities();
+        createDoctors();
+        createUsers();
+        createAppointmentToUser();
+        createInterventionToAppointment();
+        createDescriptionsAndInterventionsType();
+
     }
 
     private void createInterventionToAppointment() {
@@ -297,9 +290,9 @@ public class InitDatabase {
         entity1.setLastName("Ane");
         entity1.setUsername("33W");
         entity1.setPhone("711548969");
-        entity1.setEmail("admin100@smilelink.com");
+        entity1.setEmail("admin100@smilelink.es");
         entity1.setPasswordEncoded(passwordEncoder.encode("12345"));
-        entity1.setRoles(List.of("USER", "DOCTOR", "ADMIN"));
+        entity1.setRoles(List.of("DOCTOR", "ADMIN"));
         entity1.setBirth(LocalDate.now());
         entity1.setGender("Masculino");
         entity1.setCodEntity(100L);
@@ -320,10 +313,10 @@ public class InitDatabase {
         entity2.setLastName("Rodriguez");
         entity2.setUsername("332W");
         entity2.setPhone("785264122");
-        entity2.setEmail("admin200@smilelink.com");
+        entity2.setEmail("admin200@smilelink.es");
         entity2.setCodEntity(200L);
         entity2.setPasswordEncoded(passwordEncoder.encode("12345"));
-        entity2.setRoles(List.of("USER", "DOCTOR", "ADMIN"));
+        entity2.setRoles(List.of( "DOCTOR", "ADMIN"));
         entity2.setBirth(LocalDate.now());
         entity2.setGender("Masculino");
         avatarUrlAdmin = "/static/avatar/predAdminAvatar.png";
@@ -339,7 +332,7 @@ public class InitDatabase {
         userSuperAdmin.setName("Administrador");
         userSuperAdmin.setLastName("Administrador");
         userSuperAdmin.setUsername("");
-        userSuperAdmin.setEmail("admin@smilelink.com");
+        userSuperAdmin.setEmail("admin@smilelink.es");
         userSuperAdmin.setPasswordEncoded(passwordEncoder.encode("superpassword12345"));
         userSuperAdmin.setRoles(List.of("ADMIN"));
         String avatarUrlAdmin = "/static/avatar/administrador.png";
@@ -440,7 +433,7 @@ public class InitDatabase {
                 user.setBirth(birthDate);
                 user.setCodEntity(i % 2 == 0 ? 100L : 200L);
                 user.setPhone(person.getString("phone"));
-                user.setEmail(nameObject.getString("first") + "." + nameObject.getString("last") + "@smilelink.com");
+                user.setEmail(nameObject.getString("first") + "." + nameObject.getString("last") + "@smilelink.es");
                 user.setGender("male".equals(person.getString("gender")) ? "Masculino" : "Femenino");
                 user.setProfileAvatarFile(downloadImage(person.getJSONObject("picture").getString("large")));
                 user.setPasswordEncoded(passwordEncoder
@@ -458,7 +451,7 @@ public class InitDatabase {
         user.setLastName("Flores");
         user.setUsername("37W");
         user.setPhone("444444444");
-        user.setEmail("jaime.flores@smilelink.com");
+        user.setEmail("jaime.flores@smilelink.es");
         user.setPasswordEncoded(passwordEncoder.encode("pass"));
         user.setRoles(List.of("DOCTOR"));
         user.setBirth(LocalDate.now().minusYears(20 + 11));

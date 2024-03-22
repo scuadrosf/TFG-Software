@@ -133,7 +133,7 @@ public class UtilRestController {
 
     @GetMapping("/numPatientsYesterday")
     public int numPatientsYesterday() {
-        return utilService.getNumPatientsTotal();
+        return utilService.getNumPatientsYesterday();
     }
 
     @GetMapping("/numPatientsTotal")
