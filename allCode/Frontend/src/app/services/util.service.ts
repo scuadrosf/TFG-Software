@@ -42,4 +42,8 @@ export class UtilService {
   updateUtil(partialUtil: Util): Observable<Util> {
     return this.httpClient.put<Util>(baseUrl + "update", partialUtil);
   }
+
+  generatePDF(data: any): Observable<Blob>{
+    return this.httpClient.post(baseUrl + "generatePDF", data, {responseType: 'blob'})
+  }
 }

@@ -100,20 +100,15 @@ public class InitDatabase {
 
     private byte[] convertToByte(String filePath) {
         try {
-            // Leer el archivo PDF y convertirlo en un arreglo de bytes
             File file = new File("Backend/app/src/main/resources/static/avatar/pdf-ejemplo.pdf");
 
             FileInputStream fis = new FileInputStream(file);
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             byte[] buf = new byte[1024];
-
             for (int readNum; (readNum = fis.read(buf)) != -1;) {
-                bos.write(buf, 0, readNum); // No se preocupe por IOException aquí
+                bos.write(buf, 0, readNum);
             }
-
             byte[] bytes = bos.toByteArray();
-
-            // Cierra los streams para evitar leaks
             fis.close();
             bos.close();
             return bytes;
@@ -346,16 +341,12 @@ public class InitDatabase {
 
     private LocalTime convertDurationToLocalTime(String duration) {
         try {
-            // Extrae el número de la cadena
             int totalMinutes = Integer.parseInt(duration.replaceAll("[^0-9]", ""));
-            // Convierte los minutos en horas y minutos
             int hours = totalMinutes / 60;
             int minutes = totalMinutes % 60;
-            // Crea un LocalTime con esos valores
             return LocalTime.of(hours, minutes);
         } catch (NumberFormatException e) {
-            // Manejo de error si la cadena no es un número válido
-            return LocalTime.of(0, 0); // O manejar el error de otra manera
+            return LocalTime.of(0, 0);
         }
     }
 

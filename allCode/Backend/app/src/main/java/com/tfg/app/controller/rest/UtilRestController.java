@@ -1,23 +1,39 @@
 package com.tfg.app.controller.rest;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.itextpdf.io.image.ImageDataFactory;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Image;
+import com.itextpdf.layout.element.Paragraph;
 import com.lowagie.text.DocumentException;
+import com.tfg.app.controller.DTOS.ReportDTO;
 import com.tfg.app.model.Appointment;
 import com.tfg.app.model.Intervention;
 import com.tfg.app.model.User;
@@ -160,6 +176,50 @@ public class UtilRestController {
         Util updatedUtil = utilService.partialUpdate(23L, utiltoUpdt);
 
         return ResponseEntity.ok(updatedUtil);
+    }
+
+    /////////////////////////////////////////
+
+    @PostMapping("/generatePDF")
+    public ResponseEntity<byte[]> generatePdf(@RequestBody ReportDTO report) {
+        try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
+            // Crea un nuevo documento PDF
+            PdfWriter writer = new PdfWriter(byteArrayOutputStream);
+            PdfDocument pdf = new PdfDocument(writer);
+            Document document = new Document(pdf);
+
+            // Suponiendo que tienes una imagen para agregar al documento
+            Resource resource = new ClassPathResource("static/documents/SmileLink.png");
+            Image image = new Image(ImageDataFactory.create(resource.getURL()));
+            document.add(image);
+
+            // Añade contenido al documento
+            document.add(new Paragraph("Paciente: " + report.getName() + " " + report.getLastName()));
+            document.add(new Paragraph("DNI: " + report.getDni()));
+            document.add(new Paragraph("Dirección: " + report.getAddress()));
+            document.add(new Paragraph("Teléfono: "+ report.getPhone()));
+            document.add(new Paragraph("Fecha: "+ LocalDate.now().toString()));
+            document.add(new Paragraph(""));
+            document.add(new Paragraph("Motivo de la cita: "+ report.getDescriptionAppointment()));
+            document.add(new Paragraph(""));
+            document.add(new Paragraph("Conclusiones médicas:"));
+            document.add(new Paragraph(report.getReportIntervention()));
+
+            // Cierra el documento
+            document.close();
+
+            byte[] pdfContents = byteArrayOutputStream.toByteArray();
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            // Aquí se configura para descargar el archivo como attachment
+            String filename = "filename.pdf";
+            headers.setContentDispositionFormData(filename, filename);
+            headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+            return new ResponseEntity<>(pdfContents, headers, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 }
