@@ -36,6 +36,9 @@ export class DashboardsComponent implements OnInit {
   differenceTime: string = '';
   page!: number;
   today = new Date();
+  doctorAsignated!: number;
+  codEntity!: number;
+
 
 
   constructor(private userService: UserService, public authService: AuthService, private appointmentService: AppointmentService, private interventionService: InterventionService, private utilService: UtilService) {
@@ -44,14 +47,15 @@ export class DashboardsComponent implements OnInit {
   ngOnInit(): void {
     this.userService.getMe().subscribe((response) => {
       this.currentUser = response;
+      this.doctorAsignated = response.id;
+      this.codEntity = response.codEntity;
 
       this.loadInterventionsUser(this.currentUser.id);
       this.loadAppointmentsUser(this.currentUser.id);
-
+      this.loadAppointment(this.doctorAsignated, this.codEntity);
     })
 
     this.isAdmin = this.authService.isAdmin();
-    this.loadAppointment();
     this.loadInterventions();
     this.utilService.getAppointmentsCompletedYesterday().subscribe(num => {
       this.appointmentsComYest = num;
@@ -101,13 +105,20 @@ export class DashboardsComponent implements OnInit {
     return numPatientsTotal - numPatientsYesterday;
   }
 
-  loadAppointment() {
+  loadAppointment(doctorId: number, codEntity: number) {
     this.appointmentService.getAllAppointments().subscribe(
       (appointments: any[]) => {
-        this.numAppointmentsNoCompleted = this.countAppointmentsNoCompleted(appointments, this.today);
-        this.numAppointmentsCompleted = this.countAppointmentsCompleted(appointments, this.today);
-        this.totalAppointmentsToday = appointments.filter(appointment => this.isSameDate(new Date(appointment.bookDate), this.today)).length;
-        this.appointmentsToday = appointments
+        const filteredAppointments = appointments.filter(appointment =>
+          ((appointment.user && appointment.user.doctorAsignated &&
+            appointment.user.doctorAsignated.id === doctorId) ||
+          (appointment.doctorAsignated && appointment.doctorAsignated.id === doctorId)) && 
+          (appointment.user && appointment.user.codEntity === codEntity)
+        );
+
+        this.numAppointmentsNoCompleted = this.countAppointmentsNoCompleted(filteredAppointments, this.today);
+        this.numAppointmentsCompleted = this.countAppointmentsCompleted(filteredAppointments, this.today);
+        this.totalAppointmentsToday = filteredAppointments.filter(appointment => this.isSameDate(new Date(appointment.bookDate), this.today)).length;
+        this.appointmentsToday = filteredAppointments
           .filter(appointment => this.isSameDate(new Date(appointment.bookDate), this.today))
           .sort((a, b) => {
             const timeA = a.fromDate.split(':').map(Number);
